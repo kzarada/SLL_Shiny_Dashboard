@@ -21,7 +21,7 @@ library(vroom)
 
 data_dir = "/app/Data/"
 
-source("scripts/api_keys.R")
+source(file.path(data_dir, "Inputs/api_keys.R"))
 
 #Device IDs 
 device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>% 
@@ -30,7 +30,7 @@ device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>%
 
 for(i in 1:dim(device_id)[1]){
    #log file 
-  log_con <- file("/app/scripts/logs/hohonu_log.txt", open = "a")
+  log_con <- file("scripts/logs/hohonu_log.txt", open = "a")
   
   filename = paste0(data_dir, "Outputs/", device_id$API[i], "_",  device_id$Location[i], "_Data.csv")
   

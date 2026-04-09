@@ -12,7 +12,7 @@ library(vroom)
 
 data_dir = "/app/Data/"
 
-source("scripts/api_keys.R")
+source(file.path(data_dir, "Inputs/api_keys.R"))
 
 #Device IDs 
 device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>% 
@@ -40,10 +40,11 @@ for(i in 1:dim(device_id)[1]){
   if(is.na(last_time) | !exists("last_time")){ 
     last_time = current_time - days(1)}
   
-  last_time = str_replace_all(str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20"), ":", "%3A") 
   
   if(str_detect(last_time, ":00", negate = TRUE)){
     last_time = paste0(last_time, "%2000%3A00%3A00")}
+  
+  last_time = str_replace_all(str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20"), ":", "%3A") 
   
   current_time = str_replace_all(str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20"), ":", "%3A")
   
@@ -57,7 +58,7 @@ for(i in 1:dim(device_id)[1]){
   response <- req_perform(req)
   
   #log file 
-  log_con <- file("/app/scripts/logs/licor_log.txt", open = "a")
+  log_con <- file("/scripts/logs/licor_log.txt", open = "a")
   
 
   if (response$status_code!= 200) {
