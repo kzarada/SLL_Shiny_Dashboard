@@ -1,0 +1,17 @@
+﻿API,Location,ID,Active
+Nexsens,Harbor_Entrance,3425,Yes
+Nexsens,Rainsford_NE,3250,Yes
+Nexsens,North_Shore,4958,Yes
+Gallops,Gallops,2699,Yes
+Nexsens,Buzzards_Bay,4982,No
+Hohonu,Border_St,174,Yes
+Hohonu,Lewis_Mall,103,Yes
+Hohonu,Long_Wharf,161,Yes
+Hohonu,Morrissey_Blvd,171,No
+Hohonu,Tenean_Beach,173,Yes
+Hohonu,Fall_River,305,Yes
+Hohonu,Essex,300,Yes
+LiCOR,Rainsford_Island,20856612,Yes
+NDBC,Boston,44013,Yes
+NOAA,Boston,8443970,Yes
+NOAA,Fall_River,8447386,Yes

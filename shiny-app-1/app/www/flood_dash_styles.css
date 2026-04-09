@@ -1,0 +1,315 @@
+/* Register font */
+  @font-face {
+    font-family: 'Replica Mono LL TT';
+    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
+    url('ReplicaMonoLLTT-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+/* Global font */
+  body {
+    font-family: 'Replica Mono LL TT', monospace;
+  }
+  
+  .context-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .context-wrapper {
+    flex-direction: column;   /* stack on mobile */
+  }
+  
+  .container-box {
+    min-height: 150px;
+  }
+
+  .icon i {
+    font-size: clamp(50px, 15vw, 120px);
+  }
+
+  .ruler {
+    flex: 0 0 30px;
+  }
+  
+  .tick-label {
+    font-size: 8px;
+  }
+
+  .tick-line {
+    width: 10px;
+  }
+
+  .box {
+    margin-bottom: 10px;
+  }
+  
+  .map-box {
+    height: 50vh;
+  }
+
+  .plot-box {
+    height: 35vh;
+  }
+  
+  .app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  background-color: #002366;   /* match dashboard */
+  color: white;
+  text-align: center;
+  
+  padding: 8px;
+  font-size: 14px;
+  z-index: 9999;
+}
+
+/* Link styling */
+.app-footer a {
+  color: white;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+}
+       
+/* styles.css */
+      
+   .map-box {
+       height: 77vh;
+    }
+    
+
+  .plot-box {
+    height: 45vh;
+    }
+      
+      .myClass { 
+        font-size: 24px;
+        line-height: 50px;
+        text-align: left;
+        font-family: "Replica Mono LL TT",  monospace;
+        padding: 0 15px;
+        overflow: hidden;
+        color: white;
+      }
+      
+      
+      .icon_wrapper {
+        display: flex;
+        align-items: stretch;   /* makes heights identical */
+        justify-content: flex-start;
+        gap: 0;                 /* REMOVE space between ruler and box */
+        margin: 0;              /* remove outer spacing */
+        padding: 0;
+      }
+      
+      .icon-column {
+          flex: 1; /* Makes each column grow to fill equal available space */
+          padding: 0px;
+          text-align: left;
+          font-size: 16px;
+          align-items: center;
+        }
+      
+      .container-box {
+        width: 100%;
+        height: 18vh;
+        border: 2px solid #333;
+        border-radius: 10px;
+        position: relative;
+        display: flex;
+        justify-content: center;  /* horizontal center */
+        align-items: flex-end; 
+        overflow: hidden;
+        background: #f5f5f5;
+      }
+
+      .water {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #4da6ff;
+        transition: height 0.5s ease-in-out;
+      }
+       
+      .icon {
+        position: absolute;
+        bottom: 0;                 /* anchor to bottom */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%; 
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        text-align: center;
+        z-index: 2;
+        pointer-events: none;
+      }
+       
+    .icon i {
+        font-size: clamp(80px, 14vh, 180px);
+        line-height: 0;   
+        bottom: 0;/* removes extra internal space */
+        display: block;
+      }
+      
+    .bus-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom:-16px;
+        font-size: clamp(82.32px, 17.64vh, 199.9px);   /* ~9.8 ft */
+          }
+      
+      .bike-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -12px;
+        font-size: clamp(60px, 12vh, 140px);
+          }
+      
+      .walking-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -5px;
+        font-size: clamp(75px, 16.5vh, 175px);
+        }
+        
+        .shrimp-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -12px;
+        font-size: clamp(78px, 16vh, 181px);
+          }
+              
+      .ruler {
+          position: relative;
+          height: 18vh;
+          width: 50px;
+          margin: 0;           
+          padding: 0;
+          display: block;
+        }
+
+      .tick {
+          position: absolute;
+          left: 0;
+          width: 100%;
+          font-size: 10px;
+        }
+
+
+      .tick-label {
+          position: absolute;
+          right: 20px;   /* pushes label left of ruler */
+          top: 50%;
+          transform: translateY(-50%);
+          white-space: nowrap;
+          font-size: clamp(8px, 1vw, 12px);
+        }
+
+      .tick-line {
+            position: absolute;
+            right: 0;               /* aligns to box edge */
+            width: 15px;            /* extend fully */
+            border-top: 2px solid #333;
+          }
+  
+      .box-title{
+        font-family: "Replica Mono LL TT",  monospace; 
+        font-size: clamp(14px, 3vw, 20px);       
+        overflow: visible;
+        text-align: left; 
+      }
+  
+      .box-text{
+        font-family: "Replica Mono LL TT",  monospace; 
+        font-size: clamp(16px, 4vw, 24px);
+        overflow-y: auto;
+        text-align: left; 
+       }
+
+/* Center sliderInput container */
+  .shiny-input-container {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+/* Center slider bar */
+  .irs {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* Slider typography */
+  .irs-grid-text {
+    font-size: 12pt;
+    font-family: 'Replica Mono LL TT', monospace;
+
+  }
+  
+ .irs-grid-text:last-child {
+    display: none;
+  }
+
+
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  font-size: 12pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
+
+.state span {
+  color: white !important;
+  font-size:16px;
+}
+
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  background-color: #002366;   /* match dashboard */
+  color: white;
+  text-align: center;
+  
+  padding: 10px;
+  font-size: 18px;
+  z-index: 9999;
+}
+
+/* Link styling */
+.app-footer a {
+  color: white;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+
+/* Example CSS to make all clusters purple regardless of size */
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+  background-color: #002366!important;
+}
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+  background-color:#002366 !important;
+  color: white !important;
+}

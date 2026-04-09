@@ -1,0 +1,15 @@
+﻿Name,Location,Latitude,Longitude,ID,Instrument,Web Link
+Harbor Entrance Buoy,Harbor Entrance,42.3409462,-70.919838,Harbor.Entrance,Wave Buoy,https://wqdatalive.com/public/v3/1591?dashboardId=188&panels%5B0%5D%5Bid%5D=2884&panels%5B0%5D%5Bparams%5D=78922%2C73259%2C73261%2C79790%2C79791%2C79797%2C79799&panels%5B1%5D%5Bid%5D=2885&panels%5B1%5D%5Btab%5D=map
+Buzzards Bay Buoy,Buzzards Bay,,,Buzzards.Bay,Wave Buoy,https://wqdatalive.com/public/v3/1591?dashboardId=188&panels%5B0%5D%5Bid%5D=2884&panels%5B0%5D%5Bparams%5D=78922%2C73259%2C73261%2C79790%2C79791%2C79797%2C79799&panels%5B1%5D%5Bid%5D=2885&panels%5B1%5D%5Btab%5D=map
+North Shore Buoy,North Shore,42.70698,-70.70538,North.Shore,Wave Buoy,https://wqdatalive.com/public/v3/1591?dashboardId=188&panels%5B0%5D%5Bid%5D=2884&panels%5B0%5D%5Bparams%5D=78922%2C73259%2C73261%2C79790%2C79791%2C79797%2C79799&panels%5B1%5D%5Bid%5D=2885&panels%5B1%5D%5Btab%5D=map
+Rainsford Island Buoy,Rainsford Island,42.315048,-70.951294,Rainsford.Buoy,Wave Buoy,https://wqdatalive.com/public/v3/1591?dashboardId=188&panels%5B0%5D%5Bid%5D=2884&panels%5B0%5D%5Bparams%5D=78922%2C73259%2C73261%2C79790%2C79791%2C79797%2C79799&panels%5B1%5D%5Bid%5D=2885&panels%5B1%5D%5Btab%5D=map
+Gallops Island Tide Gauge,Gallops Island,42.324561,-70.93915,Gallops.Tide,Tide Gauge,https://wqdatalive.com/public/v3/1591?dashboardId=188&panels%5B0%5D%5Bid%5D=2884&panels%5B0%5D%5Bparams%5D=78922%2C73259%2C73261%2C79790%2C79791%2C79797%2C79799&panels%5B1%5D%5Bid%5D=2885&panels%5B1%5D%5Btab%5D=map
+Rainsford Island Weather Station,Rainsford Island,42.310793,-70.954706,Rainsford.Weather,Weather Station,"https://www.licor.cloud/dashboards/public/d631d525-0ab0-44a1-9870-d6b36f6fab6f/true?filters={%22davra-timeselector%22:{%22type%22:%22relative%22,%22unit%22:%22days%22,%22value%22:1,%22live%22:false}}"
+Long Wharf Overland Flood Sensor,Long Wharf,42.3601,-71.0484,Long.Wharf,Overland Flood Sensor,"https://dashboard.hohonu.io/map-page/hohonu-161/LongWharf,Boston,MA"
+Morrissey Blvd Overland Flood Sensor,Morrissey Blvd,42.310556,-71.045278,Morrissey.Blvd,Overland Flood Sensor,
+Tenean Beach Overland Flood Sensor,Tenean Beach,42.29139,-71.0424,Tenean.Beach,Overland Flood Sensor,"https://dashboard.hohonu.io/map-page/hohonu-173/TeneanBeach,Boston,MA"
+Lewis Mall Overland Flood Sensor,Lewis Mall,42.3663,-71.0417,Lewis.Mall,Overland Flood Sensor,"https://dashboard.hohonu.io/map-page/hohonu-103/LewisMall,Boston"
+Border St Overland Flood Sensor,Border St,42.3765,-71.04111,Border.St,Overland Flood Sensor,"https://dashboard.hohonu.io/map-page/hohonu-174/BorderSt.,Boston,MA"
+NOAA Boston Buoy,,42.346,-70.651,NOAA.Buoy,Wave Buoy,
+NOAA Boston Tide Gauge,,42.353333,-71.05,Boston.Tide,Tide Gauge,https://tidesandcurrents.noaa.gov/stationhome.html?id=8443970
+NOAA Fall River Buoy,,41.705,-71.163333,Fall.River.Tide,Tide Gauge,https://tidesandcurrents.noaa.gov/stationhome.html?id=8447386

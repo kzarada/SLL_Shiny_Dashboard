@@ -1,0 +1,8 @@
+﻿Station,Station.Name,Latitude,Longitude,Type,Sponsor,Directions
+Long.Wharf,Boston - Long Wharf,42.3601,-71.0484,radar,City of Boston,https://maps.app.goo.gl/4Xo7PL747sF612fG9
+Morrissey.Blvd,Boston - Morrissey Blvd,,,,Unknown,
+Tenean.Beach,Boston - Tenean Beach,42.29139,-71.0424,radar,City of Boston,https://maps.app.goo.gl/aYWeqcaZen26JbRC7
+Lewis.Mall,Boston - Lewis Mall,42.3663,-71.0417,ultrasonic,City of Boston,https://maps.app.goo.gl/7JEpb8W8TKiTKhyN9
+Border.St,Boston - Border St. ,42.3765,-71.04111,ultrasonic,City of Boston,https://maps.app.goo.gl/VtXtyDUQe67GxcSn7
+Essex,Essex - Main St. ,42.6311,-70.7762,ultrasonic,Executive Office of Energy and Environmental Affairs,https://maps.app.goo.gl/re6FYLZkg8iYeEHs8
+Fall.River,Fall River - Stafford Square,41.6952,-71.1398,radar,Executive Office of Energy and Environmental Affairs,https://maps.app.goo.gl/gsJN7B6JPrLTdSAy6

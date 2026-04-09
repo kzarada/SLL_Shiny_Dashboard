@@ -1,0 +1,77 @@
+﻿API,Parameter ID,Parameter,Units,Min,Max
+Nexsens,79778,Latitude,Deg,,
+Nexsens,79779,Longitude,Deg,,
+Nexsens,79785,Rel. Barometric Pressure,inHg,28,32
+Nexsens,79786,Air Temperature,C,-30,44
+Nexsens,79787,Relative Humidity,%,0,100
+Nexsens,79788,Dewpoint,C,-30,44
+Nexsens,79789,Wind Direction_1,Deg,0,360
+Nexsens,79790,Magnetic Wind Direction,Deg,0,360
+Nexsens,79791,Wind Speed,m/s,0,140
+Nexsens,79792,Wind Direction,Deg,0,360
+Nexsens,79793,Wind Speed,knots,0,72
+Nexsens,79797,Hs Wave Height,m,0,10
+Nexsens,79798,Tp Wave Period,sec,0,60
+Nexsens,79799,Dominant Wave Direction,Deg,0,360
+Nexsens,79800,Mean Wave Direction ,Deg,0,360
+Nexsens,79801,Hmax Wave Height,m,0,10
+Nexsens,79802,H10 Wave Height,m,0,10
+Nexsens,78922,WL radar,ft,,
+Nexsens,73256,Latitude,Deg,,
+Nexsens,73257,Longitude,Deg,,
+Nexsens,73259,Hs Wave Height,m,0,10
+Nexsens,73260,Tp Wave Period,sec,0,60
+Nexsens,73261,Dominant Wave Direction,Deg,0,360
+Nexsens,73262,Mean Wave Direction ,Deg,0,360
+Nexsens,132179,Latitude,Deg,,
+Nexsens,132180,Longitude,Deg,,
+Nexsens,132173,Air Temperature,C,-30,44
+Nexsens,132174,Relative Humidity,%,0,100
+Nexsens,132188,Dewpoint,C,-30,44
+Nexsens,132164,Hs Wave Height,m,0,10
+Nexsens,132165,Tp Wave Period,sec,0,60
+Nexsens,132166,Dominant Wave Direction,Deg,0,360
+Nexsens,132167,Mean Wave Direction,Deg,0,360
+Nexsens,132168,Hmax Wave Height,m,0,10
+Nexsens,132169,H10 Wave Height,m,0,10
+Nexsens,132182,WMO Avg Corrected Wind Dir,Deg,0,360
+Nexsens,132183,WMO Avg Corrected Wind Speed,m/s,0,140
+Nexsens,132184,Windchill,C,-30,44
+Nexsens,132185,Heat Index,C,-30,44
+Nexsens,132186,Air Density,Kg/m3,,
+Nexsens,132187,Wet Bulb Temperature,C,-40,36
+LiCOR,20825315-1,Pressure,inHg,28,32
+LiCOR,20840106-1,Rain,in,0,10
+LiCOR,20845310-1,Solar Radiation_1,W/m2,0,1000
+LiCOR,20845409-1,Temperature,degF,-22,115
+LiCOR,20845409-2,RH,%,0,100
+LiCOR,20845409-3,Dew Point,degF,-22,115
+LiCOR,20866713-1,Solar Radiation_2,W/m2,0,1000
+LiCOR,20866714-1,Solar Radiation_3,W/m2,0,1000
+LiCOR,20994667-1,PAR,uE,,
+LiCOR,21326654-1,Wind Speed_RMYoung,mph,0,315
+LiCOR,21326654-2,Gust Speed_RMYoung,mph,0,315
+LiCOR,21326654-3,Wind Direction_RMYoung,deg,0,360
+LiCOR,21343371-1,Wind Speed_Ultrasonic,mph,0,315
+LiCOR,21343371-2,Gust Speed_Ultrasonic,mph,0,315
+LiCOR,21343371-3,Wind Direction_Ultrasonic,deg,0,360
+Nexsens,132098,Hs Wave Height,m,,
+Nexsens,132099,Tp (DPD) Wave Period,sec,,
+Nexsens,132100,Dominant Wave Direction,Deg,,
+Nexsens,132101,Mean Wave Direction (MWD),Deg,,
+Nexsens,132102,Hmax Wave Height,m,,
+Nexsens,132103,H10 Wave Height,m,,
+Nexsens,132105,Corrected Wind Dir,Deg,,
+Nexsens,132106,Corrected Wind Speed,m/s,,
+Nexsens,132107,Air Temperature,C,,
+Nexsens,132108,Relative Humidity,%,,
+Nexsens,132109,Barometric Pressure,hPa,,
+Nexsens,132113,Latitude,Deg,,
+Nexsens,132114,Longitude,Deg,,
+Nexsens,132116,WMO Avg Corrected Wind Dir,Deg,,
+Nexsens,132117,WMO Avg Corrected Wind Speed,m/s,,
+Nexsens,132118,Windchill,C,,
+Nexsens,132119,Heat Index,C,,
+Nexsens,132120,Air Density,Kg/m3,,
+Nexsens,132121,Wet Bulb Temperature,C,,
+Nexsens,132122,Dewpoint,C,,

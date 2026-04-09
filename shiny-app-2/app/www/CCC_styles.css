@@ -1,0 +1,175 @@
+/* Register font */
+  @font-face {
+    font-family: 'Replica Mono LL TT';
+    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
+    url('ReplicaMonoLLTT-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+/* Global font */
+  body {
+    font-family: 'Replica Mono LL TT', monospace;
+  }
+  
+  .context-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .context-wrapper {
+    flex-direction: column;   /* stack on mobile */
+  }
+  
+
+  .box {
+    margin-bottom: 10px;
+  }
+  
+  .map-box {
+    height: 50vh;
+  }
+
+  .plot-box {
+    height: 50vh;
+  }
+}
+       
+/* styles.css */
+  .state span {
+  font-size: 16px;
+}
+ 
+   .map-box {
+       height: 50vh;
+    }
+    
+
+  .plot-box {
+    height: 50vh;
+    }
+    
+    .selectize-input{
+      padding: 0;
+    }
+    
+    
+      .myClass { 
+        font-size: 24px;
+        line-height: 50px;
+        text-align: left;
+        font-family: "Replica Mono LL TT",  monospace;
+        padding: 0 15px;
+        overflow: hidden;
+        color: white;
+      }
+
+
+    .box-title{
+        font-family: "Replica Mono LL TT",  monospace; 
+        font-size: clamp(14px, 3vw, 20px);       
+        overflow: visible;
+        text-align: left; 
+      }
+  
+/* 1. Remove outer spacing */
+.box-header .form-group {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 2. Remove wrapper spacing */
+.box-header .selectize-control {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 3. Tighten the actual input box */
+.box-header .selectize-input {
+  padding: 2px 6px !important;   /* inner padding (keep small, not zero) */
+  margin: 0 !important;
+  min-height: unset !important;
+  height: 20px !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+}
+
+/* 4. Remove extra space from dropdown arrow area */
+.box-header .selectize-input::after {
+  margin: 0 !important;
+}
+      
+              
+      .box-text{
+        font-family: "Replica Mono LL TT",  monospace; 
+        font-size: clamp(16px, 4vw, 24px);
+        overflow-y: auto;
+        text-align: left; 
+       }
+
+/* Center sliderInput container */
+  .shiny-input-container {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+
+/* Center slider bar */
+  .irs {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* Slider typography */
+  .irs-grid-text {
+    font-size: 12pt;
+    font-family: 'Replica Mono LL TT', monospace;
+
+  }
+  
+ .irs-grid-text:last-child {
+    display: none;
+  }
+
+
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  font-size: 12pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  
+  background-color: #2EBBAD;   /* match dashboard */
+  color: white;
+  text-align: center;
+  
+  padding: 10px;
+  font-size: 18px;
+  z-index: 9999;
+}
+
+/* Link styling */
+.app-footer a {
+  color: white;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Example CSS to make all clusters purple regardless of size */
+.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+  background-color: #2EBBAD!important;
+}
+.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
+  background-color:#2EBBAD !important;
+}
