@@ -167,7 +167,7 @@ ui <- dashboardPage(
                                             "icon_select", 
                                             label = "Compare to:", 
                                             choices = list("Bus" = "bus", 
-                                                           "Person" = "walk", 
+                                                           "Human" = "walk", 
                                                            "Bike" = "bike", 
                                                            "Giant Shrimp" = 'shrimp'), 
                                             multiple = F
@@ -546,7 +546,7 @@ server <- function(input, output, session) {
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
     depth = if(unit == "m"){main_flood_graph()$Flood.Depth/3.281}else{main_flood_graph()$Flood.Depth}
-    y_max = max(depth, convert_units(1, unit_state()))
+    y_max = max(depth, convert_units(1, unit_state()), na_rm = T)
     
     ggplot(main_flood_graph(), aes(x = Time_ET, y = depth)) + 
       geom_line(linewidth = 1.5, color = "#2EBBAD") + 

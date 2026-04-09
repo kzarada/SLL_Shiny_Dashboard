@@ -403,6 +403,19 @@ ui <- dashboardPage(
 # ---- Server ----
 server <- function(input, output, session) {
   
+  ################## Popup ################## 
+  showModal(modalDialog(
+    title = "Welcome to the Stone Living Lab Current Coastal Conditions Dashboard!",
+    HTML(paste0("This dashboard displays data from our real-time monitoring sensors. 
+    For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
+                                                                                       href = "https://www.canva.com/design/DAGzC4w-HyY/FTvLHmZpkhQShXF0yTdktg/view?utm_content=DAGzC4w-HyY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h023b1e34ec", 
+                                                                                       target = '_blank'), "</u>"), 
+         "<br><br> <strong> Please note that data are currently not available from the Gallops Tide Station or Rainsford Weather Station. We are working with our data providers on getting these instruments back online as soon as possible."),
+    easyClose = TRUE,
+    footer = modalButton("Dismiss")
+  ))
+  
+  
   ########### Unit Toggle ####################
   
   unit_state <- reactive({ifelse(input$unit_toggle, "m", "ft")})
