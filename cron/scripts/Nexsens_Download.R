@@ -12,7 +12,7 @@ library(vroom)
 
 data_dir = "/app/Data/"
 
-source("apps/scripts/api_keys.R")
+source("app/scripts/api_keys.R")
 
 #Device IDs 
 

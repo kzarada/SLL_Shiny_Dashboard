@@ -21,7 +21,7 @@ library(vroom)
 
 data_dir = "/app/Data/"
 
-source("apps/scripts/api_keys.R")
+source("app/scripts/api_keys.R")
 
 #Device IDs 
 device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>% 
@@ -84,6 +84,7 @@ if(length(hohonu_download$data$waterlevel)==0){
              " to: ", current_time, " at ", Sys.time()), file = log_con, sep = "\n")
   next
 }
+close(log_con)
 
 hohonu_data = as.data.frame(hohonu_download$data) %>% 
                   mutate(Location = rep(device_id$Location[i]), 
@@ -110,8 +111,7 @@ write.table(hohonu_data,
             col.names = FALSE,
             row.names = TRUE)
 
-close(log_con)
 
-rm(hohonu_data, hohonu_download, response, url, req)
+
 }
 
