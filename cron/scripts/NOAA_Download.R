@@ -51,7 +51,7 @@ for(i in 1:dim(device_id)[1]){
   response <- req_perform(req)
   
   #log file 
-  log_con <- file("/app/scripts/logs/noaa_log.txt", open = "a")
+  log_con <- file("/app/Data/Outputs/logs/noaa_log.txt", open = "a")
   
   if (response$status_code!= 200) {
     cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 

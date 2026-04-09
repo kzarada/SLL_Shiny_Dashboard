@@ -58,7 +58,7 @@ for(i in 1:dim(device_id)[1]){
   response <- req_perform(req)
   
   #log file 
-  log_con <- file("/scripts/logs/licor_log.txt", open = "a")
+  log_con <- file("/app/Data/Outputs/logs/licor_log.txt", open = "a")
   
 
   if (response$status_code!= 200) {
