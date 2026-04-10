@@ -289,6 +289,7 @@ body {
 }
 
 
+
 /* ═══════════════════════════════════════
    MAP CLUSTERS
 ═══════════════════════════════════════ */
@@ -305,12 +306,12 @@ body {
 .marker-cluster-medium div,
 .marker-cluster-large div {
   background-color:#2EBBAD  !important;
-  color: white !important;
+  color: black !important;
   border-radius: 50%;
   
    box-shadow:
-    0 0 0 6px  rgba(46, 187, 173 0.5),   /* ring 1 — medium teal */
-    0 0 0 12px rgba(46, 187, 173 0.25);  /* ring 2 — faint teal */
-    0 0 0 18px rgba(46, 187, 173 0.15);  /* ring 3 — extra faint teal */
+    0 0 0 6px  rgba(46, 187, 173, 0.50),   /* ring 1 — medium blue */
+    0 0 0 12px rgba(46, 187, 173, 0.30);  /* ring 2 — faint blue */
+    0 0 0 18px rgba(46, 187, 173, 0.20);
     
 }
