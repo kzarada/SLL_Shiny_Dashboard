@@ -65,21 +65,34 @@ body {
     min-height: 40px !important;
   }
 
-  /* Keep logo image from overflowing the shorter bar */
   .main-header .logo img {
     height: 28px !important;
     width: 28px !important;
   }
 
-  /* Title text line-height must match new bar height */
-  .myClass {
-    line-height: 40px;
-    font-size: clamp(12px, 3vw, 18px);
+  /* Keep the navbar items in a single row */
+  .main-header .navbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    overflow: hidden !important;
   }
 
-  /* Shrink the unit toggle switch in the header */
-  .main-header .navbar .dropdown {
-    padding: 4px 6px !important;
+  /* Prevent the title span from wrapping or pushing down */
+  .myClass {
+    line-height: 40px;
+    font-size: clamp(10px, 2.5vw, 16px);
+    white-space: nowrap;        /* never wraps to a new line */
+    overflow: hidden;
+    text-overflow: ellipsis;    /* shows "..." if it's still too long */
+    max-width: 45vw;            /* stops it crowding the toggle switch */
+  }
+
+  /* Prevent the navbar list from wrapping */
+  .main-header .navbar-nav {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
   }
 }
 
