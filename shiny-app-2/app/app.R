@@ -136,21 +136,19 @@ ui <- dashboardPage(
   
   dashboardBody(use_theme(mytheme),
                 
-                tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css"),
+                tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                           
-                          tags$style(HTML(
-                            '.myClass { 
-                            font-size: clamp(24px, 7vw, 60px)
-                            line-height: 50px;
-                            text-align: left;
-                            font-family: "Replica Mono LL TT",  monospace;
-                            padding: 0 15px;
-                            overflow: hidden;
-                            color: white;}'))),
-                
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),
+                tags$script(HTML('
+                          $(document).ready(function() {
+                            Shiny.setInputValue("window_width", $(window).width());
+                            $(window).resize(function() {
+                              Shiny.setInputValue("window_width", $(window).width());
+                            });
+                          });
+                        '))
                 
                 tabItems(
                   tabItem(tabName = "dashboard", 
@@ -210,7 +208,6 @@ ui <- dashboardPage(
                                        label = NULL, 
                                        choices = list("Select Wave Buoy" = "intro",
                                                       "Harbor Entrance" = "harbor.entrance", 
-                                                      "Rainsford Island" = 'rainsford', 
                                                       "North Shore" = 'north.shore'),
                                        multiple = F),
                                      solidHeader = TRUE,
@@ -285,7 +282,7 @@ ui <- dashboardPage(
                                    "Gallops Island Tide Gauge" = "Gallops.Tide", 
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
-                                   "Rainsford NE Wave Buoy" = "Rainsford.Buoy",
+                                   #"Rainsford NE Wave Buoy" = "Rainsford.Buoy",
                                    "Rainsford Island Weather Station" = "Rainsford.Weather"), 
                               multiple = F
                             ), 
@@ -415,7 +412,34 @@ server <- function(input, output, session) {
     footer = modalButton("Dismiss")
   ))
   
+  ########## Mobile Detection #############
+  # Detect mobile via window width passed from JS
+  is_mobile <- reactive({
+    !is.null(input$window_width) && input$window_width < 768
+  })
   
+  plot_theme <- reactive({
+    if (is_mobile()) {
+      theme_bw(base_family = "Replica Mono LL TT") +
+        theme(
+          axis.text.x  = element_text(size = 7, angle = 45, hjust = 1),
+          axis.text.y  = element_text(size = 7),
+          axis.title   = element_text(size = 9),
+          legend.text  = element_text(size = 7),
+          legend.title = element_blank(), 
+          legend.position = "bottom"
+        )
+    } else {
+      theme_bw(base_family = "Replica Mono LL TT") +
+        theme(
+          axis.text  = element_text(size = 16),
+          axis.title = element_text(size = 18),
+          legend.text  = element_text(size = 16),
+          legend.title = element_blank(), 
+          legend.position = "bottom"
+        )
+    }
+  })
   ########### Unit Toggle ####################
   
   unit_state <- reactive({ifelse(input$unit_toggle, "m", "ft")})
@@ -477,14 +501,9 @@ server <- function(input, output, session) {
                    arrow = arrow(length = unit(0.15, 'cm'))) + 
       xlab("Time (ET)") + 
       ylab(y_label) +
-      theme_bw(base_family = "Replica Mono LL TT") +
       scale_color_manual(
         values = c("#256EFF", "#002366", "#2EBBAD")) +
-      theme(axis.text = element_text(size = 16),
-            axis.title = element_text(size = 18),
-            legend.position = 'bottom',
-            legend.text = element_text(size = 16),
-            legend.title = element_blank())
+      plot_theme()
     
     
   })
@@ -532,15 +551,11 @@ server <- function(input, output, session) {
       ggtitle(ggtitle) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
-      theme_bw(base_family = "Replica Mono LL TT") + 
       scale_color_manual(
         values = c("#256EFF","#2EBBAD")) + 
-      theme(plot.title = element_text(size = 18), 
-            axis.text = element_text(size = 16), 
-            axis.title = element_text(size = 18), 
-            legend.position = 'bottom', 
-            legend.title = element_blank(), 
-            legend.text = element_text(size = 16))
+      plot_theme() + 
+      theme(plot.title = element_text(size = 18))
+
   })
   
   output$tide_plot <- renderPlot({
@@ -576,13 +591,10 @@ server <- function(input, output, session) {
       ylab(y_label) +
       xlab("Time (ET)") + 
       ggtitle(ggtitle) +
-      theme_bw(base_family = "Replica Mono LL TT") + 
       scale_color_manual(
         values = c("#002366")) + 
-      theme(plot.title = element_text(size = 18), 
-            axis.text = element_text(size = 16), 
-            axis.title = element_text(size = 18), 
-            legend.position = 'none')
+     plot_theme() + 
+     theme(legend.position = 'none')
     
     
   }) 
@@ -716,9 +728,9 @@ server <- function(input, output, session) {
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
-      theme_bw(base_family = "Replica Mono LL TT") +
       theme(axis.text = element_text(size = 16),
-            axis.title = element_text(size = 18))
+            axis.title = element_text(size = 18)) + 
+      plot_theme()
     
   })
   
@@ -777,14 +789,9 @@ server <- function(input, output, session) {
         geom_line(aes(x = Time_ET, y = max_wave, color = "Maximum Wave Height (ft)"), linewidth = 1) + 
         ylab(y_label) + 
         xlab("Time (ET)") + 
-        theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#256EFF","#2EBBAD")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'bottom', 
-              legend.title = element_blank(), 
-              legend.text = element_text(size = 16)) 
+        plot_theme()
     }
     else if(input$instrument.id == "Rainsford.Weather"){
       ggplot(combo_data(), aes(x = Time_ET, y = Wind.Speed_RMYoung_mph)) +
@@ -799,14 +806,9 @@ server <- function(input, output, session) {
                      arrow = arrow(length = unit(0.15, 'cm'))) + 
         xlab("Time (ET)") + 
         ylab("Wind Speed (mph)") +
-        theme_bw(base_family = "Replica Mono LL TT") +
         scale_color_manual(
           values = c("#256EFF", "#002366", "#2EBBAD")) +
-        theme(axis.text = element_text(size = 16),
-              axis.title = element_text(size = 18),
-              legend.position = 'bottom',
-              legend.text = element_text(size = 16),
-              legend.title = element_blank())
+       plot_theme()
     }
     else if(input$instrument.id == "Gallops.Tide"){
       
@@ -822,12 +824,10 @@ server <- function(input, output, session) {
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
         xlab("Time (ET)") + 
-        theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#002366")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'none')
+        plot_theme() + 
+        theme(legend.position = 'none')
       
     }
     else if(input$instrument.id ==  "Boston.Tide"){
@@ -843,12 +843,10 @@ server <- function(input, output, session) {
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
         xlab("Time (ET)") + 
-        theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#002366")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'none')
+        plot_theme() + 
+        theme(legend.position = 'none')
       
     }
     else if(input$instrument.id == "Fall.River.Tide"){
@@ -864,12 +862,10 @@ server <- function(input, output, session) {
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
         xlab("Time (ET)") + 
-        theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#002366")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'none')
+        plot_theme() + 
+        theme(legend.position = 'none')
     }
     else if(input$instrument.id == "North.Shore"){
       unit = unit_state() 
@@ -890,11 +886,7 @@ server <- function(input, output, session) {
         theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#256EFF","#2EBBAD")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'bottom', 
-              legend.title = element_blank(), 
-              legend.text = element_text(size = 16))
+        plot_theme()
     }
     else if(input$instrument.id == "Rainsford.Buoy"){
       unit = unit_state() 
@@ -909,14 +901,9 @@ server <- function(input, output, session) {
         xlab("Time (ET)") + 
         geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                    color = "darkred", linewidth = 1, linetype = "dashed") +
-        theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
           values = c("#256EFF")) + 
-        theme(axis.text = element_text(size = 16), 
-              axis.title = element_text(size = 18), 
-              legend.position = 'bottom', 
-              legend.title = element_blank(), 
-              legend.text = element_text(size = 16))
+        plot_theme()
     }
     
   })
