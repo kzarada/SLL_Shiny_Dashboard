@@ -226,9 +226,11 @@ ui <- dashboardPage(
                               list("Boston - Border Street" = "Border.St", 
                                    "Boston - Lewis Mall" = "Lewis.Mall",
                                    "Boston - Long Wharf" = "Long.Wharf",
+                                   "Boston - Morrissey Blvd" = "Morrissey.Blvd",
                                    "Boston - Tenean Beach" = "Tenean.Beach",
                                    "Essex - Main Street" = "Essex", 
-                                   "Fall River - Stafford Square" = "Fall.River"), 
+                                   "Fall River - Stafford Square" = "Fall.River", 
+                                   "Salem - Collin's Cove" = "Salem"), 
                               multiple = F), 
                             
                             column(width = 6, 
