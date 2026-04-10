@@ -292,11 +292,25 @@ body {
 /* ═══════════════════════════════════════
    MAP CLUSTERS
 ═══════════════════════════════════════ */
-
+/* Outer container — transparent so rings show through */
 .marker-cluster-small,
 .marker-cluster-medium,
-.marker-cluster-large { background-color: #2EBBAD !important; }
+.marker-cluster-large {
+  background-color: transparent !important;
+  border-radius: 50%;
+}
 
+/* Inner div — the center circle with rings radiating outward */
 .marker-cluster-small div,
 .marker-cluster-medium div,
-.marker-cluster-large div { background-color: #2EBBAD !important; }
+.marker-cluster-large div {
+  background-color:#2EBBAD  !important;
+  color: white !important;
+  border-radius: 50%;
+  
+   box-shadow:
+    0 0 0 6px  rgba(46, 187, 173 0.5),   /* ring 1 — medium teal */
+    0 0 0 12px rgba(46, 187, 173 0.25);  /* ring 2 — faint teal */
+    0 0 0 18px rgba(46, 187, 173 0.15);  /* ring 3 — extra faint teal */
+    
+}
