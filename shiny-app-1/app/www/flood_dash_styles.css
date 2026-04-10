@@ -305,11 +305,24 @@
 }
 
 
-/* Example CSS to make all clusters purple regardless of size */
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-  background-color: #002366!important;
+/* Outer container — transparent so rings show through */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: transparent !important;
+  border-radius: 50%;
 }
-.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-  background-color:#002366 !important;
+
+/* Inner div — the center circle with rings radiating outward */
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: #002366 !important;
   color: white !important;
+  border-radius: 50%;
+  
+   box-shadow:
+  0 0 0 6px  rgba(0, 35, 102, 0.5),    /* dark blue ring */
+  0 0 0 12px rgba(46, 187, 173, 0.4),  /* teal ring */
+  0 0 0 18px rgba(46, 187, 173, 0.15); /* faint teal outer ring */
 }
