@@ -174,7 +174,7 @@ ui <- dashboardPage(
                                    box(title = selectInput(
                                      "tide_select",
                                      label = NULL, 
-                                     choices = list("Select Tide Gauge" = 'boston',
+                                     choices = list("Select Tide Gauge" = 'intro',
                                                     "Gallops Island" = "gallops", 
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river'),
