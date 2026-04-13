@@ -4,6 +4,7 @@ library(shinydashboard)
 library(leaflet)
 library(fresh)
 library(sf)
+library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
@@ -130,14 +131,9 @@ ui <- dashboardPage(
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),
-                tags$script(HTML('
-                          $(document).ready(function() {
-                            Shiny.setInputValue("window_width", $(window).width());
-                            $(window).resize(function() {
-                              Shiny.setInputValue("window_width", $(window).width());
-                            });
-                          });
-                        ')),
+               
+                 shinybrowser::detect(), 
+                
                 
                 tabItems(
                   tabItem(tabName = "dashboard", 
@@ -406,13 +402,9 @@ server <- function(input, output, session) {
   ))
   
   ########## Mobile Detection #############
-  # Detect mobile via window width passed from JS
-  is_mobile <- reactive({
-    !is.null(input$window_width) && input$window_width < 768
-  })
-  
+
   plot_theme <- reactive({
-    if (is_mobile()) {
+    if (shinybrowser::is_device_mobile()) {
       theme_bw(base_family = "Replica Mono LL TT") +
         theme(
           axis.text.x  = element_text(size = 7, angle = 45, hjust = 1),
