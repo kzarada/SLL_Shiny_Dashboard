@@ -32,17 +32,6 @@ end_time = max(map_hohonu$Time_ET, na.rm = T)
 arrow_length_x <- 1800   # seconds (controls horizontal arrow size)
 arrow_length_y <- 0.5   # wind-speed units (vertical size)
 
-wind_dir = combo%>% 
-  mutate(Time_ET = round_date(Time_ET, unit = "hour")) %>% 
-  group_by(Time_ET) %>% 
-  summarise(Mean_Wind_Dir = mean(Wind.Direction_RMYoung_deg)) %>% 
-  ungroup() %>%
-  mutate(
-    dir_rad = (Mean_Wind_Dir+ 180)*pi / 180, 
-    arrow_y = rep(-1), 
-    arrow_xend = Time_ET + arrow_length_x * cos(dir_rad), 
-    arrow_yend = arrow_y + arrow_length_y * sin(dir_rad))
-
 
 #colors: 
 #blue: #256EFF
@@ -478,7 +467,21 @@ server <- function(input, output, session) {
     instrument.locations %>% filter(ID == input$instrument.id)
   })
   
+  ############# Wind Direction ################
   
+  wind_dir <- reactive({
+    combo_data() %>% 
+    mutate(Time_ET = round_date(Time_ET, unit = "hour")) %>% 
+    group_by(Time_ET) %>% 
+    summarise(Mean_Wind_Dir = mean(Wind.Direction_RMYoung_deg)) %>% 
+    ungroup() %>%
+    mutate(
+      dir_rad = (Mean_Wind_Dir+ 180)*pi / 180, 
+      arrow_y = rep(-1), 
+      arrow_xend = Time_ET + arrow_length_x * cos(dir_rad), 
+      arrow_yend = arrow_y + arrow_length_y * sin(dir_rad))
+  
+  })
   
   
   ################# Main Page Plots ##########################
@@ -487,6 +490,7 @@ server <- function(input, output, session) {
     
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Wind Speed (mph)", "Wind Speed (m/s)")
+    
     wind_speed = if(unit == "m"){
       combo_data()$Wind.Speed_RMYoung_mph/2.237}else{combo_data()$Wind.Speed_RMYoung_mph}
     gust_speed = if(unit == "m"){combo_data()$Gust.Speed_RMYoung_mph/2.237}else{combo_data()$Gust.Speed_RMYoung_mph}
@@ -497,7 +501,7 @@ server <- function(input, output, session) {
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylim(c(-2, max(gust_speed + 1))) + 
-      geom_segment(data = wind_dir, 
+      geom_segment(data = wind_dir(), 
                    aes(xend = arrow_xend, 
                        y = arrow_y, 
                        yend = arrow_yend, 
