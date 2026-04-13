@@ -8,7 +8,7 @@ library(tidyverse)
 library(shinydashboard)
 library(leaflet)
 library(fresh)
-
+library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
 #data_dir = "/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data"
 data_dir = "/srv/shiny-server/Data/"
@@ -122,6 +122,8 @@ ui <- dashboardPage(
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Flooding Dashboard </span>\');})')),
+                
+                shinybrowser::detect(), 
                 
                 tabItems(
                   tabItem(tabName = "dashboard", 
@@ -338,6 +340,27 @@ server <- function(input, output, session) {
       "unit_toggle",
       label = unit_state()
     )
+  })
+  
+  ########## Mobile Detection #############
+  
+  plot_theme <- reactive({
+    if (shinybrowser::is_device_mobile()) {
+      theme_bw(base_family = "Replica Mono LL TT") +
+        theme(
+          axis.text.x  = element_text(size = 7, angle = 45, hjust = 1),
+          axis.text.y  = element_text(size = 7),
+          axis.title   = element_text(size = 9),
+          legend.position = "none"
+        )
+    } else {
+      theme_bw(base_family = "Replica Mono LL TT") +
+        theme(
+          axis.text  = element_text(size = 16),
+          axis.title = element_text(size = 18),
+          legend.position = "none"
+        )
+    }
   })
   
   
@@ -559,10 +582,7 @@ server <- function(input, output, session) {
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
-      theme_bw(base_family = "Replica Mono LL TT") +
-      theme(axis.text = element_text(size = 16),
-            axis.title = element_text(size = 18), 
-            plot.margin = margin(0.5, 0.5, 0.5, 0.5, "cm"))
+      plot_theme()
     
   })
   
@@ -699,9 +719,7 @@ server <- function(input, output, session) {
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
-      theme_bw(base_family = "Replica Mono LL TT") +
-      theme(axis.text = element_text(size = 16),
-            axis.title = element_text(size = 18))
+      plot_theme()
     
   })
   
