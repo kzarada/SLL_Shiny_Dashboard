@@ -219,7 +219,7 @@ ui <- dashboardPage(
                               multiple = F), 
                             
                             column(width = 6, 
-                                   class = "col-12 col-md-6",
+                                   class = 'plot-box',
                                    box(
                                      title = "Sensor Photo", 
                                      solidHeader = TRUE, 
@@ -229,7 +229,6 @@ ui <- dashboardPage(
                                    )),
                             column(
                               width = 6,
-                              class = "col-12 col-md-6", 
                               box(
                                 title = 'Sensor Information', 
                                 solidHeader = TRUE, 
@@ -243,6 +242,7 @@ ui <- dashboardPage(
                                 title = 'Sensor Location', 
                                 solidHeader = TRUE, 
                                 status = 'primary', 
+                                class = 'map-box',
                                 leafletOutput("sensor_map"), 
                                 width = 12
                               ), 
@@ -250,6 +250,7 @@ ui <- dashboardPage(
                               box(
                                 title = "Flood Depth", 
                                 solidHeader = TRUE, 
+                                class = 'plot-box',
                                 status = "primary", 
                                 shinyfullscreen::fullscreen_this(plotOutput("station_flood")), 
                                 width = 12
@@ -298,6 +299,7 @@ ui <- dashboardPage(
                                 title = 'Instrument Location', 
                                 solidHeader = TRUE, 
                                 status = 'primary', 
+                                class = 'map-box',
                                 leafletOutput("instrument_map"), 
                                 width = 12
                               ), 
@@ -306,6 +308,7 @@ ui <- dashboardPage(
                                 title = "Instrument Data", 
                                 solidHeader = TRUE, 
                                 status = "primary", 
+                                class = 'plot-box',
                                 shinyfullscreen::fullscreen_this(plotOutput("instrument_graph")), 
                                 width = 12
                               )

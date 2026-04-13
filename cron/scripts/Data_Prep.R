@@ -24,7 +24,7 @@ parms = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_Parameters.csv"))%>%
 
 
 harbor_entrance = read.csv(file.path(data_dir, "Outputs/Nexsens_Harbor_Entrance_Data.csv")) %>% 
-  dplyr::mutate(across(is.numeric, \(x) na_if(x, -100000))) %>% 
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>% 
   arrange(Time_ET) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
@@ -42,7 +42,7 @@ harbor_entrance = read.csv(file.path(data_dir, "Outputs/Nexsens_Harbor_Entrance_
 
 
 north_shore= read.csv(file.path(data_dir, "Outputs/Nexsens_North_Shore_Data.csv")) %>% 
-  dplyr::mutate(across(is.numeric, \(x) na_if(x, -100000))) %>%
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>%
   arrange(Time_ET) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
@@ -59,7 +59,7 @@ north_shore= read.csv(file.path(data_dir, "Outputs/Nexsens_North_Shore_Data.csv"
   rename_with(~paste0("North_Shore_", .x), !c(Time_ET))
 
 rainsford_buoy = read.csv(file.path(data_dir, "Outputs/Nexsens_Rainsford_NE_Data.csv")) %>% 
-  dplyr::mutate(across(is.numeric, \(x) na_if(x, -100000))) %>% 
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>% 
   arrange(Time_ET) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
@@ -74,7 +74,7 @@ rainsford_buoy = read.csv(file.path(data_dir, "Outputs/Nexsens_Rainsford_NE_Data
   rename_with(~paste0("Rainsford_", .x), !c(Time_ET))
 
 rainsford = read.csv(file.path(data_dir, "Outputs/LiCOR_Rainsford_Island_Data.csv"))  %>% 
-  dplyr::mutate(across(is.numeric, \(x) na_if(x, -100000))) %>% 
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>% 
   arrange(Time_ET) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
@@ -89,7 +89,7 @@ rainsford = read.csv(file.path(data_dir, "Outputs/LiCOR_Rainsford_Island_Data.cs
 
 
 gallops = read.csv(file.path(data_dir, "Outputs/Nexsens_Gallops_Data.csv")) %>% 
-  dplyr::mutate(across(is.numeric, \(x) na_if(x, -100000))) %>% 
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>% 
   arrange(Time_ET) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
