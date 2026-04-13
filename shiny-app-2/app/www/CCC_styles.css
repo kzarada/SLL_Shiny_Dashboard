@@ -74,25 +74,34 @@ body {
   .main-header .navbar {
     display: flex !important;
     flex-direction: row !important;
-    align-items: left !important;
+    align-items: center !important;
+    padding: 0 !important;
     overflow: hidden !important;
   }
 
-  /* Prevent the title span from wrapping or pushing down */
-  .myClass {
+
+   .myClass {
+    order: 1;                   /* sits after logo (order 0), before switch (order 2) */
+    flex: 1 1 auto;             /* grows to fill available space */
     line-height: 40px;
     font-size: clamp(10px, 2.5vw, 16px);
-    white-space: nowrap;        /* never wraps to a new line */
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;    /* shows "..." if it's still too long */
-    max-width: 45vw;            /* stops it crowding the toggle switch */
+    text-overflow: ellipsis;
+    text-align: left !important;
+    padding: 0 6px !important;
   }
-
-  /* Prevent the navbar list from wrapping */
+ /* Push the toggle switch to the far right */
+  .main-header .navbar .navbar-custom-menu {
+    order: 2;
+    margin-left: auto !important;
+    flex-shrink: 0;             /* never compress the switch */
+  }
+  
   .main-header .navbar-nav {
     display: flex !important;
     flex-direction: row !important;
-    align-items: left !important;
+    align-items: center !important;
   }
 }
 

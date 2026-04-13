@@ -174,7 +174,7 @@ ui <- dashboardPage(
                                    box(title = selectInput(
                                      "tide_select",
                                      label = NULL, 
-                                     choices = list("Select Tide Gauge" = 'intro',
+                                     choices = list("Select Tide Gauge" = 'boston',
                                                     "Gallops Island" = "gallops", 
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river'),
@@ -219,7 +219,7 @@ ui <- dashboardPage(
                               multiple = F), 
                             
                             column(width = 6, 
-                                   class = 'plot-box',
+                                   class = "col-12 col-md-6", 
                                    box(
                                      title = "Sensor Photo", 
                                      solidHeader = TRUE, 
@@ -229,6 +229,7 @@ ui <- dashboardPage(
                                    )),
                             column(
                               width = 6,
+                              class = "col-12 col-md-6", 
                               box(
                                 title = 'Sensor Information', 
                                 solidHeader = TRUE, 
@@ -276,6 +277,7 @@ ui <- dashboardPage(
                             ), 
                             
                             column(width = 6, 
+                                   class = "col-12 col-md-6", 
                                    box(
                                      title = "Instrument Photo", 
                                      solidHeader = TRUE, 
@@ -286,6 +288,7 @@ ui <- dashboardPage(
                             
                             column(
                               width = 6,
+                              class = "col-12 col-md-6", 
                               box(
                                 title = 'Instrument Overview', 
                                 solidHeader = TRUE, 
@@ -732,7 +735,7 @@ server <- function(input, output, session) {
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
     depth = if(unit == "m"){sensor_loc()$Flood.Depth/3.281}else{sensor_loc()$Flood.Depth}
-    y_max = max(depth, convert_units(1, unit_state()))
+    y_max = max(depth, convert_units(1, unit_state()), na.rm = T)
     
     ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
       geom_line(linewidth = 1.5, color = "#2EBBAD") + 
