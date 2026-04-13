@@ -42,9 +42,11 @@ for(i in 1:dim(device_id)[1]){
   
   
   if(str_detect(last_time, ":00", negate = TRUE)){
-    last_time = paste0(last_time, "%2000%3A00%3A00")}
+    last_time = paste0(last_time, "%2000%3A00%3A00")
+  } else{  
+    last_time = str_replace_all(str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20"), ":", "%3A") 
+  }
   
-  last_time = str_replace_all(str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20"), ":", "%3A") 
   
   current_time = str_replace_all(str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20"), ":", "%3A")
   
