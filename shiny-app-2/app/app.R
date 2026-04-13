@@ -490,12 +490,16 @@ server <- function(input, output, session) {
       combo_data()$Wind.Speed_RMYoung_mph/2.237}else{combo_data()$Wind.Speed_RMYoung_mph}
     gust_speed = if(unit == "m"){combo_data()$Gust.Speed_RMYoung_mph/2.237}else{combo_data()$Gust.Speed_RMYoung_mph}
     
+    y_max = if(unit == "m"){
+      max(gust_speed + 1, 6.7)}else{max(gust_speed + 1, 15)}
+    
+    
     ggplot(combo_data(), aes(x = Time_ET, y = wind_speed)) +
       geom_line(aes(x = Time_ET, y = wind_speed, color = "Wind Speed"), linewidth = 1) +
       geom_line(aes(x = Time_ET, y = gust_speed, color = "Gust Speed"), linewidth = 1) +
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
-      ylim(c(-2, max(gust_speed + 1))) + 
+      ylim(c(-2, y_max)) + 
       geom_segment(data = wind_dir(), 
                    aes(xend = arrow_xend, 
                        y = arrow_y, 
@@ -536,6 +540,8 @@ server <- function(input, output, session) {
       if(unit == "m"){combo_data()$North_Shore_Hmax_Wave_Height_m}else{combo_data()$North_Shore_Hmax_Wave_Height_ft}
     }
     
+    y_max = max(max_height, convert_units(2.5, unit))
+    
     ggtitle = case_when(
       input$wave_select == "intro" ~ "Harbor Entrance Wave Buoy",
       input$wave_select == "harbor.entrance" ~ "Harbor Entrance Wave Buoy", 
@@ -550,6 +556,7 @@ server <- function(input, output, session) {
       geom_line(aes(color = "Significant Wave Height"), linewidth= 1) + 
       geom_line(aes(x = Time_ET, y = max_height, color = "Maximum Wave Height"), linewidth = 1) + 
       ylab(y_label) + 
+      ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
       ggtitle(ggtitle) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 

@@ -24,19 +24,11 @@ for(i in 1:dim(device_id)[1]){
   filename = paste0(data_dir, "Outputs/", device_id$API[i], "_",  device_id$Location[i], "_Data.csv")
   
   
-  last_time = vroom(filename, col_select = Time_ET, col_types = c(Time_ET= 'T')) %>% 
-    pull() %>% 
-    last() %>% 
-    force_tz(tzone = "America/New_York")
-  
   current_time = as.Date(now(tzone = "America/New_York"))
   
   #if statement to capture missing last_time values
-  if(is.na(last_time) | !exists("last_time")){ 
-    last_time = current_time - days(1)}
-  
-  if(str_detect(last_time, ":00", negate = TRUE)){
-    last_time = paste0(last_time, "00:00:00")}
+    last_time = current_time - days(2)
+
   
   current_time = str_remove_all(current_time, "-")
   last_day = str_remove_all(as.Date(last_time), "-")
@@ -76,15 +68,8 @@ for(i in 1:dim(device_id)[1]){
   
   if(dim(api_data_clean)[1] == 0){next}
   
-  #write.csv(api_data_clean, filename)
-  write.table(api_data_clean,
-              file = filename,
-              sep = ",",
-              append = TRUE,
-              quote = FALSE,
-              col.names = FALSE,
-              row.names = TRUE)
-  
+  write.csv(api_data_clean, filename)
+ 
   
 } #end loop 
   
