@@ -57,12 +57,19 @@ body {
   color: white;
 }
 
-/* Shrink the navbar bar itself on small screens */
 @media (max-width: 768px) {
+
+  /* Shrink header bar */
   .main-header .navbar,
   .main-header .logo {
     height: 40px !important;
     min-height: 40px !important;
+  }
+
+  /* Narrow the logo column */
+  .main-header .logo {
+    width: 50px !important;
+    flex-shrink: 0;
   }
 
   .main-header .logo img {
@@ -70,41 +77,44 @@ body {
     width: 28px !important;
   }
 
-  /* Keep the navbar items in a single row */
+  /* Navbar flex row: title fills space between logo and switch */
   .main-header .navbar {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     padding: 0 !important;
+    margin-left: 50px !important;   /* offset to clear the logo column */
     overflow: hidden !important;
+    width: calc(100% - 50px) !important;
   }
 
-
-   .myClass {
-    order: 1;                   /* sits after logo (order 0), before switch (order 2) */
-    flex: 1 1 auto;             /* grows to fill available space */
+  /* Title: left-aligned, grows to fill available space */
+  .myClass {
+    order: 1;
+    flex: 1 1 auto;
     line-height: 40px;
-    font-size: clamp(10px, 2.5vw, 16px);
+    font-size: clamp(10px, 3.5vw, 16px);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left !important;
     padding: 0 6px !important;
   }
- /* Push the toggle switch to the far right */
+
+  /* Toggle switch: pinned right, never shrinks */
   .main-header .navbar .navbar-custom-menu {
     order: 2;
+    flex-shrink: 0;
     margin-left: auto !important;
-    flex-shrink: 0;             /* never compress the switch */
+    padding-right: 8px;
   }
-  
+
   .main-header .navbar-nav {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
   }
 }
-
 
 /* ═══════════════════════════════════════
    FOOTER
@@ -333,7 +343,7 @@ body {
   
    box-shadow:
     0 0 0 6px  rgba(46, 187, 173, 0.50),   /* ring 1 — medium blue */
-    0 0 0 12px rgba(46, 187, 173, 0.30);  /* ring 2 — faint blue */
+    0 0 0 12px rgba(46, 187, 173, 0.30),  /* ring 2 — faint blue */
     0 0 0 18px rgba(46, 187, 173, 0.20);
     
 }
