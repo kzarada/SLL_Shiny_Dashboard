@@ -712,7 +712,7 @@ server <- function(input, output, session) {
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
     depth = if(unit == "m"){sensor_loc()$Flood.Depth/3.281}else{sensor_loc()$Flood.Depth}
-    y_max = max(depth, convert_units(1, unit_state()))
+    y_max = max(depth, convert_units(1, unit_state()), na.rm = T)
     
     ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
       geom_line(linewidth = 1.5, color = "#2EBBAD") + 
