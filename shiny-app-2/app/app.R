@@ -104,8 +104,7 @@ ui <- dashboardPage(
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
                   titleWidth = 70, 
                   tags$li(
-                    class = "dropdown",
-                    style = "padding: 5px;",
+                    class = "dropdown unit-toggle-nav",
                     shinyWidgets::prettySwitch(
                       inputId = "unit_toggle",
                       label = NULL,
@@ -113,7 +112,8 @@ ui <- dashboardPage(
                       fill = TRUE,
                       status = "primary"
                     )
-                  )), 
+                  )
+                ), 
   
   dashboardSidebar(
     sidebarMenu(id = 'tabs', 
