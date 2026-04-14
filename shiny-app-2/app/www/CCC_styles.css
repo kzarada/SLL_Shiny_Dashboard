@@ -59,28 +59,29 @@ body {
 
 @media (max-width: 768px) {
 
-  /* Hide the logo entirely on mobile */
   .main-header .logo {
     display: none !important;
   }
 
-  /* Expand navbar to full width since logo is gone */
+  /* Full width navbar, single row */
   .main-header .navbar {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    margin-left: 0 !important;      /* no longer needs to offset logo */
+    margin-left: 0 !important;
     width: 100% !important;
-    padding: 0 8px !important;
     height: 40px !important;
     min-height: 40px !important;
-    overflow: hidden !important;
   }
 
-  /* Title fills space between hamburger and switch */
+  /* Hamburger menu button — keep left, don't let it grow */
+  .main-header .navbar .sidebar-toggle {
+    flex-shrink: 0;
+    padding: 0 10px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+  }
+
+  /* Title — allow it to grow and fill remaining space */
   .myClass {
-    order: 1;
-    flex: 1 1 auto;
+    display: inline-block !important;
     line-height: 40px;
     font-size: clamp(11px, 3.5vw, 16px);
     white-space: nowrap;
@@ -88,20 +89,18 @@ body {
     text-overflow: ellipsis;
     text-align: left !important;
     padding: 0 6px !important;
+    max-width: calc(100% - 120px) !important; /* leave room for hamburger + switch */
   }
 
-  /* Switch stays pinned to the right */
+  /* Push the custom menu (unit switch) to the far right */
   .main-header .navbar .navbar-custom-menu {
-    order: 2;
-    flex-shrink: 0;
-    margin-left: auto !important;
-    padding-right: 8px;
-  }
-
-  .main-header .navbar-nav {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    height: 40px !important;
     display: flex !important;
-    flex-direction: row !important;
     align-items: center !important;
+    padding-right: 10px !important;
   }
 }
 
