@@ -81,8 +81,8 @@ rainsford = read.csv(file.path(data_dir, "Outputs/LiCOR_Rainsford_Island_Data.cs
   filter(Time_ET > start_time & Time_ET < current_time)  %>% 
   dplyr::select(Time_ET, Wind.Speed_RMYoung_mph, Gust.Speed_RMYoung_mph, 
                 Wind.Direction_RMYoung_deg) %>% 
-  mutate(Wind.Speed_RMYoung_mph = ifelse(Wind.Speed_RMYoung_mph < 0 | Wind.Speed_RMYoung_mph > 130, NA, Wind.Speed_RMYoung_mph ),
-         Gust.Speed_RMYoung_mph = ifelse(Gust.Speed_RMYoung_mph < 0 | Gust.Speed_RMYoung_mph > 130, NA, Gust.Speed_RMYoung_mph ), 
+  mutate(Wind.Speed_RMYoung_mph = ifelse(Wind.Speed_RMYoung_mph < 0 | Wind.Speed_RMYoung_mph > 80, NA, Wind.Speed_RMYoung_mph ),
+         Gust.Speed_RMYoung_mph = ifelse(Gust.Speed_RMYoung_mph < 0 | Gust.Speed_RMYoung_mph > 80, NA, Gust.Speed_RMYoung_mph ), 
          Wind.Direction_RMYoung_deg = ifelse(Wind.Direction_RMYoung_deg < 0 | Wind.Direction_RMYoung_deg > 360, NA, Wind.Direction_RMYoung_deg)) %>% 
   distinct()
 
