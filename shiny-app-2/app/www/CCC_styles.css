@@ -103,27 +103,22 @@ body {
     padding-right: 10px !important;
   }
   
-  .unit-toggle-nav {
-    margin-left: auto;   /* pushes it to the right */
-    padding-right: 10px;
+.unit-toggle-floating {
+    top: 8px;
+    right: 10px;
   }
 
-  /* Make switch smaller */
-  .unit-toggle-nav .pretty {
-    transform: scale(0.8);
-    transform-origin: right center;
-  }
-
-  /* Reduce extra spacing */
-  .unit-toggle-nav .pretty .state label {
-    font-size: 10px;
+  .unit-toggle-floating .pretty {
+    transform: scale(0.75);
+    transform-origin: right top;
   }
 }
 
-.unit-toggle-nav {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
+.unit-toggle-floating {
+  position: fixed;
+  top: 12px;     /* aligns with header */
+  right: 20px;
+  z-index: 10000;
 }
 
 /* ═══════════════════════════════════════

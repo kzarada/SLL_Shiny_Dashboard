@@ -102,17 +102,7 @@ ui <- dashboardPage(
   
   dashboardHeader(title = tags$a(href='https://stonelivinglab.org/',
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
-                  titleWidth = 70, 
-                  tags$li(
-                    class = "dropdown unit-toggle-nav",
-                    shinyWidgets::prettySwitch(
-                      inputId = "unit_toggle",
-                      label = NULL,
-                      value = FALSE,
-                      fill = TRUE,
-                      status = "primary"
-                    )
-                  )
+                  titleWidth = 70
                 ), 
   
   dashboardSidebar(
@@ -128,6 +118,16 @@ ui <- dashboardPage(
                 
                 tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                           
+                tags$div(
+                  class = "unit-toggle-floating",
+                  shinyWidgets::prettySwitch(
+                    inputId = "unit_toggle",
+                    label = NULL,
+                    value = FALSE,
+                    fill = TRUE,
+                    status = "primary"
+                  )
+                ),
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),
