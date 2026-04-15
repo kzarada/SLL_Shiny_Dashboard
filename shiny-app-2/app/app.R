@@ -182,7 +182,7 @@ ui <- dashboardPage(
                                      "tide_select",
                                      label = NULL, 
                                      choices = list("Select Tide Gauge" = 'intro',
-                                                    "Gallops Island" = "gallops", 
+                                                    #"Gallops Island" = "gallops", 
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river'),
                                      multiple = F), 
@@ -584,7 +584,7 @@ server <- function(input, output, session) {
     y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)")
     
     ggtitle = case_when(
-      input$tide_select == "intro" ~ "Gallops Tide Gauge",
+      input$tide_select == "intro" ~ "NOAA Tide Gauge - Boston",
       input$tide_select == "gallops" ~ "Gallops Tide Gauge", 
       input$tide_select == "boston" ~ "NOAA Tide Gauge - Boston", 
       input$tide_select == 'fall.river' ~ "NOAA Tide Gauge - Fall River", 
@@ -598,7 +598,7 @@ server <- function(input, output, session) {
     }else if(input$tide_select == 'fall.river'){
       combo_data()$Fall_River_Water_MLLW
     }else if(input$tide_select == 'intro'){
-      combo_data()$Gallops_Water_Level_ft
+      combo_data()$Boston_Water_MLLW
     }
     
     water_level = if(unit == "m"){
