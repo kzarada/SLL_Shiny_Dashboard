@@ -103,22 +103,27 @@ body {
     padding-right: 10px !important;
   }
   
-.unit-toggle-floating {
-    top: 8px;
-    right: 10px;
-  }
-
-  .unit-toggle-floating .pretty {
+  .unit-toggle-floating {
+    position: fixed !important;
+    top: 6px !important;
+    right: 8px !important;
+    left: auto !important;
     transform: scale(0.75);
     transform-origin: right top;
+    width: auto;
+    z-index: 10001 !important; /* above navbar */
   }
 }
 
 .unit-toggle-floating {
   position: fixed;
-  top: 12px;     /* aligns with header */
+  top: 12px;
   right: 20px;
   z-index: 10000;
+
+  display: inline-flex;     /*  shrink to content */
+  width: auto;              /* prevent full width */
+  max-width: fit-content;   /* extra safety */
 }
 
 /* ═══════════════════════════════════════
