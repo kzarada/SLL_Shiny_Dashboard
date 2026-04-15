@@ -77,10 +77,17 @@ getColor <- function(hohonu) {
     else if(Flood.Depth >= 0.5 & Flood.Depth < 1){
       "#F5A30C"
     }
-    else {
+    
+    else if(Flood.Depth >=1 & Flood.Depth < 2){
       "#E82D07"
-    } })
+    }
+    
+    else if(Flood.Depth >= 2){
+      "#8F00FF"
+    }
+  })
 }
+
 
 convert_units <- function(value, unit) {
   if (unit == "m") {
@@ -612,32 +619,62 @@ server <- function(input, output, session) {
     
     
   }) 
+  
+  
+############## MAP ###################
+  zoom_level <- reactive({
+    input$flood_map_zoom
+  })
+  
+  marker_radius <- reactive({
+    z <- zoom_level()
+    if (is.null(z)) return(16)
+    
+    # smoother scaling
+    return(2 * (1.2 ^ z))
+  })
+  
+  label_size <- reactive({
+    z <- input$flood_map_zoom
+    
+    if (is.null(z)) return("12px")
+    
+    if(z < 11) return("0px")
+    
+    # Scale text with zoom (adjust multiplier to taste)
+    size <- 6 + z * 0.8
+    
+    paste0(size, "px")
+  })
+  
   output$flood_map <- renderLeaflet({
     
     unit = unit_state()
     
     ft_label = c("None", "< 0.5 ft", "0.5 - 1 ft", 
-                 "> 1 ft", "No Data Available")
+                 "1 - 2 ft", "> 2 ft", "No Data Available")
     m_label =  c("None", "< 0.15 m", "0.15 - 0.3 m", 
-                 "> 0.3 m", "No Data Available")
+                 "0.3 m - 0.6 m", "> 0.6 m", "No Data Available")
     legend_label = if(unit == 'ft'){ft_label
     }else{m_label}
     
     
+    
+    
     leaflet() %>% 
       addProviderTiles(providers$CartoDB.Positron) %>% 
-      setView(lng = -70.88, lat = 42.23, zoom = 8) %>% 
+      setView(lng = -70.88, lat = 42.23, zoom = 7.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
-                colors = c("#2CBF04", "#FAEE07", "#F5A30C", "#E82D07", "lightgray"), 
+                colors = c("#2CBF04", "#FAEE07", "#F5A30C", "#E82D07", "#8F00FF", "lightgray"), 
                 labels = legend_label, 
                 title = "Flood Depth") 
     
   })
   
   observe({
-    unit = unit_state()
     
+    unit = unit_state()
     
     leafletProxy("flood_map", data = filtered_flood_data()) %>% 
       clearMarkers() %>% 
@@ -645,24 +682,24 @@ server <- function(input, output, session) {
       addCircleMarkers(data = filtered_flood_data(), 
                        lat = ~Latitude, 
                        lng = ~Longitude, 
-                       clusterOptions = markerClusterOptions(disableClusteringAtZoom = 11, 
-                                                             zoomToBoundsOnClick = TRUE, 
-                                                             singleMarkerMode = TRUE),
+                       # clusterOptions = markerClusterOptions(disableClusteringAtZoom = 11, 
+                       #                                       zoomToBoundsOnClick = TRUE, 
+                       #                                       singleMarkerMode = TRUE),
                        color = getColor(filtered_flood_data()), 
-                       radius = 18, 
+                       radius = marker_radius(),  
                        fillOpacity = 1,
                        layerId = filtered_flood_data()$Location,
-                       label=~ifelse(unit == "ft", as.character(Flood.Depth), as.character(round(Flood.Depth/3.281, 1))),
+                       label=~as.character(Flood.Depth),
                        labelOptions = labelOptions(noHide = TRUE, textOnly = TRUE, direction = "center",
                                                    style = list(
                                                      "color" = "black",
                                                      "font-family" = "Replica Mono LL TT",
                                                      "font-style" = "bold",
-                                                     "font-size" = "12px")), 
+                                                     "font-size" = label_size())), 
                        popup = ~paste0("<strong>", Station.Name,
                                        "</strong><br/>
-                                      Flood Depth: ", Flood.Depth,
-                                       "<br/> QC Note: ", QC_Note,
+                                      Flood Depth: ", Flood.Depth, " ", unit, 
+                                       "<br/> Data quality note: ", QC_Note,
                                        "<br/> <a href='#'
                                           onclick=\"
                                           Shiny.setInputValue('go_to_tab',\'", 
