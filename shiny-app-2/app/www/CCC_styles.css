@@ -48,8 +48,9 @@ body {
 /* Title text injected via JS into the navbar */
 .myClass {
   font-size: clamp(13px, 2.5vw, 28px); /* scales from phone → desktop */
-  line-height: 50px;
+  line-height: 40px;
   text-align: left;
+  align-items: center;
   font-family: "Replica Mono LL TT", monospace;
   padding: 0 8px;
   overflow: hidden;
@@ -57,26 +58,18 @@ body {
   color: white;
 }
 
+/* Unit toggle inside navbar-custom-menu */
+.main-header .navbar .navbar-custom-menu .shiny-input-container {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 40px;
+}
+
 @media (max-width: 768px) {
 
   .main-header .logo {
     display: none !important;
-  }
-
-  /* Full width navbar, single row */
-  .main-header .navbar {
-    margin-left: 0 !important;
-    width: 100% !important;
-    height: 40px !important;
-    min-height: 40px !important;
-  }
-
-  /* Hamburger menu button — keep left, don't let it grow */
-  .main-header .navbar .sidebar-toggle {
-    flex-shrink: 0;
-    padding: 0 10px !important;
-    height: 40px !important;
-    line-height: 40px !important;
   }
 
   /* Title — allow it to grow and fill remaining space */
@@ -89,42 +82,41 @@ body {
     text-overflow: ellipsis;
     text-align: left !important;
     padding: 0 6px !important;
-    max-width: calc(100% - 120px) !important; /* leave room for hamburger + switch */
+    max-width: calc(100% - 90px) !important; /* leave room for hamburger + switch */
+  }
+  /* Remove padding from the right container */
+  .main-header .navbar-custom-menu {
+    margin-right: 2 !important;
+    padding-right: 2 !important;
   }
 
-  /* Push the custom menu (unit switch) to the far right */
-  .main-header .navbar .navbar-custom-menu {
-    position: absolute !important;
-    right: 0 !important;
-    top: 0 !important;
-    height: 40px !important;
-    display: flex !important;
-    align-items: center !important;
-    padding-right: 10px !important;
+  .main-header .navbar-custom-menu > .navbar-nav {
+    margin: 0 !important;
   }
-  
-  .unit-toggle-floating {
-    position: fixed !important;
-    top: 6px !important;
-    right: 8px !important;
-    left: auto !important;
+
+  /* Force the toggle to the far right */
+  .unit-toggle-nav {
+    position: absolute;
+    right: 5px;     
+    top: 5px;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove extra spacing from Shiny input wrapper */
+  .unit-toggle-nav .shiny-input-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+
+  /* Shrink the switch */
+  .unit-toggle-nav .pretty {
     transform: scale(0.75);
-    transform-origin: right top;
-    width: auto;
-    z-index: 10001 !important; /* above navbar */
+    transform-origin: right center;
+    margin: 0;
   }
-}
-
-.unit-toggle-floating {
-  position: fixed;
-  top: 12px;
-  right: 20px;
-  z-index: 10000;
-
-  display: inline-flex;     /*  shrink to content */
-  width: auto;              /* prevent full width */
-  max-width: fit-content;   /* extra safety */
-}
+}   /* end media  */
 
 /* ═══════════════════════════════════════
    FOOTER

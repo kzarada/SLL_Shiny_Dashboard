@@ -1,3 +1,10 @@
+########################################
+#
+#   Current Coastal Conditions
+#
+########################################
+
+
 library(shiny)
 library(tidyverse)
 library(shinydashboard)
@@ -109,8 +116,18 @@ ui <- dashboardPage(
   
   dashboardHeader(title = tags$a(href='https://stonelivinglab.org/',
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
-                  titleWidth = 70
-                ), 
+                  titleWidth = 70, 
+                  tags$li(
+                    class = "dropdown unit-toggle-nav",
+                    shinyWidgets::prettySwitch(
+                      inputId = "unit_toggle",
+                      label = NULL,
+                      value = FALSE,
+                      fill = TRUE,
+                      status = "primary"
+                    )
+                  )), 
+  
   
   dashboardSidebar(
     sidebarMenu(id = 'tabs', 
@@ -123,23 +140,14 @@ ui <- dashboardPage(
   
   dashboardBody(use_theme(mytheme),
                 
-                tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
-                          
-                tags$div(
-                  class = "unit-toggle-floating",
-                  shinyWidgets::prettySwitch(
-                    inputId = "unit_toggle",
-                    label = NULL,
-                    value = FALSE,
-                    fill = TRUE,
-                    status = "primary"
-                  )
-                ),
+                tags$head(
+                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                 
+              
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),
-               
-                 shinybrowser::detect(), 
+                
+                shinybrowser::detect(), 
                 
                 
                 tabItems(
@@ -336,7 +344,10 @@ ui <- dashboardPage(
                                Only the last 24 hours of data are available. <br><br>
                                
                               <strong>Data are real-time, not quality controlled, and may be inaccurate.</strong> 
-                              The data have not been reviewed or edited. Data users are cautioned to consider the provisional nature of the information 
+                              The data have not been reviewed or edited. Real-time data may contain errors such as 
+                              inaccurate sensor readings either from instrument error or sensor obstruction. 
+                              For example, snow pack may result in false flood readings from the overland flood sensors. <br>
+                              Data users are cautioned to consider the provisional nature of the information 
                               before using it for decisions that concern personal or public safety or the conduct 
                               of business that involves substantial monetary or operational consequences. 
                               No warranty, express or implied, is given as to the accuracy, reliability, 
@@ -376,7 +387,8 @@ ui <- dashboardPage(
                                      solidHeader = TRUE, 
                                      status = 'primary', 
                                      width = 12, 
-                                     div(p(HTML(paste0("If you have feedback on this dashboard or questions about our work, 
+                                     div(p(HTML(paste0("If you have feedback on this dashboard, questions about our work, 
+                                                or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
                                                                              href = "mailto:info@stonelivinglab.org"))))))), 
                           tags$img(src='Full_Logo.png', 

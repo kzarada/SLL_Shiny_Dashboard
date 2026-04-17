@@ -102,8 +102,7 @@ ui <- dashboardPage(
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
                   titleWidth = 70, 
                   tags$li(
-                    class = "dropdown",
-                    style = "padding: 10px;",
+                    class = "dropdown unit-toggle-nav",
                     shinyWidgets::prettySwitch(
                       inputId = "unit_toggle",
                       label = NULL,
@@ -112,6 +111,7 @@ ui <- dashboardPage(
                       status = "primary"
                     )
                   )), 
+  
   
   dashboardSidebar(
     sidebarMenu(id = 'tabs', 
@@ -123,8 +123,18 @@ ui <- dashboardPage(
   dashboardBody(use_theme(mytheme),
                 
                 
-                tags$head(tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css"), 
-                          tags$meta(name = "viewport", content = "width=device-width, initial-scale=1")),
+                tags$head(
+                  tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
+                
+                # Toggle lives here in the body — JS will physically move it to the navbar
+                shinyWidgets::prettySwitch(
+                  inputId = "unit_toggle",
+                  label = NULL,
+                  value = FALSE,
+                  fill = TRUE,
+                  status = "primary"
+                ),
+                
                 
                 
                 tags$script(HTML('$(document).ready(function() {
@@ -295,7 +305,8 @@ ui <- dashboardPage(
                                      solidHeader = TRUE, 
                                      status = 'primary', 
                                      width = 12, 
-                                     div(p(HTML(paste0("If you have feedback on this dashboard or questions about our work, 
+                                     div(p(HTML(paste0("If you have feedback on this dashboard, questions about our work, 
+                                                or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
                                                                              href = "mailto:info@stonelivinglab.org"))))))), 
                           tags$img(src='Full_Logo.png', 
@@ -436,7 +447,7 @@ server <- function(input, output, session) {
              " on ", format(with_tz(input$time, tzone = "America/New_York"), "%B %d at %H:%M"), 
              " </strong> compared to a ", bus_height, " ", unit_label, " bus. <br> <br> <small> <i>This comparison is intended to provide 
            general information about potential flooding conditions. Data are real-time and may
-           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i>")
+           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i><br> <br> ")
     }
     else if(input$icon_select == 'bike'){
       
@@ -445,7 +456,7 @@ server <- function(input, output, session) {
              " on ", format(with_tz(input$time, tzone = "America/New_York"), "%B %d at %H:%M"), 
              " </strong> compared to a ", bike_height, " ", unit_label, " bike. <br> <br> <small> <i>This comparison is intended to provide 
            general information about potential flooding conditions. Data are real-time and may
-           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i>")
+           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i><br> <br> ")
       
     }
     else if(input$icon_select == 'walk'){
@@ -455,7 +466,7 @@ server <- function(input, output, session) {
              " on ", format(with_tz(input$time, tzone = "America/New_York"), "%B %d at %H:%M"), 
              " </strong> compared to a ", person_height, " ", unit_label, " person. <br> <br> <small> <i>This comparison is intended to provide 
            general information about potential flooding conditions. Data are real-time and may
-           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i>")
+           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i><br> <br> ")
       
     }
     else if(input$icon_select == 'shrimp'){
@@ -464,8 +475,7 @@ server <- function(input, output, session) {
              "  at ", str_replace(input$station_select, "[.]", " "), 
              " on ", format(with_tz(input$time, tzone = "America/New_York"), "%B %d at %H:%M"), 
              " </strong> compared to a giant ", shrimp_height, " ", unit_label, " shrimp. <br> <br> <small> <i>This comparison is intended to provide 
-           general information about potential flooding conditions. Data are real-time and may
-           be inaccurate. Please use your own judgment and consult any official warnings and local authorities regarding any flooding.</small></i>")
+           a whimsical break from flooding conditions. Please enjoy this gigantic pink shrimp. </small></i><br><br>")
       
     }
   })
