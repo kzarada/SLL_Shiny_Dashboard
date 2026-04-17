@@ -114,6 +114,8 @@ convert_units <- function(value, unit) {
 
 ui <- dashboardPage(
   
+  title = "SLL Current Coastal Conditions", 
+  
   dashboardHeader(title = tags$a(href='https://stonelivinglab.org/',
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
                   titleWidth = 70, 
@@ -141,9 +143,7 @@ ui <- dashboardPage(
   dashboardBody(use_theme(mytheme),
                 
                 tags$head(
-                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css"),
-                
-                tags$title("SLL Flooding Dashboard")),
+                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),

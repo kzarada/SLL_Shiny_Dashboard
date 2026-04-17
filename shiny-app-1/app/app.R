@@ -97,6 +97,7 @@ convert_units <- function(value, unit) {
 # Define UI for application that draws a histogram
 
 ui <- dashboardPage(
+  title = "SLL Flood Dashboard",
   
   dashboardHeader(title = tags$a(href='https://stonelivinglab.org/',
                                  tags$img(src='LivingLab_logo_white_RGB.png', width =40, height = 40)), 
@@ -124,8 +125,6 @@ ui <- dashboardPage(
                 
                 
                 tags$head(
-                  
-                  tags$title("SLL Flooding Dashboard"), 
                   
                   tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
