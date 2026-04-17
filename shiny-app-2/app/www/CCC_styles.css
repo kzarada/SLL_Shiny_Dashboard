@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════
+   Docker CSS
+═══════════════════════════════════════ */
+
 /* Register font */
   @font-face {
     font-family: 'Replica Mono LL TT';
@@ -223,30 +227,15 @@ body {
 
   /* Slider readability */
   .irs-grid-text {
-    font-size: 9pt;
+    font-size: 8px;
   }
 
   .irs--shiny .irs-min,
   .irs--shiny .irs-max {
-    font-size: 9pt;
+    font-size: 8px;
   }
 }
 
-
-/* ═══════════════════════════════════════
-   TABLET (769px – 1024px)
-═══════════════════════════════════════ */
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .map-box,
-  .plot-box {
-    height: 55vh;
-  }
-
-  .myClass {
-    font-size: clamp(16px, 2.5vw, 26px);
-  }
-}
 
 
 /* ═══════════════════════════════════════

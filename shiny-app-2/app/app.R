@@ -33,6 +33,10 @@ map_hohonu = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>%
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
 
+tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>% 
+  mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
+         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+
 start_time = round_date(min(map_hohonu$Time_ET, na.rm = T), "10 mins")
 end_time = max(map_hohonu$Time_ET, na.rm = T)
 
@@ -618,17 +622,31 @@ server <- function(input, output, session) {
       water_level/3.281}else{water_level}
     
     
+    prediction = if(input$tide_select == "gallops"){
+      NA}
+    else if(input$tide_select == "boston"){
+      tide_pred()$Boston_Water_Prediction
+    }else if(input$tide_select == 'fall.river'){
+      tide_pred()$Fall_River_Water_Prediction
+    }else if(input$tide_select == 'intro'){
+      tide_pred()$Boston_Water_Prediction
+    }
+    
+    prediction = if(unit == "m"){
+      prediction/3.281}else{prediction}
+    
+    
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
-      geom_line(aes(color = "Water Level"), linewidth = 1) +
+      geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
+      geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dashed', linewidth =1) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
       xlab("Time (ET)") + 
       ggtitle(ggtitle) +
       scale_color_manual(
-        values = c("#002366")) + 
-     plot_theme() + 
-     theme(legend.position = 'none', 
-           plot.title = element_text(size = 18))
+        values = c("#002366", "#2E3440")) + 
+      plot_theme() + 
+      theme(plot.title = element_text(size = 18))
     
     
   }) 
@@ -1010,6 +1028,16 @@ server <- function(input, output, session) {
     }
   )
   
+  tide_pred <- reactiveFileReader(
+    intervalMillis = 500,
+    session = session,
+    filePath = file.path(data_dir, "Outputs/tide_predictions.csv"),
+    readFunc = function(path){
+      read.csv(path) %>% 
+        mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
+               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+    }
+  )
   observe({
     newData = map_hohonu_data() 
     updateSliderInput(session, 
