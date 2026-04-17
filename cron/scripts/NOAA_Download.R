@@ -75,10 +75,9 @@ for(i in 1:dim(device_id)[1]){
   
 # ############ NOAA TIDE Prediction ##################
 
-device_id = read.csv("/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data/Inputs/CCO_Sensor_ID.csv") %>%
-  filter(API == "NOAA") %>%
+device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>% 
+  filter(API == "NOAA") %>% 
   filter(Active == "Yes")
-
 
 for(i in 1:dim(device_id)[1]){
   
