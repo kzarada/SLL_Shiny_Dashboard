@@ -124,6 +124,9 @@ ui <- dashboardPage(
                 
                 
                 tags$head(
+                  
+                  tags$title("SLL Flooding Dashboard"), 
+                  
                   tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
                 

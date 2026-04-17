@@ -141,9 +141,10 @@ ui <- dashboardPage(
   dashboardBody(use_theme(mytheme),
                 
                 tags$head(
-                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
+                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css"),
                 
-              
+                tags$title("SLL Flooding Dashboard")),
+                
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),
                 
