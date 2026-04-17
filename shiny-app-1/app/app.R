@@ -126,16 +126,6 @@ ui <- dashboardPage(
                 tags$head(
                   tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
-                # Toggle lives here in the body — JS will physically move it to the navbar
-                shinyWidgets::prettySwitch(
-                  inputId = "unit_toggle",
-                  label = NULL,
-                  value = FALSE,
-                  fill = TRUE,
-                  status = "primary"
-                ),
-                
-                
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Flooding Dashboard </span>\');})')),
