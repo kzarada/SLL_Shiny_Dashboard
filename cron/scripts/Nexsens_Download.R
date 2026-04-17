@@ -41,17 +41,12 @@ log_con <- file("/app/Data/Outputs/logs/Nexsens_log.txt", open = "a")
   
 filename = paste0(data_dir,"Outputs/", device_id$API[i], "_",  device_id$Location[i], "_Data.csv")
 
-last_time = vroom(filename, col_select = Time, col_types = c(Time= 'T')) %>% 
-                pull() %>% 
-                last()
-
-last_time = str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20")
-
 current_time = now(tzone = "UTC")
 
 #if statement to capture missing last_time values
-if(is.na(last_time) | !exists("last_time")){ 
-  last_time = current_time - days(1)}
+last_time = current_time - days(2)
+
+last_time = str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20")
 
 if(str_detect(last_time, ":00", negate = TRUE)){
   last_time = paste0(last_time, "%2000:00:00")}
@@ -102,14 +97,8 @@ api_wide = api_data %>%
               mutate(Time_ET = with_tz(Time, tzone = "America/New_York"))
 
 
-#write.csv(api_wide, filename)
-write.table(api_wide,
-            file = filename,
-            sep = ",",
-            append = TRUE,
-            quote = FALSE,
-            col.names = FALSE,
-            row.names = TRUE)
+write.csv(api_wide, filename)
+
 
 close(log_con)
 
@@ -131,15 +120,11 @@ log_con <- file("/app/scripts/logs/nexsens_log.txt", open = "a")
   
 filename = paste0(data_dir, "Outputs/Nexsens_", device_id$Location[i], "_Data.csv")
 
-last_time = vroom(filename, col_select = Time_UTC, col_types = c(Time_UTC= 'T')) %>% 
-                pull() %>% 
-                last()
-
 current_time = now(tzone = "UTC")
 
 #if statement to capture missing last_time values
-if(is.na(last_time) | !exists("last_time")){ 
-  last_time = current_time - days(1)}
+
+last_time = current_time - days(2)
 
 if(str_detect(last_time, ":00", negate = TRUE)){
   last_time = paste0(last_time, "%2000:00:00")}
@@ -182,14 +167,7 @@ gallops_data  = gallops_data  %>%
               mutate(Time_ET = round_date(with_tz(Time_UTC, tzone = "America/New_York"), unit = "minute")) 
   
 
-#write.csv(gallops_data , filename)
-write.table(gallops_data , 
-            file = filename, 
-            sep = ",", 
-            append = TRUE, 
-            quote = FALSE, 
-            col.names = FALSE, 
-            row.names = TRUE)
+write.csv(gallops_data , filename)
 
 close(log_con)
 

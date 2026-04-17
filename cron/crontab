@@ -4,6 +4,8 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 */5 * * * * root Rscript /app/scripts/Hohonu_Download.R >> /var/log/cron.log 2>&1
 */5 * * * * root Rscript /app/scripts/LiCOR_Download.R >> /var/log/cron.log 2>&1
 */5 * * * * root Rscript /app/scripts/NOAA_Download.R >> /var/log/cron.log 2>&1
-*/10 * * * * root Rscript /app/scripts/Data_Prep.R >> /var/log/cron.log 2>&1
 */20 * * * * root Rscript /app/scripts/Nexsens_Download.R >> /var/log/cron.log 2>&1
+*/10 * * * * root Rscript /app/scripts/Data_Prep.R >> /var/log/cron.log 2>&1
+
+
 

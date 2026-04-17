@@ -33,16 +33,11 @@ for(i in 1:dim(device_id)[1]){
   log_con <- file("/app/Data/Outputs/logs/hohonu_log.txt", open = "a")
   
   filename = paste0(data_dir, "Outputs/", device_id$API[i], "_",  device_id$Location[i], "_Data.csv")
-  
-  last_time = vroom(filename, col_select = Timestamp_UTC, col_types = c(Timestamp_UTC= "T")) %>%
-    pull() %>%
-    last()
-  
+
   current_time = round_date(now(tzone = "UTC"), unit = "minute")
   
   #if statement to capture missing last_time values
-  if(!exists("last_time")){ 
-    last_time = current_time - days(1) }
+    last_time = current_time - days(2) 
   
   #Create API url
   url <- paste0("https://dashboard.hohonu.io/api/v1/stations/hohonu-", device_id$ID[i], "/waterlevel")
@@ -102,14 +97,8 @@ hohonu_data = as.data.frame(hohonu_download$data) %>%
 
 
 
-#write.csv(hohonu_data, filename)
-write.table(hohonu_data,
-            file = filename,
-            sep = ",",
-            append = TRUE,
-            quote = FALSE,
-            col.names = FALSE,
-            row.names = TRUE)
+write.csv(hohonu_data, filename)
+
 
 
 

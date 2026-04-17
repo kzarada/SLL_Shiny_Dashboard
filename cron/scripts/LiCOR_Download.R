@@ -31,14 +31,9 @@ filename = paste0(data_dir, "Outputs/LiCOR_Rainsford_Island_Data.csv")
 
 for(i in 1:dim(device_id)[1]){
   
-  last_time = vroom(filename, col_select = timestamp, col_types = c(timestamp = "T")) %>%
-    pull() %>%
-    last()
   current_time = now(tzone = "UTC")
   
-  #if statement to capture missing last_time values
-  if(is.na(last_time) | !exists("last_time")){ 
-    last_time = current_time - days(1)}
+  last_time = current_time - days(2)
   
   
   if(str_detect(last_time, ":00", negate = TRUE)){
@@ -46,7 +41,6 @@ for(i in 1:dim(device_id)[1]){
   } else{  
     last_time = str_replace_all(str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20"), ":", "%3A") 
   }
-  
   
   current_time = str_replace_all(str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20"), ":", "%3A")
   
@@ -86,16 +80,7 @@ for(i in 1:dim(device_id)[1]){
                 values_from = value)
 
 
-  
-  write.table(api_df,
-              file = filename,
-              sep = ",",
-              append = TRUE,
-              quote = FALSE,
-              col.names = FALSE,
-              row.names = TRUE)
-  
-  #write.csv(api_df, filename)
+  write.csv(api_df, filename)
 }
 
 
