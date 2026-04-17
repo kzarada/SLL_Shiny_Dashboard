@@ -125,7 +125,7 @@ body {
   .unit-toggle-nav .pretty {
     transform: scale(0.75);
     transform-origin: right center;
-    margin: 0;
+    margin: 2px;
   }
 }   /* end media  */
 
@@ -451,8 +451,41 @@ body {
           }
   
 
+@media (max-width: 768px) {
+ .bus-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom:-16px;
+        font-size: clamp(82.32px, 17.64vh, 199.9px);   /* ~9.8 ft */
+          }
+      
+      .bike-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -14px;
+        font-size: clamp(60px, 12vh, 140px);
+          }
+      
+      .walking-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -8px;
+        font-size: clamp(75px, 16.5vh, 175px);
+        }
+        
+      .shrimp-icon {
+        display: block;
+        line-height: 1;
+        bottom: 0;
+        margin-bottom: -14px;
+        font-size: clamp(78px, 16vh, 181px);
+          }
 
-} /* end media*/
+}
+
        
 
 
