@@ -170,10 +170,29 @@ map_hohonu <- hohonu %>%
   arrange(Time_ET) 
 
 
+################################################
+##### NOAA Predictions
+################################################
+
+fall_river_pred = read.csv(file.path(data_dir, "Outputs/NOAA_Fall_River_Predictions.csv")) %>%
+  mutate(Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M", tz = "America/New_York")) %>%
+  filter(Time_ET > start_time)  %>% 
+  dplyr::select(Time_ET, Prediction_MLLW) %>%
+  rename(Fall_River_Water_Prediction = Prediction_MLLW)
+
+boston_pred = read.csv(file.path(data_dir, "Outputs/NOAA_Boston_Predictions.csv")) %>%
+  mutate(Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M", tz = "America/New_York")) %>%
+  filter(Time_ET > start_time)  %>% 
+  dplyr::select(Time_ET, Prediction_MLLW) %>%
+  rename(Boston_Water_Prediction = Prediction_MLLW)
+
+predictions = full_join(fall_river_pred, boston_pred)
+
 
 write.csv(combo, file.path(data_dir,"Outputs/combo.csv"))
 write.csv(hohonu, file.path(data_dir, "Outputs/hohonu.csv"))
 write.csv(map_hohonu, file.path(data_dir, "Outputs/map_hohonu.csv"))
+write.csv(predictions, file.path(data_dir, "Outputs/tide_predictions.csv"))
 
 
 
