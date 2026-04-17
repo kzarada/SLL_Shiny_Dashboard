@@ -77,6 +77,15 @@ body {
   height: 50px;
 }
 
+  .unit-toggle-nav {
+    position: absolute;
+    right: 10px;     
+    top: 15px;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+
 @media (max-width: 768px) {
 
   .main-header .logo {
@@ -389,7 +398,7 @@ body {
         display: block;
         line-height: 1;
         bottom: 0;
-        margin-bottom:-12px;
+        margin-bottom:-10px;
         font-size: clamp(82.32px, 17.64vh, 199.9px);   /* ~9.8 ft */
           }
       
