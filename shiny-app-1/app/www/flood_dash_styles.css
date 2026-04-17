@@ -40,18 +40,6 @@ body {
   gap: 10px;
 }
 
-/* Global font */
-  body {
-    font-family: 'ReplicaMonoLLTT-Regular', monospace;
-  }
-  
-  .context-wrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-}
-
-
 
 /* ═══════════════════════════════════════
    HEADER
@@ -60,7 +48,7 @@ body {
 /* Title text injected via JS into the navbar */
 .myClass {
   font-size: clamp(13px, 2.5vw, 28px); /* scales from phone → desktop */
-  line-height: 50px;
+  line-height: 40px;
   text-align: left;
   font-family: "Replica Mono LL TT", monospace;
   padding: 0 8px;
@@ -76,14 +64,6 @@ body {
   padding: 0 16px;
   height: 50px;
 }
-
-  .unit-toggle-nav {
-    position: absolute;
-    right: 10px;     
-    top: 15px;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
 
 
 @media (max-width: 768px) {
@@ -134,7 +114,7 @@ body {
   .unit-toggle-nav .pretty {
     transform: scale(0.75);
     transform-origin: right center;
-    margin: 2px;
+    margin: 0;
   }
 }   /* end media  */
 
