@@ -140,7 +140,8 @@ ui <- dashboardPage(
                 menuItem("Dashboard", tabName = 'dashboard', icon = icon('dashboard')), 
                 menuItem("Stations", tabName = 'stations', icon = icon("water")), 
                 menuItem("Instruments", tabName = 'instruments', icon = icon('cloud')),
-                menuItem("Data Download", tabName = "download", icon = icon("download")), 
+                #menuItem("Data Download", tabName = "download", icon = icon("download")), 
+                menuItem("Feedback", tabName = 'feedback', icon = icon("comment-dots")),
                 menuItem("Contact Us", tabName = 'contact', icon = icon("square-envelope"))), 
     collapsed = TRUE),
   
@@ -370,6 +371,17 @@ ui <- dashboardPage(
                             
                           ) #end box
                   ),#end tabItem
+                  
+                  tabItem(tabName = "feedback", 
+                          column(width = 6, 
+                                 box(title = "Feedback Form", 
+                                     solidHeader = TRUE, 
+                                     status = 'primary', 
+                                     width = 12, 
+                                     HTML('<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe8eRgdDoTZBjKnLsOeALOaG7zGSvQGpXPzf-gy8PBIQMaJrw/viewform?embedded=true" width="640" height="582" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>')) 
+                                 
+                          ) #end col
+                  ), #end tabitem
                   
                   tabItem(tabName = "contact", 
                           column(width = 12, 

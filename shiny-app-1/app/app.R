@@ -118,6 +118,7 @@ ui <- dashboardPage(
     sidebarMenu(id = 'tabs', 
                 menuItem("Dashboard", tabName = 'dashboard', icon = icon('dashboard')), 
                 menuItem("Stations", tabName = 'stations', icon = icon("water")), 
+                menuItem("Feedback", tabName = 'feedback', icon = icon("comment-dots")),
                 menuItem("Contact Us", tabName = 'contact', icon = icon("square-envelope"))), 
     collapsed = TRUE),
   
@@ -275,6 +276,17 @@ ui <- dashboardPage(
                             ) #end col
                           ) #end fluid row
                   ), #end tabItem
+                  
+                  tabItem(tabName = "feedback", 
+                          column(width = 6, 
+                                 box(title = "Feedback Form", 
+                                     solidHeader = TRUE, 
+                                     status = 'primary', 
+                                     width = 12, 
+                                     HTML('<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc2N62zj_VH6uqfW3w2mISb8jNECv5C1lRM_j1afsGX0wgZcQ/viewform?embedded=true" width="640" height="591" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>')) 
+                                 
+                          ) #end col
+                  ), #end tabitem
                   
                   tabItem(tabName = "contact", 
                           column(width = 12, 
