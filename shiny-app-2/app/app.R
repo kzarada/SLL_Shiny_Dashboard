@@ -21,6 +21,16 @@ data_dir = "/srv/shiny-server/Data/"
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
 
+
+instrument.map = instrument.locations %>% 
+  filter(str_detect(Name, "Flood Sensor", negate = T)) %>% 
+  drop_na(Latitude) %>% 
+  mutate(Type = case_when(
+    str_detect(Name, "Buoy") ~  'buoy', 
+    str_detect(Name, "Gauge") ~ "gauge", 
+    str_detect(Name, "Weather") ~ "weather", 
+    .default = NA)) 
+
 combo = read.csv(file.path(data_dir, "Outputs/combo.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
@@ -140,7 +150,7 @@ ui <- dashboardPage(
                 menuItem("Dashboard", tabName = 'dashboard', icon = icon('dashboard')), 
                 menuItem("Stations", tabName = 'stations', icon = icon("water")), 
                 menuItem("Instruments", tabName = 'instruments', icon = icon('cloud')),
-                #menuItem("Data Download", tabName = "download", icon = icon("download")), 
+                menuItem("Data Download", tabName = "download", icon = icon("download")), 
                 menuItem("Feedback", tabName = 'feedback', icon = icon("comment-dots")),
                 menuItem("Contact Us", tabName = 'contact', icon = icon("square-envelope"))), 
     collapsed = TRUE),
@@ -352,7 +362,7 @@ ui <- dashboardPage(
                               <strong>Data are real-time, not quality controlled, and may be inaccurate.</strong> 
                               The data have not been reviewed or edited. Real-time data may contain errors such as 
                               inaccurate sensor readings either from instrument error or sensor obstruction. 
-                              For example, snow pack may result in false flood readings from the overland flood sensors. <br>
+                              For example, snow pack may result in false flood readings from the overland flood sensors.
                               Data users are cautioned to consider the provisional nature of the information 
                               before using it for decisions that concern personal or public safety or the conduct 
                               of business that involves substantial monetary or operational consequences. 
@@ -650,17 +660,79 @@ server <- function(input, output, session) {
       prediction/3.281}else{prediction}
     
     
+    major = if(input$tide_select == "gallops"){
+      NA}
+    else if(input$tide_select == "boston"){
+      16
+    }else if(input$tide_select == 'fall.river'){
+      11.98
+    }else if(input$tide_select == 'intro'){
+      16
+    }
+    
+    major = if(unit == "m"){
+      major/3.281}else{major}
+    
+    moderate = if(input$tide_select == "gallops"){
+      NA}
+    else if(input$tide_select == "boston"){
+      14.49
+    }else if(input$tide_select == 'fall.river'){
+      9.48
+    }else if(input$tide_select == 'intro'){
+      14.49
+    }
+    
+    moderate = if(unit == "m"){
+      moderate/3.281}else{moderate}
+    
+    minor = if(input$tide_select == "gallops"){
+      NA}
+    else if(input$tide_select == "boston"){
+      12.50
+    }else if(input$tide_select == 'fall.river'){
+      6.98
+    }else if(input$tide_select == 'intro'){
+      12.50
+    }
+    
+    minor = if(unit == "m"){
+      minor/3.281}else{minor}
+    
+    ymax = max(water_level, (major + 3))
+    
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
       geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
-      geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dashed', linewidth =1) + 
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), color = "darkred", linewidth = 1, linetype = "dashed") +
+      geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
+      geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+      geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+      geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+      geom_rect(aes(xmin = -Inf, 
+                    xmax = Inf, 
+                    ymin= minor, 
+                    ymax = moderate, 
+                    fill = "NOAA - Minor Flooding")) + 
+      geom_rect(aes(xmin = -Inf, 
+                    xmax = Inf, 
+                    ymin= moderate + 0.1, 
+                    ymax = major, 
+                    fill = "NOAA - Moderate Flooding")) + 
+      geom_rect(aes(xmin = -Inf, 
+                    xmax = Inf, 
+                    ymin= major + 0.1, 
+                    ymax = major + 2, 
+                    fill = "NOAA - Major Flooding")) + 
+      scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
+                 color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
-      xlab("Time (ET)") + 
+      xlab("Time (ET)") +
       ggtitle(ggtitle) +
       scale_color_manual(
         values = c("#002366", "#2E3440")) + 
       plot_theme() + 
-      theme(plot.title = element_text(size = 18))
+      theme(plot.title = element_text(size = 18), 
+            legend.box = 'vertical')
     
     
   }) 
@@ -692,6 +764,24 @@ server <- function(input, output, session) {
     paste0(size, "px")
   })
   
+  instrument_width <- reactive({
+    z <- input$flood_map_zoom
+    
+    if (is.null(z)) return(16)
+    if(z < 10.5) return(0.1)
+    
+    return(25)
+  })
+  
+  instrument_height <- reactive({
+    z <- input$flood_map_zoom
+    
+    if (is.null(z)) return(16)
+    if(z < 10.5) return(0.1)
+    
+    return(25)
+  })
+
   output$flood_map <- renderLeaflet({
     
     unit = unit_state()
@@ -704,8 +794,6 @@ server <- function(input, output, session) {
     }else{m_label}
     
     
-    
-    
     leaflet() %>% 
       addProviderTiles(providers$CartoDB.Positron) %>% 
       setView(lng = -70.88, lat = 42.23, zoom = 7.5) %>% 
@@ -714,12 +802,27 @@ server <- function(input, output, session) {
                 colors = c("#2CBF04", "#FAEE07", "#F5A30C", "#E82D07", "#8F00FF", "lightgray"), 
                 labels = legend_label, 
                 title = "Flood Depth") 
-    
   })
   
   observe({
     
     unit = unit_state()
+    
+    
+    instrument.icons = iconList(
+      buoy = makeIcon(
+        iconUrl = 'wave.png', 
+        iconWidth = instrument_width() + 10 , 
+        iconHeight = instrument_height()), 
+      gauge = makeIcon(
+        iconUrl = 'tide.png', 
+        iconWidth = instrument_width() , 
+        iconHeight = instrument_height()), 
+      weather = makeIcon(
+        iconUrl = 'wind.png', 
+        iconWidth = instrument_width(), 
+        iconHeight = instrument_height()))
+    
     
     leafletProxy("flood_map", data = filtered_flood_data()) %>% 
       clearMarkers() %>% 
@@ -749,7 +852,18 @@ server <- function(input, output, session) {
                                           onclick=\"
                                           Shiny.setInputValue('go_to_tab',\'", 
                                        Location, "\',{priority:'event'});
-                                          \">View station details </a>"))
+                                          \">View station details </a>")) %>% 
+      addMarkers(data = instrument.map, 
+                 lat = ~Latitude, 
+                 lng = ~Longitude,
+                 icon = ~instrument.icons[Type], 
+                 popup = ~paste0("<strong>", Name,
+                                  "</strong><br/> <a href='#'
+                                          onclick=\"
+                                          Shiny.setInputValue('go_to_instrument',\'", 
+                                  ID, "\',{priority:'event'});
+                                          \">View instrument details </a>"))
+    
   })
   
   ############ Observe Event for View Station Details ############
@@ -769,6 +883,21 @@ server <- function(input, output, session) {
     
   })
   
+  observeEvent(input$go_to_instrument, {
+    
+    updateTabItems(
+      session,
+      inputId = "tabs",
+      selected = 'instruments'
+    )
+    
+    updateSelectInput(
+      session, 
+      "instrument.id", 
+      select = input$go_to_instrument
+    )
+    
+  })
   
   
   
@@ -846,7 +975,7 @@ server <- function(input, output, session) {
     
     if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide")){
       
-      "Tide gauges are acoustic or radar instruments that measure changes in sea level."
+      "Tide gauges are acoustic or radar instruments that measure changes in sea level. The major, moderate, and minor flooding lines and the predicted future water level are from NOAA."
     }
     else if(input$instrument.id %in% c("Harbor.Entrance", "North.Shore", "Rainsford.Buoy")){
       "Wave buoys are floating oceanographic instruments anchored in place that measure wave characteristics such as wave height, direction, and period."
@@ -927,13 +1056,29 @@ server <- function(input, output, session) {
       
     }
     else if(input$instrument.id ==  "Boston.Tide"){
+     
       unit = unit_state()
       y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
       
-      water_level = combo_data()$Boston_Water_MLLW
+      major = if(unit == "m"){
+        16/3.281}else{16}
       
+      moderate = if(unit == "m"){
+        14.49/3.281}else{14.49}
+      
+      minor = if(unit == "m"){
+        12.50/3.281}else{12.5}
+      
+      water_level = combo_data()$Boston_Water_MLLW
+
       if(unit == "m"){
         water_level/3.281}else{water_level}
+      
+      prediction = tide_pred()$Boston_Water_Prediction
+    
+        prediction = if(unit == "m"){
+          prediction/3.281}else{prediction}
+    
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
@@ -941,8 +1086,29 @@ server <- function(input, output, session) {
         xlab("Time (ET)") + 
         scale_color_manual(
           values = c("#002366")) + 
+        geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= minor, 
+                      ymax = moderate, 
+                      fill = "NOAA - Minor Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= moderate + 0.1, 
+                      ymax = major, 
+                      fill = "NOAA - Moderate Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= major + 0.1, 
+                      ymax = major + 2, 
+                      fill = "NOAA - Major Flooding")) + 
+        scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
-        theme(legend.position = 'none')
+        theme(plot.title = element_text(size = 18), 
+              legend.box = 'vertical')
+      
       
     }
     else if(input$instrument.id == "Fall.River.Tide"){
@@ -954,14 +1120,49 @@ server <- function(input, output, session) {
       if(unit == "m"){
         water_level/3.281}else{water_level}
       
+      prediction = tide_pred()$Fall_River_Water_Prediction
+      
+      prediction = if(unit == "m"){
+        prediction/3.281}else{prediction}
+      
+      major = if(unit == "m"){
+        11.98/3.281}else{11.98}
+      
+      moderate = if(unit == "m"){
+        9.48/3.281}else{9.48}
+      
+      minor = if(unit == "m"){
+        6.98/3.281}else{6.98}
+      
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
         xlab("Time (ET)") + 
         scale_color_manual(
           values = c("#002366")) + 
+        geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= minor, 
+                      ymax = moderate, 
+                      fill = "NOAA - Minor Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= moderate + 0.1, 
+                      ymax = major, 
+                      fill = "NOAA - Moderate Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= major + 0.1, 
+                      ymax = major + 2, 
+                      fill = "NOAA - Major Flooding")) + 
+        scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
-        theme(legend.position = 'none')
+        theme(plot.title = element_text(size = 18), 
+              legend.box = 'vertical')
+      
     }
     else if(input$instrument.id == "North.Shore"){
       unit = unit_state() 
@@ -1075,6 +1276,10 @@ server <- function(input, output, session) {
           tags$li("You will credit the Stone Living Lab for any research or products released that use the data.")
         )),
       
+      textInput('name', "Please enter your name:"),
+      textInput("org", "Please enter your organization:"),
+      textInput("email", "Please enter your email:"),
+      
       footer = tagList(
         modalButton("Cancel"),
         downloadButton("confirm_download", "Agree", class = "btn-primary")
@@ -1084,7 +1289,9 @@ server <- function(input, output, session) {
     ))
   })
   
-  
+
+  download_trigger <- reactiveValues(count = 0)
+
   output$confirm_download <- downloadHandler(
     
     filename = function(){
@@ -1099,9 +1306,33 @@ server <- function(input, output, session) {
       write.csv(combo_data(), file = "Instrument_Data.csv")
       write.csv(hohonu_data(), file = "Flooding_Data.csv")
       
-      zip(file, zip_files) }, 
+      zip(file, zip_files)
+      
+      emails <- read.csv(file.path(data_dir, "Outputs/User_Info.csv"))
+        
+      updated_emails = emails %>% 
+          add_row(name = input$name, 
+                  org = input$org, 
+                  email = input$email)
+      print(input$name)  
+      write.csv(updated_emails, file.path(data_dir, "Outputs/User_Info.csv"))
+   
+      
+      }, 
     contentType = "application/zip")
   
 }
+
+# observeEvent(download_trigger$count , {
+#   
+#   emails <- read.csv(file.path(data_dir, "Outputs/User_Info.csv"))
+#   
+#   updated_emails = email %>% 
+#     add_row(name = input$name, 
+#             org = input$org, 
+#             email = input$email)
+#   
+#   write.csv(file.path(data_dir, "Outputs/User_Info.csv"))
+# })
 # ---- Run app ----
 shinyApp(ui, server)
