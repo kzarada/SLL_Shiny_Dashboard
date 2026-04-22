@@ -373,16 +373,18 @@ ui <- dashboardPage(
                   ),#end tabItem
                   
                   tabItem(tabName = "feedback", 
-                          column(width = 6, 
+                          column(width = 12, 
+                                 class = "col-12 col-md-6", 
                                  box(title = "Feedback Form", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
                                      width = 12, 
-                                     HTML('<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe8eRgdDoTZBjKnLsOeALOaG7zGSvQGpXPzf-gy8PBIQMaJrw/viewform?embedded=true" width="640" height="582" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>')) 
-                                 
+                                     tags$iframe(
+                                       src = "https://docs.google.com/forms/d/e/1FAIpQLSe8eRgdDoTZBjKnLsOeALOaG7zGSvQGpXPzf-gy8PBIQMaJrw/viewform?embedded=true", 
+                                       style = "width:100%; height: 80vh;"
+                                     ))
                           ) #end col
                   ), #end tabitem
-                  
                   tabItem(tabName = "contact", 
                           column(width = 12, 
                                  box(title = "About the Stone Living Lab", 

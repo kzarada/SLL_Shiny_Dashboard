@@ -278,12 +278,16 @@ ui <- dashboardPage(
                   ), #end tabItem
                   
                   tabItem(tabName = "feedback", 
-                          column(width = 6, 
+                          column(width = 12, 
+                                 class = "col-12 col-md-6", 
                                  box(title = "Feedback Form", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
                                      width = 12, 
-                                     HTML('<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc2N62zj_VH6uqfW3w2mISb8jNECv5C1lRM_j1afsGX0wgZcQ/viewform?embedded=true" width="640" height="591" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>')) 
+                                     tags$iframe(
+                                       src = "https://docs.google.com/forms/d/e/1FAIpQLSc2N62zj_VH6uqfW3w2mISb8jNECv5C1lRM_j1afsGX0wgZcQ/viewform?embedded=true", 
+                                       style = "width:100%; height: 80vh;"
+                                     ))
                                  
                           ) #end col
                   ), #end tabitem
