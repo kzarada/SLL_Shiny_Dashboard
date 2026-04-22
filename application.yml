@@ -1,0 +1,21 @@
+proxy:
+  title: Stone Living Lab Shiny Apps
+  port: 8080
+
+  authentication: none
+
+  docker:
+    url: unix:///var/run/docker.sock
+
+  specs:
+    - id: shiny-app-1
+      display-name: SLL Flood Dashboard
+      description: SLL Flood
+      container-image: shiny-app-1
+      container-port: 3838
+
+    - id: shiny-app-2
+      display-name: SLL Current Coastal Conditions
+      description: Second app
+      container-image: shiny-app-2
+      container-port: 3838

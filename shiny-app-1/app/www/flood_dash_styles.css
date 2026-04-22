@@ -45,6 +45,7 @@ body {
 }
 
 
+
 /* ═══════════════════════════════════════
    HEADER
 ═══════════════════════════════════════ */
@@ -54,6 +55,7 @@ body {
   font-size: clamp(13px, 2.5vw, 28px); /* scales from phone → desktop */
   line-height: 40px;
   text-align: left;
+  align-items: center;
   font-family: "Replica Mono LL TT", monospace;
   padding: 0 8px;
   overflow: hidden;
@@ -66,9 +68,8 @@ body {
   display: flex;
   align-items: center;
   padding: 0 16px;
-  height: 0px;
+  height: 40px;
 }
-
 
 @media (max-width: 768px) {
 
