@@ -1323,16 +1323,6 @@ server <- function(input, output, session) {
   
 }
 
-# observeEvent(download_trigger$count , {
-#   
-#   emails <- read.csv(file.path(data_dir, "Outputs/User_Info.csv"))
-#   
-#   updated_emails = email %>% 
-#     add_row(name = input$name, 
-#             org = input$org, 
-#             email = input$email)
-#   
-#   write.csv(file.path(data_dir, "Outputs/User_Info.csv"))
-# })
+
 # ---- Run app ----
 shinyApp(ui, server)

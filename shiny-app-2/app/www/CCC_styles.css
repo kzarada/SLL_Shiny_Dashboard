@@ -271,7 +271,8 @@ body {
   text-align: left;
 }
 
-.state span { font-size: clamp(10px, 16px, 16px); }
+.state span { 
+  font-size: clamp(10px, 16px, 16px); }
 
 
 /* ═══════════════════════════════════════
