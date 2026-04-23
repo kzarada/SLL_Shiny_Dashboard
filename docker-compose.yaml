@@ -6,27 +6,18 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
-    depends_on:
-      - shiny-app-1
-      - shiny-app-2
-  
+    networks:
+      - sp-net
+
   data-fetcher:
     build: ./cron
     platform: linux/amd64
     volumes:
       - ./Data:/app/Data
     restart: unless-stopped
+    networks:
+      - sp-net
 
-  shiny-app-1:
-    build: ./shiny-app-1
-    platform: linux/amd64
-    volumes:
-      - ./Data:/srv/shiny-server/Data
-    restart: unless-stopped
-
-  shiny-app-2:
-    build: ./shiny-app-2
-    platform: linux/amd64
-    volumes:
-      - ./Data:/srv/shiny-server/Data
-    restart: unless-stopped
+networks:
+  sp-net:
+    name: sp-net

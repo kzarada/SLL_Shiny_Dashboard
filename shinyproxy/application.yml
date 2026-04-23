@@ -7,6 +7,7 @@ proxy:
 
   docker:
     url: unix:///var/run/docker.sock
+    internal-networking: true 
 
   specs:
     - id: SLL_Flood_Dashboard
@@ -14,7 +15,6 @@ proxy:
       description: Dashboard for flood conditions
       container-image: sll_shiny_dashboard-shiny-app-1
       container-port: 3838
-      container-path: /app
       pull-policy: IfNotPresent
       
       container-volumes:
@@ -25,7 +25,6 @@ proxy:
       description: Dashboard of current coastal conditions
       container-image: sll_shiny_dashboard-shiny-app-2
       container-port: 3838
-      container-path: /app
       pull-policy: IfNotPresent
 
       container-volumes:
