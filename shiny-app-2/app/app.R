@@ -441,7 +441,7 @@ ui <- dashboardPage(
                 tags$div(
                   class = "app-footer",
                   tags$a(
-                    href = "http://147.93.47.40:3838/",
+                    href = "http://147.93.47.40:8080/app/SLL_Flood_Dashboard",
                     target = "_blank",
                     HTML("Only interested in flooding? <u>Click here</u> to see the SLL Flooding Dashboard"))
                 ) #end footer

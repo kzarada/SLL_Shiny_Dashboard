@@ -336,7 +336,7 @@ ui <- dashboardPage(
                 tags$div(
                   class = "app-footer",
                   tags$a(
-                    href = "http://147.93.47.40:3839/",
+                    href = "http://147.93.47.40:8080/app/SLL_Current_Coastal_Conditions",
                     target = "_blank",
                     HTML("Interested in seeing more data? <u>Click here</u> to view our Current Coastal Conditions Dashboard")
                   )
