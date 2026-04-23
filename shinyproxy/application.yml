@@ -2,6 +2,7 @@ proxy:
   title: Stone Living Lab Dashboards
   port: 8080
   container-wait-time: 120000
+  hide-navbar: true
 
   authentication: none
 
