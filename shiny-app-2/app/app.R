@@ -24,7 +24,8 @@ instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_L
 
 instrument.map = instrument.locations %>% 
   filter(str_detect(Name, "Flood Sensor", negate = T)) %>% 
-  drop_na(Latitude) %>% 
+  drop_na(Latitude) %>%
+  filter(Name != "Rainsford Island Buoy") %>% 
   mutate(Type = case_when(
     str_detect(Name, "Buoy") ~  'buoy', 
     str_detect(Name, "Gauge") ~ "gauge", 
