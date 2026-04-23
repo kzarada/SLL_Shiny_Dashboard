@@ -22,6 +22,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN R -e "install.packages(c('s2', 'sf', 'leaflet', 'fresh', 'shinydashboard', 'shinybrowser', 'vroom', 'fs', 'zoo', 'shinyWidgets', 'shinyfullscreen', 'bsicons', 'fontawesome'), repos='https://cloud.r-project.org')"
 
+RUN rm -rf /srv/shiny-server/*
+
 COPY app/app.R /srv/shiny-server/app.R
 COPY app/www/ /srv/shiny-server/www/
 
