@@ -15,6 +15,7 @@ proxy:
       description: Dashboard for flood conditions
       container-image: sll_shiny_dashboard-shiny-app-1
       container-port: 3838
+      container-path: /app  
       container-network: sp-net 
       pull-policy: IfNotPresent
       
@@ -26,6 +27,7 @@ proxy:
       description: Dashboard of current coastal conditions
       container-image: sll_shiny_dashboard-shiny-app-2
       container-port: 3838
+      container-path: /app  
       container-network: sp-net 
       pull-policy: IfNotPresent
 
