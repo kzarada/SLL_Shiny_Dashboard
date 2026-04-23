@@ -183,7 +183,7 @@ ui <- dashboardPage(
                             column(width = 6, 
                                    class = "col-12 col-md-6", 
                                    box(
-                                     title = "Flood Map", 
+                                     title = "Flood and Instrument Map", 
                                      class = "map-box",
                                      solidHeader = TRUE, 
                                      status = 'primary',
@@ -397,6 +397,7 @@ ui <- dashboardPage(
                   ), #end tabitem
                   tabItem(tabName = "contact", 
                           column(width = 12, 
+                                 class = "col-12 col-md-6", 
                                  box(title = "About the Stone Living Lab", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -411,7 +412,8 @@ ui <- dashboardPage(
                                     Office of Energy and Environmental Affairs, the National Park Service, and the James M. and Cathleen D. 
                                     Stone Foundation that engages scientists and the community in research, education, and the promotion of equity.")))), 
                           
-                          column(width = 12, 
+                          column(width = 12,
+                                 class = "col-12 col-md-6", 
                                  box(title = "Contact Us", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -420,6 +422,16 @@ ui <- dashboardPage(
                                                 or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
                                                                              href = "mailto:info@stonelivinglab.org"))))))), 
+                          column(width = 12, 
+                                 class = "col-12 col-md-6", 
+                                 box(title = "Keep in touch!", 
+                                     solidHeader = TRUE, 
+                                     status = 'primary', 
+                                     width = 12, 
+                                     tags$iframe(
+                                       src = "https://mailchi.mp/stonelivinglab.org/oflzp4092d", 
+                                       style = "width:100%; height: 80vh;"
+                                     ))), 
                           tags$img(src='Full_Logo.png', 
                                    height = 200,
                                    style="display: block; margin-left: auto; margin-right: auto;")) #end tabItem
@@ -625,10 +637,10 @@ server <- function(input, output, session) {
     y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)")
     
     ggtitle = case_when(
-      input$tide_select == "intro" ~ "NOAA Tide Gauge - Boston",
+      input$tide_select == "intro" ~ "NOAA Tide Gauge and Flood Predictions - Boston",
       input$tide_select == "gallops" ~ "Gallops Tide Gauge", 
-      input$tide_select == "boston" ~ "NOAA Tide Gauge - Boston", 
-      input$tide_select == 'fall.river' ~ "NOAA Tide Gauge - Fall River", 
+      input$tide_select == "boston" ~ "NOAA Tide Gauge and Flood Predictions - Boston", 
+      input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River", 
       .default = NA
     )
     

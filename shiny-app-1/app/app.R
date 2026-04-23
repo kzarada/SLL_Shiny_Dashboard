@@ -317,6 +317,16 @@ ui <- dashboardPage(
                                                 or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
                                                                              href = "mailto:info@stonelivinglab.org"))))))), 
+                          column(width = 12, 
+                                 class = "col-12 col-md-6", 
+                                 box(title = "Keep in touch!", 
+                                     solidHeader = TRUE, 
+                                     status = 'primary', 
+                                     width = 12, 
+                                     tags$iframe(
+                                       src = "https://mailchi.mp/stonelivinglab.org/oflzp4092d", 
+                                       style = "width:100%; height: 80vh;"
+                                     ))), 
                           tags$img(src='Full_Logo.png', 
                                    height = 200,
                                    style="display: block; margin-left: auto; margin-right: auto;")
