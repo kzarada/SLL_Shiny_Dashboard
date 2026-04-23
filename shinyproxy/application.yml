@@ -8,14 +8,14 @@ proxy:
     url: unix:///var/run/docker.sock
 
   specs:
-    - id: shiny-app-1
+    - id: SLL_Flood_Dashboard
       display-name: SLL Flood Dashboard
-      description: SLL Flood
+      description: Dashboard for flood conditions
       container-image: shiny-app-1
       container-port: 3838
 
-    - id: shiny-app-2
+    - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
-      description: Second app
+      description: Dashboard of current coastal conditions.
       container-image: shiny-app-2
       container-port: 3838

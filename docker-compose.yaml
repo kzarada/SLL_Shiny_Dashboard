@@ -20,8 +20,6 @@ services:
   shiny-app-1:
     build: ./shiny-app-1
     platform: linux/amd64
-    ports:
-      - "3838:3838"
     volumes:
       - ./Data:/srv/shiny-server/Data
     restart: unless-stopped
@@ -29,8 +27,6 @@ services:
   shiny-app-2:
     build: ./shiny-app-2
     platform: linux/amd64
-    ports:
-      - "3839:3838"
     volumes:
       - ./Data:/srv/shiny-server/Data
     restart: unless-stopped
