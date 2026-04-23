@@ -11,13 +11,13 @@ proxy:
     - id: SLL_Flood_Dashboard
       display-name: SLL Flood Dashboard
       description: Dashboard for flood conditions
-      container-image: sll_shiny_dashboard-shiny-app-1-1
+      container-image: sll_shiny_dashboard-shiny-app-1
       container-port: 3838
       pull-policy: IfNotPresent
 
     - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
       description: Dashboard of current coastal conditions
-      container-image: sll_shiny_dashboard-shiny-app-2-1
+      container-image: sll_shiny_dashboard-shiny-app-2
       container-port: 3838
       pull-policy: IfNotPresent
