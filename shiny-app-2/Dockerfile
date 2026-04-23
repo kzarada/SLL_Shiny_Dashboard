@@ -24,8 +24,7 @@ RUN R -e "install.packages(c('s2', 'sf', 'leaflet', 'fresh', 'shinydashboard', '
 
 RUN rm -rf /srv/shiny-server/*
 
-COPY app/app.R /srv/shiny-server/app.R
-COPY app/www/ /srv/shiny-server/www/
+COPY app/ /srv/shiny-server/app/
 
 EXPOSE 3838
 
