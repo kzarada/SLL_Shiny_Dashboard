@@ -20,4 +20,4 @@ proxy:
       description: Dashboard of current coastal conditions
       container-image: sll_shiny_dashboard-shiny-app-2
       container-port: 3838
-      pull-policy: IfNotPresent
+      pull-policy: IfNotPresentg
