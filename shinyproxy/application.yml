@@ -15,10 +15,16 @@ proxy:
       container-image: sll_shiny_dashboard-shiny-app-1
       container-port: 3838
       pull-policy: IfNotPresent
+      
+      container-volumes:
+       - /root/project/Data:/srv/shiny-server/Data 
 
     - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
       description: Dashboard of current coastal conditions
       container-image: sll_shiny_dashboard-shiny-app-2
       container-port: 3838
-      pull-policy: IfNotPresentg
+      pull-policy: IfNotPresent
+
+      container-volumes:
+       - /root/project/Data:/srv/shiny-server/Data 
