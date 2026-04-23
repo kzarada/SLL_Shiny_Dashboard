@@ -7,11 +7,6 @@ proxy:
 
   docker:
     url: unix:///var/run/docker.sock
-    container-network: bridge
-
-  logging:
-    level:
-      eu.openanalytics: DEBUG
 
   specs:
     - id: SLL_Flood_Dashboard
@@ -22,7 +17,7 @@ proxy:
       pull-policy: IfNotPresent
       
       container-volumes:
-       - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data 
+         - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data
 
     - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
@@ -32,4 +27,4 @@ proxy:
       pull-policy: IfNotPresent
 
       container-volumes:
-       - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data 
+         - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data
