@@ -17,7 +17,7 @@ proxy:
       pull-policy: IfNotPresent
       
       container-volumes:
-       - /root/project/Data:/srv/shiny-server/Data 
+       - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data 
 
     - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
@@ -27,4 +27,4 @@ proxy:
       pull-policy: IfNotPresent
 
       container-volumes:
-       - /root/project/Data:/srv/shiny-server/Data 
+       - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data 
