@@ -18,6 +18,22 @@ services:
     networks:
       - sp-net
 
+  shiny-app-1:
+    build: ./shiny-app-1
+    platform: linux/amd64
+    volumes:
+      - ./Data:/srv/shiny-server/Data
+    networks:
+      - sp-net
+
+  shiny-app-2:
+    build: ./shiny-app-2
+    platform: linux/amd64
+    volumes:
+      - ./Data:/srv/shiny-server/Data
+    networks:
+      - sp-net
+
 networks:
   sp-net:
     name: sp-net
