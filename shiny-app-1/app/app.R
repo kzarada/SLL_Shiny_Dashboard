@@ -126,8 +126,8 @@ ui <- dashboardPage(
                 
                 
                 tags$head(
-                  
-                  tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
+                includeHTML("google-analytics.html"),
+                tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
                 
                 tags$script(HTML('$(document).ready(function() {
@@ -306,9 +306,9 @@ ui <- dashboardPage(
                                     <br> <br> The Stone Living Lab is a partnership between Boston Harbor Now, UMass Boston’s School for the Environment, 
                                     the City of Boston, the Massachusetts Department of Conservation and Recreation, the Massachusetts Executive 
                                     Office of Energy and Environmental Affairs, the National Park Service, and the James M. and Cathleen D. 
-                                    Stone Foundation that engages scientists and the community in research, education, and the promotion of equity.")))), 
-                          
-                          column(width = 12, 
+                                    Stone Foundation that engages scientists and the community in research, education, and the promotion of equity."))), 
+                                 
+                                 
                                  box(title = "Contact Us", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -316,9 +316,8 @@ ui <- dashboardPage(
                                      div(p(HTML(paste0("If you have feedback on this dashboard, questions about our work, 
                                                 or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
-                                                                             href = "mailto:info@stonelivinglab.org"))))))), 
-                          column(width = 12, 
-                                 class = "col-12 col-md-6", 
+                                                                             href = "mailto:info@stonelivinglab.org")))))), 
+                                 
                                  box(title = "Keep in touch!", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -326,13 +325,8 @@ ui <- dashboardPage(
                                      tags$iframe(
                                        src = "https://mailchi.mp/stonelivinglab.org/oflzp4092d", 
                                        style = "width:100%; height: 80vh;"
-                                     ))), 
-                          tags$img(src='Full_Logo.png', 
-                                   height = 200,
-                                   style="display: block; margin-left: auto; margin-right: auto;")
-                          
-                  )
-                ), #end Tab Items 
+                                     )))) #end tabItem
+                ), #end tabItems
                 tags$div(
                   class = "app-footer",
                   tags$a(
@@ -608,7 +602,7 @@ server <- function(input, output, session) {
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
     depth = if(unit == "m"){main_flood_graph()$Flood.Depth/3.281}else{main_flood_graph()$Flood.Depth}
-    y_max = max(max(depth, na.rm = T), convert_units(1, unit_state()), na_rm = T)
+    y_max = max(depth, convert_units(1, unit_state()), na.rm = T)
     
     ggplot(main_flood_graph(), aes(x = Time_ET, y = depth)) + 
       geom_line(linewidth = 1.5, color = "#2EBBAD") + 

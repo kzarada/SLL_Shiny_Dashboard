@@ -14,7 +14,8 @@ library(sf)
 library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data"
 
 
 ################## Read in data #####################
@@ -159,6 +160,9 @@ ui <- dashboardPage(
   dashboardBody(use_theme(mytheme),
                 
                 tags$head(
+                  
+                  includeHTML("google-analytics.html"),
+                  
                   tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                 
                 tags$script(HTML('$(document).ready(function() {
@@ -300,7 +304,7 @@ ui <- dashboardPage(
                               "Select Instrument:", 
                               list("Boston NOAA Tide Gauge" = "Boston.Tide", 
                                    "Fall River NOAA Tide Gauge" = "Fall.River.Tide",
-                                   "Gallops Island Tide Gauge" = "Gallops.Tide", 
+                                   #"Gallops Island Tide Gauge" = "Gallops.Tide", 
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
                                    #"Rainsford NE Wave Buoy" = "Rainsford.Buoy",
@@ -398,7 +402,6 @@ ui <- dashboardPage(
                   ), #end tabitem
                   tabItem(tabName = "contact", 
                           column(width = 12, 
-                                 class = "col-12 col-md-6", 
                                  box(title = "About the Stone Living Lab", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -411,10 +414,9 @@ ui <- dashboardPage(
                                     <br> <br> The Stone Living Lab is a partnership between Boston Harbor Now, UMass Boston’s School for the Environment, 
                                     the City of Boston, the Massachusetts Department of Conservation and Recreation, the Massachusetts Executive 
                                     Office of Energy and Environmental Affairs, the National Park Service, and the James M. and Cathleen D. 
-                                    Stone Foundation that engages scientists and the community in research, education, and the promotion of equity.")))), 
+                                    Stone Foundation that engages scientists and the community in research, education, and the promotion of equity."))), 
                           
-                          column(width = 12,
-                                 class = "col-12 col-md-6", 
+                    
                                  box(title = "Contact Us", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -422,9 +424,8 @@ ui <- dashboardPage(
                                      div(p(HTML(paste0("If you have feedback on this dashboard, questions about our work, 
                                                 or have noticed issues with any of our overland flood sensors or instruments,
                                                 please email us at ", tags$a("info@stonelivinglab.org", 
-                                                                             href = "mailto:info@stonelivinglab.org"))))))), 
-                          column(width = 12, 
-                                 class = "col-12 col-md-6", 
+                                                                             href = "mailto:info@stonelivinglab.org")))))), 
+                    
                                  box(title = "Keep in touch!", 
                                      solidHeader = TRUE, 
                                      status = 'primary', 
@@ -432,10 +433,7 @@ ui <- dashboardPage(
                                      tags$iframe(
                                        src = "https://mailchi.mp/stonelivinglab.org/oflzp4092d", 
                                        style = "width:100%; height: 80vh;"
-                                     ))), 
-                          tags$img(src='Full_Logo.png', 
-                                   height = 200,
-                                   style="display: block; margin-left: auto; margin-right: auto;")) #end tabItem
+                                     )))) #end tabItem
                   
                 ), #end tabItems
                 
@@ -712,7 +710,7 @@ server <- function(input, output, session) {
     minor = if(unit == "m"){
       minor/3.281}else{minor}
     
-    ymax = max(water_level, (major + 3))
+    ymax = max(water_level, (major * 1.1))
     
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
       geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
@@ -727,13 +725,13 @@ server <- function(input, output, session) {
                     fill = "NOAA - Minor Flooding")) + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
-                    ymin= moderate + 0.1, 
+                    ymin= moderate + 0.05, 
                     ymax = major, 
                     fill = "NOAA - Moderate Flooding")) + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
-                    ymin= major + 0.1, 
-                    ymax = major + 2, 
+                    ymin= major + 0.05, 
+                    ymax = major *1.1, 
                     fill = "NOAA - Major Flooding")) + 
       scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
@@ -1014,14 +1012,16 @@ server <- function(input, output, session) {
   })
   
   output$instrument_graph <- renderPlot({
-    unit = unit_state() 
-    
-    wave_height =  if(unit == "m"){combo_data()$Harbor_Entrance_Hs_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hs_Wave_Height_ft}
-    max_wave = if(unit == "m"){combo_data()$Harbor_Entrance_Hmax_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hmax_Wave_Height_ft}
-    
-    y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
+   
     
     if(input$instrument.id == "Harbor.Entrance"){
+      
+      unit = unit_state() 
+      
+      wave_height =  if(unit == "m"){combo_data()$Harbor_Entrance_Hs_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hs_Wave_Height_ft}
+      max_wave = if(unit == "m"){combo_data()$Harbor_Entrance_Hmax_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hmax_Wave_Height_ft}
+      
+      y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
       ggplot(combo_data(), aes(x = Time_ET, y = wave_height)) + 
         geom_line(aes(color = "Significant Wave Height (ft)"), linewidth= 1) + 
         geom_line(aes(x = Time_ET, y = max_wave, color = "Maximum Wave Height (ft)"), linewidth = 1) + 
@@ -1032,21 +1032,36 @@ server <- function(input, output, session) {
         plot_theme()
     }
     else if(input$instrument.id == "Rainsford.Weather"){
-      ggplot(combo_data(), aes(x = Time_ET, y = Wind.Speed_RMYoung_mph)) +
-        geom_line(aes(x = Time_ET, y = Wind.Speed_RMYoung_mph, color = "Wind Speed"), linewidth = 1) +
-        geom_line(aes(x = Time_ET, y = Gust.Speed_RMYoung_mph, color = "Gust Speed"), linewidth = 1) +
-        ylim(c(-2, max(combo_data()$Gust.Speed_RMYoung_mph + 1))) + 
-        geom_segment(data = wind_dir, 
+      
+      unit = unit_state()
+      y_label = ifelse(unit == 'ft', "Wind Speed (mph)", "Wind Speed (m/s)")
+      
+      wind_speed = if(unit == "m"){
+        combo_data()$Wind.Speed_RMYoung_mph/2.237}else{combo_data()$Wind.Speed_RMYoung_mph}
+      gust_speed = if(unit == "m"){combo_data()$Gust.Speed_RMYoung_mph/2.237}else{combo_data()$Gust.Speed_RMYoung_mph}
+      
+      y_max = if(unit == "m"){
+        max(gust_speed + 1, 6.7)}else{max(gust_speed + 1, 15)}
+      
+      
+      ggplot(combo_data(), aes(x = Time_ET, y = wind_speed)) +
+        geom_line(aes(x = Time_ET, y = wind_speed, color = "Wind Speed"), linewidth = 1) +
+        geom_line(aes(x = Time_ET, y = gust_speed, color = "Gust Speed"), linewidth = 1) +
+        geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
+                   color = "darkred", linewidth = 1, linetype = "dashed") +
+        ylim(c(-2, y_max)) + 
+        geom_segment(data = wind_dir(), 
                      aes(xend = arrow_xend, 
                          y = arrow_y, 
                          yend = arrow_yend, 
                          color = "Wind Direction"), 
                      arrow = arrow(length = unit(0.15, 'cm'))) + 
         xlab("Time (ET)") + 
-        ylab("Wind Speed (mph)") +
+        ylab(y_label) +
         scale_color_manual(
           values = c("#256EFF", "#002366", "#2EBBAD")) +
-       plot_theme()
+        plot_theme()
+      
     }
     else if(input$instrument.id == "Gallops.Tide"){
       
@@ -1082,23 +1097,19 @@ server <- function(input, output, session) {
       minor = if(unit == "m"){
         12.50/3.281}else{12.5}
       
-      water_level = combo_data()$Boston_Water_MLLW
-
-      if(unit == "m"){
-        water_level/3.281}else{water_level}
+      water_level = if(unit == "m"){combo_data()$Boston_Water_MLLW/3.281}else{combo_data()$Boston_Water_MLLW}
       
-      prediction = tide_pred()$Boston_Water_Prediction
-    
-        prediction = if(unit == "m"){
-          prediction/3.281}else{prediction}
+      prediction = if(unit == "m"){
+          tide_pred()$Boston_Water_Prediction/3.281}else{tide_pred()$Boston_Water_Prediction}
     
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
+        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
         xlab("Time (ET)") + 
         scale_color_manual(
-          values = c("#002366")) + 
+          values = c("#002366", "#2E3440")) + 
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
@@ -1125,18 +1136,14 @@ server <- function(input, output, session) {
       
     }
     else if(input$instrument.id == "Fall.River.Tide"){
+      
       unit = unit_state()
       y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
       
-      water_level = combo_data()$Fall_River_Water_MLLW
-      
-      if(unit == "m"){
-        water_level/3.281}else{water_level}
-      
-      prediction = tide_pred()$Fall_River_Water_Prediction
+      water_level = if(unit == "m"){combo_data()$Fall_River_Water_MLLW/3.281}else{combo_data()$Fall_River_Water_MLLW}
       
       prediction = if(unit == "m"){
-        prediction/3.281}else{prediction}
+        tide_pred()$Fall_River_Water_Prediction/3.281}else{tide_pred()$Fall_River_Water_Prediction}
       
       major = if(unit == "m"){
         11.98/3.281}else{11.98}
@@ -1149,10 +1156,11 @@ server <- function(input, output, session) {
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
+        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
         xlab("Time (ET)") + 
         scale_color_manual(
-          values = c("#002366")) + 
+          values = c("#002366", "#2E3440")) +  
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
