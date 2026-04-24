@@ -10,7 +10,6 @@ library(leaflet)
 library(fresh)
 library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
-#data_dir = "/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data"
 data_dir = "/srv/shiny-server/Data/"
 
 
