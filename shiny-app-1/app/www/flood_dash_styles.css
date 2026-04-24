@@ -450,7 +450,7 @@ body {
         display: block;
         line-height: 1;
         bottom: 0;
-        margin-bottom:-16px;
+        margin-bottom:-12px;
         font-size: clamp(82.32px, 17.64vh, 199.9px);   /* ~9.8 ft */
           }
       
@@ -458,7 +458,7 @@ body {
         display: block;
         line-height: 1;
         bottom: 0;
-        margin-bottom: -16px;
+        margin-bottom: -12px;
         font-size: clamp(60px, 12vh, 140px);
           }
       
@@ -466,7 +466,7 @@ body {
         display: block;
         line-height: 1;
         bottom: 0;
-        margin-bottom: -14px;
+        margin-bottom: -10px;
         font-size: clamp(75px, 16.5vh, 175px);
         }
         
@@ -474,7 +474,7 @@ body {
         display: block;
         line-height: 1;
         bottom: 0;
-        margin-bottom: -16px;
+        margin-bottom: -12px;
         font-size: clamp(78px, 16vh, 181px);
           }
 
