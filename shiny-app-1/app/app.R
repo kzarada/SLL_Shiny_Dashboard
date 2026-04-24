@@ -125,8 +125,8 @@ ui <- dashboardPage(
                 
                 
                 tags$head(
-                includeHTML("google-analytics.html"),
-                tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
+                  includeHTML(paste0(data_dir, "Inputs/google-analytics_1.html")),
+                  tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
                 
                 tags$script(HTML('$(document).ready(function() {

@@ -16,7 +16,6 @@ library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
 
-
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
@@ -160,7 +159,7 @@ ui <- dashboardPage(
                 
                 tags$head(
                   
-                  includeHTML("google-analytics.html"),
+                  includeHTML(paste0(data_dir, "Inputs/google-analytics-2.html")),
                   
                   tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                 
