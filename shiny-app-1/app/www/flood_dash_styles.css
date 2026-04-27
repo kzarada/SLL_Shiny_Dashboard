@@ -226,15 +226,7 @@ body {
     padding: 6px 8px !important;
   }
 
-  /* Slider readability */
-  .irs-grid-text {
-    font-size: 8px;
-  }
-
-  .irs--shiny .irs-min,
-  .irs--shiny .irs-max {
-    font-size: 8px;
-  }
+  
 }
 
 
@@ -283,7 +275,7 @@ body {
 ═══════════════════════════════════════ */
 
 .map-box {
-  height: 85vh;
+  height: 75vh;
 }
 
 .plot-box {
@@ -313,6 +305,29 @@ body {
 .irs--shiny .irs-max {
   font-size: 12pt;
   font-family: 'Replica Mono LL TT', monospace;
+}
+
+@media (max-width: 768px) {
+.shiny-input-container {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.irs { margin-left: auto; margin-right: auto; }
+
+.irs-grid-text {
+  font-size: 7pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
+
+.irs-grid-text:last-child { display: none; }
+
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  font-size: 7pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
 }
 
 /* ═══════════════════════════════════════
