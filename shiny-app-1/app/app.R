@@ -360,7 +360,7 @@ server <- function(input, output, session) {
     title = "Welcome to the Stone Living Lab Flooding Dashboard!",
     HTML(paste0("This dashboard displays real-time flooding conditions at our overland flood sensors. 
     For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
-                                                                                       href = "https://www.canva.com/design/DAGzC4w-HyY/FTvLHmZpkhQShXF0yTdktg/view?utm_content=DAGzC4w-HyY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h023b1e34ec", 
+                                                                                       href = "https://canva.link/yne2ktj8dnz2c81", 
                                                                                        target = '_blank'), "</u>")),
     easyClose = TRUE,
     footer = modalButton("Dismiss")
