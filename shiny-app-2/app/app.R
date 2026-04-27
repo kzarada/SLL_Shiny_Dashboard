@@ -254,7 +254,8 @@ ui <- dashboardPage(
                                    "Boston - Tenean Beach" = "Tenean.Beach",
                                    "Essex - Main Street" = "Essex", 
                                    "Fall River - Stafford Square" = "Fall.River", 
-                                   "Salem - Collin's Cove" = "Salem"), 
+                                   "Salem - Collin's Cove" = "Salem", 
+                                   "Wareham - Besse Park" = "Wareham"), 
                               multiple = F), 
                             
                             column(width = 6, 
