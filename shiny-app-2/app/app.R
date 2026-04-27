@@ -331,7 +331,7 @@ ui <- dashboardPage(
                               box(
                                 title = 'Instrument Overview', 
                                 solidHeader = TRUE, 
-                                height = "15vh",
+                                height = "20vh",
                                 status = "primary",  
                                 htmlOutput("instrument_text"), 
                                 width = 12
