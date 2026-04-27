@@ -480,7 +480,9 @@ server <- function(input, output, session) {
           axis.title   = element_text(size = 9),
           legend.text  = element_text(size = 7),
           legend.title = element_blank(), 
-          legend.position = "bottom"
+          legend.position = "bottom", 
+          plot.title = element_text(size = 10), 
+          plot.margin = margin(0.1,0.5,0.1,0.1, "cm") #t,r,b,l
         )
     } else {
       theme_bw(base_family = "Replica Mono LL TT") +
@@ -489,7 +491,9 @@ server <- function(input, output, session) {
           axis.title = element_text(size = 18),
           legend.text  = element_text(size = 16),
           legend.title = element_blank(), 
-          legend.position = "bottom"
+          legend.position = "bottom", 
+          plot.title = element_text(size = 18),
+          plot.margin = margin(0.5,1,0.5,0.5, "cm")
         )
     }
   })
@@ -745,8 +749,7 @@ server <- function(input, output, session) {
       scale_color_manual(
         values = c("#002366", "#2E3440")) + 
       plot_theme() + 
-      theme(plot.title = element_text(size = 18), 
-            legend.box = 'vertical')
+      theme(legend.box = 'vertical')
     
     
   }) 
