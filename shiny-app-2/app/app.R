@@ -14,7 +14,8 @@ library(sf)
 library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data/"
 
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
@@ -158,10 +159,15 @@ ui <- dashboardPage(
   dashboardBody(use_theme(mytheme),
                 
                 tags$head(
-                  
-                  includeHTML(paste0(data_dir, "Inputs/google-analytics-2.html")),
-                  
-                  tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
+                  tags$script(async = NA, src = "https://www.googletagmanager.com/gtag/js?id=G-T3BSSCMHRC"),
+                  tags$script(HTML("
+                                      window.dataLayer = window.dataLayer || [];
+                                      function gtag(){dataLayer.push(arguments);}
+                                      gtag('js', new Date());
+                                      gtag('config', 'G-T3BSSCMHRC');
+                                    ")), 
+                                                
+                tags$link(rel = "stylesheet", type = "text/css", href = "CCC_styles.css")),
                 
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> SLL Current Coastal Conditions</span>\');})')),

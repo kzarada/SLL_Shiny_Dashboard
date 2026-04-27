@@ -125,7 +125,14 @@ ui <- dashboardPage(
                 
                 
                 tags$head(
-                  includeHTML(paste0(data_dir, "Inputs/google-analytics_1.html")),
+                  tags$script(async = NA, src = "https://www.googletagmanager.com/gtag/js?id=G-T4C517H1X9"),
+                  tags$script(HTML("
+                                      window.dataLayer = window.dataLayer || [];
+                                      function gtag(){dataLayer.push(arguments);}
+                                      gtag('js', new Date());
+                                      gtag('config', 'G-T4C517H1X9');
+                                    ")), 
+                          
                   tags$link(rel = "stylesheet", type = "text/css", href = "flood_dash_styles.css")),
                 
                 
