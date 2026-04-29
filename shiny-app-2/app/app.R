@@ -284,7 +284,7 @@ ui <- dashboardPage(
                                 solidHeader = TRUE, 
                                 status = 'primary', 
                                 class = 'map-box',
-                                leafletOutput("sensor_map"), 
+                                leafletOutput("sensor_map", height = "100%"), 
                                 width = 12
                               ), 
                               
@@ -293,7 +293,7 @@ ui <- dashboardPage(
                                 solidHeader = TRUE, 
                                 class = 'plot-box',
                                 status = "primary", 
-                                shinyfullscreen::fullscreen_this(plotOutput("station_flood")), 
+                                shinyfullscreen::fullscreen_this(plotOutput("station_flood", height = "100%")), 
                                 width = 12
                               ) #end box
                             ) #end col
@@ -334,7 +334,7 @@ ui <- dashboardPage(
                                 solidHeader = TRUE, 
                                 height = "20vh",
                                 status = "primary",  
-                                htmlOutput("instrument_text"), 
+                                htmlOutput("instrument_text", height = "100%"), 
                                 width = 12
                               ),
                               
@@ -343,7 +343,7 @@ ui <- dashboardPage(
                                 solidHeader = TRUE, 
                                 status = 'primary', 
                                 class = 'map-box',
-                                leafletOutput("instrument_map"), 
+                                leafletOutput("instrument_map", height = "100%"), 
                                 width = 12
                               ), 
                               
@@ -352,7 +352,7 @@ ui <- dashboardPage(
                                 solidHeader = TRUE, 
                                 status = "primary", 
                                 class = 'plot-box',
-                                shinyfullscreen::fullscreen_this(plotOutput("instrument_graph")), 
+                                shinyfullscreen::fullscreen_this(plotOutput("instrument_graph", height = "100%")), 
                                 width = 12
                               )
                             ) #end col
@@ -488,12 +488,12 @@ server <- function(input, output, session) {
     } else {
       theme_bw(base_family = "Replica Mono LL TT") +
         theme(
-          axis.text  = element_text(size = 16),
-          axis.title = element_text(size = 18),
-          legend.text  = element_text(size = 16),
+          axis.text  = element_text(size = 12),
+          axis.title = element_text(size = 14),
+          legend.text  = element_text(size = 14),
           legend.title = element_blank(), 
           legend.position = "bottom", 
-          plot.title = element_text(size = 18),
+          plot.title = element_text(size = 16),
           plot.margin = margin(0.5,1,0.5,0.5, "cm")
         )
     }

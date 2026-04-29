@@ -396,8 +396,8 @@ server <- function(input, output, session) {
     } else {
       theme_bw(base_family = "Replica Mono LL TT") +
         theme(
-          axis.text  = element_text(size = 16),
-          axis.title = element_text(size = 18),
+          axis.text  = element_text(size = 12),
+          axis.title = element_text(size = 16),
           legend.position = "none", 
           plot.margin = margin(0.5,1,0.5,0.5, "cm")
         )
