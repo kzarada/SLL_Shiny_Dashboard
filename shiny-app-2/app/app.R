@@ -494,7 +494,7 @@ server <- function(input, output, session) {
           legend.title = element_blank(), 
           legend.position = "bottom", 
           plot.title = element_text(size = 16),
-          plot.margin = margin(0.5,1,0.5,0.5, "cm")
+          plot.margin = margin(0.5,1,0.5,1, "cm")
         )
     }
   })
@@ -633,8 +633,7 @@ server <- function(input, output, session) {
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       scale_color_manual(
         values = c("#256EFF","#2EBBAD")) + 
-      plot_theme() + 
-      theme(plot.title = element_text(size = 18))
+      plot_theme()
 
   })
   
@@ -1115,6 +1114,7 @@ server <- function(input, output, session) {
         geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
         xlab("Time (ET)") + 
+        ggtitle("NOAA Tide Gauge and Flood Predictions - Boston") + 
         scale_color_manual(
           values = c("#002366", "#2E3440")) + 
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
@@ -1137,8 +1137,7 @@ server <- function(input, output, session) {
                       fill = "NOAA - Major Flooding")) + 
         scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
-        theme(plot.title = element_text(size = 18), 
-              legend.box = 'vertical')
+        theme(legend.box = 'vertical')
       
       
     }
@@ -1165,6 +1164,7 @@ server <- function(input, output, session) {
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
+        ggtitle("NOAA Tide Gauge and Flood Predictions - Fall River") + 
         xlab("Time (ET)") + 
         scale_color_manual(
           values = c("#002366", "#2E3440")) +  
@@ -1188,8 +1188,7 @@ server <- function(input, output, session) {
                       fill = "NOAA - Major Flooding")) + 
         scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
-        theme(plot.title = element_text(size = 18), 
-              legend.box = 'vertical')
+        theme(legend.box = 'vertical')
       
     }
     else if(input$instrument.id == "North.Shore"){
