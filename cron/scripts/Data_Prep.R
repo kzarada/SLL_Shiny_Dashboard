@@ -154,6 +154,7 @@ hohonu <- vroom::vroom(files,
     is.na(Flood.Depth) ~ "No data collected", 
     .default = "Data passed quality control checks")) %>% 
   left_join(hohonu_locations, by = c("Location" = "Station")) %>% 
+  mutate(Flood.Depth = ifelse(Location == "Salem" & Flood.Depth < 0.2, 0, Flood.Depth)) %>% 
   distinct() %>% 
   group_by(Location) %>% 
   arrange(Time_ET) %>% 
