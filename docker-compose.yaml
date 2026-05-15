@@ -6,6 +6,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
+    restart: unless-stopped
     networks:
       - sp-net
 
@@ -23,6 +24,7 @@ services:
     platform: linux/amd64
     volumes:
       - ./Data:/srv/shiny-server/Data
+    restart: unless-stopped
     networks:
       - sp-net
 
@@ -31,6 +33,7 @@ services:
     platform: linux/amd64
     volumes:
       - ./Data:/srv/shiny-server/Data
+    restart: unless-stopped
     networks:
       - sp-net
 
