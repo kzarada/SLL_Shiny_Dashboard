@@ -488,13 +488,13 @@ server <- function(input, output, session) {
     } else {
       theme_bw(base_family = "Replica Mono LL TT") +
         theme(
-          axis.text  = element_text(size = 12),
-          axis.title = element_text(size = 14),
-          legend.text  = element_text(size = 14),
+          axis.text  = element_text(size = 14),
+          axis.title = element_text(size = 16),
+          legend.text  = element_text(size = 16),
           legend.title = element_blank(), 
           legend.position = "bottom", 
-          plot.title = element_text(size = 16),
-          plot.margin = margin(0.5,1,0.5,1, "cm")
+          plot.title = element_text(size = 18),
+          plot.margin = margin(0.5,0.5,0.5,1, "cm")
         )
     }
   })
@@ -563,6 +563,8 @@ server <- function(input, output, session) {
     y_max = if(unit == "m"){
       max(gust_speed + 1, 6.7)}else{max(gust_speed + 1, 15)}
     
+    shiny::validate(need(wind_speed, "Data are not available from this instrument"))
+    
     
     ggplot(combo_data(), aes(x = Time_ET, y = wind_speed)) +
       geom_line(aes(x = Time_ET, y = wind_speed, color = "Wind Speed"), linewidth = 1) +
@@ -611,6 +613,8 @@ server <- function(input, output, session) {
     }
     
     y_max = max(max_height, convert_units(2.5, unit))
+    
+    shiny::validate(need(wave_height, "Data are not available from this instrument"))
     
     ggtitle = case_when(
       input$wave_select == "intro" ~ "Harbor Entrance Wave Buoy",
@@ -663,6 +667,7 @@ server <- function(input, output, session) {
     water_level = if(unit == "m"){
       water_level/3.281}else{water_level}
     
+    shiny::validate(need(water_level, "Data are not available from this instrument"))
     
     prediction = if(input$tide_select == "gallops"){
       NA}
@@ -965,6 +970,8 @@ server <- function(input, output, session) {
     depth = if(unit == "m"){sensor_loc()$Flood.Depth/3.281}else{sensor_loc()$Flood.Depth}
     y_max = max(depth, convert_units(1, unit_state()), na.rm = T)
     
+    shiny::validate(need(depth, "Data are not available from this instrument"))
+    
     ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
       geom_line(linewidth = 1.5, color = "#2EBBAD") + 
       ylab(y_label) + 
@@ -1027,6 +1034,8 @@ server <- function(input, output, session) {
       wave_height =  if(unit == "m"){combo_data()$Harbor_Entrance_Hs_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hs_Wave_Height_ft}
       max_wave = if(unit == "m"){combo_data()$Harbor_Entrance_Hmax_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hmax_Wave_Height_ft}
       
+      shiny::validate(need(wave_height, "Data are not available from this instrument"))
+      
       y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
       ggplot(combo_data(), aes(x = Time_ET, y = wave_height)) + 
         geom_line(aes(color = "Significant Wave Height (ft)"), linewidth= 1) + 
@@ -1049,6 +1058,7 @@ server <- function(input, output, session) {
       y_max = if(unit == "m"){
         max(gust_speed + 1, 6.7)}else{max(gust_speed + 1, 15)}
       
+      shiny::validate(need(wind_speed, "Data are not available from this instrument"))
       
       ggplot(combo_data(), aes(x = Time_ET, y = wind_speed)) +
         geom_line(aes(x = Time_ET, y = wind_speed, color = "Wind Speed"), linewidth = 1) +
@@ -1079,6 +1089,8 @@ server <- function(input, output, session) {
       if(unit == "m"){
         water_level/3.281}else{water_level}
       
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
+      
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
@@ -1108,6 +1120,7 @@ server <- function(input, output, session) {
       prediction = if(unit == "m"){
           tide_pred()$Boston_Water_Prediction/3.281}else{tide_pred()$Boston_Water_Prediction}
     
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
@@ -1147,6 +1160,8 @@ server <- function(input, output, session) {
       y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
       
       water_level = if(unit == "m"){combo_data()$Fall_River_Water_MLLW/3.281}else{combo_data()$Fall_River_Water_MLLW}
+      
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
       
       prediction = if(unit == "m"){
         tide_pred()$Fall_River_Water_Prediction/3.281}else{tide_pred()$Fall_River_Water_Prediction}
@@ -1197,6 +1212,7 @@ server <- function(input, output, session) {
       wave_height = if(unit == "m"){combo_data()$North_Shore_Hs_Wave_Height_m}else{combo_data()$North_Shore_Hs_Wave_Height_ft}
       max_height = if(unit == "m"){combo_data()$North_Shore_Hmax_Wave_Height_m}else{combo_data()$North_Shore_Hmax_Wave_Height_ft}
       
+      shiny::validate(need(wave_height, "Data are not available from this instrument"))
       
       y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
       
@@ -1216,6 +1232,8 @@ server <- function(input, output, session) {
       unit = unit_state() 
       
       wave_height = if(unit == "m"){combo_data()$Rainsford_Hs_Wave_Height_m}else{combo_data()$Rainsford_Hs_Wave_Height_ft}
+      
+      shiny::validate(need(wave_height, "Data are not available from this instrument"))
       
       y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
       
@@ -1280,6 +1298,8 @@ server <- function(input, output, session) {
                Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
     }
   )
+  
+  
   observe({
     newData = map_hohonu_data() 
     updateSliderInput(session, 
