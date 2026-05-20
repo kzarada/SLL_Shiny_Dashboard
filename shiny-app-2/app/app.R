@@ -464,8 +464,7 @@ server <- function(input, output, session) {
     For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
                                                                                        href = "https://canva.link/yne2ktj8dnz2c81", 
                                                                                        target = '_blank'), "</u>"), 
-         "<br><br> <strong> Please note that data are currently not available from the Gallops Tide Station. 
-         We are working on getting this instrument back online as soon as possible."),
+         "<br><br> <strong> Please note that the Harbor Entrance Buoy is currently down for maintence. It will be back online the week of May 25."),
     easyClose = TRUE,
     footer = modalButton("Dismiss")
   ))
