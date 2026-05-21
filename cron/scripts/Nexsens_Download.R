@@ -136,7 +136,7 @@ current_time = str_replace(as.character(round_date(current_time, unit = "minute"
 
 #API URL
 url = paste0("https://www.wqdatalive.com/api/v1/devices/", device_id$ID[1],
-             "/parameters/78922/data?apiKey=", nexsens_key, "&from=", last_time, 
+             "/parameters/75337/data?apiKey=", nexsens_key, "&from=", last_time, 
              "&to=", current_time)
 
 req <- request(url)
