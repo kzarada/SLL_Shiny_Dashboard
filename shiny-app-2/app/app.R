@@ -308,7 +308,7 @@ ui <- dashboardPage(
                               "Select Instrument:", 
                               list("Boston NOAA Tide Gauge" = "Boston.Tide", 
                                    "Fall River NOAA Tide Gauge" = "Fall.River.Tide",
-                                   #"Gallops Island Tide Gauge" = "Gallops.Tide", 
+                                   "Gallops Island Tide Gauge" = "Gallops.Tide", 
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
                                    #"Rainsford NE Wave Buoy" = "Rainsford.Buoy",
