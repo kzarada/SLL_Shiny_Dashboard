@@ -646,8 +646,8 @@ server <- function(input, output, session) {
     y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)")
     
     ggtitle = case_when(
-      input$tide_select == "intro" ~ "NOAA Tide Gauge and Flood Predictions - Boston",
-      input$tide_select == "gallops" ~ "Gallops Tide Gauge", 
+      input$tide_select == "intro" ~ "Gallops Tide Gauge and NOAA Flood Predictions",
+      input$tide_select == "gallops" ~ "Gallops Tide Gauge and NOAA Flood Predictions", 
       input$tide_select == "boston" ~ "NOAA Tide Gauge and Flood Predictions - Boston", 
       input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River", 
       .default = NA
@@ -660,7 +660,7 @@ server <- function(input, output, session) {
     }else if(input$tide_select == 'fall.river'){
       combo_data()$Fall_River_Water_MLLW
     }else if(input$tide_select == 'intro'){
-      combo_data()$Boston_Water_MLLW
+      combo_data()$Gallops_Water_Level_ft
     }
     
     water_level = if(unit == "m"){
@@ -675,7 +675,7 @@ server <- function(input, output, session) {
     }else if(input$tide_select == 'fall.river'){
       tide_pred()$Fall_River_Water_Prediction
     }else if(input$tide_select == 'intro'){
-      tide_pred()$Boston_Water_Prediction
+      NA
     }
     
     prediction = if(unit == "m"){
@@ -683,7 +683,7 @@ server <- function(input, output, session) {
     
     
     major = if(input$tide_select == "gallops"){
-      NA}
+      16}
     else if(input$tide_select == "boston"){
       16
     }else if(input$tide_select == 'fall.river'){
@@ -696,7 +696,7 @@ server <- function(input, output, session) {
       major/3.281}else{major}
     
     moderate = if(input$tide_select == "gallops"){
-      NA}
+      14.49}
     else if(input$tide_select == "boston"){
       14.49
     }else if(input$tide_select == 'fall.river'){
@@ -709,7 +709,7 @@ server <- function(input, output, session) {
       moderate/3.281}else{moderate}
     
     minor = if(input$tide_select == "gallops"){
-      NA}
+      12.50}
     else if(input$tide_select == "boston"){
       12.50
     }else if(input$tide_select == 'fall.river'){
