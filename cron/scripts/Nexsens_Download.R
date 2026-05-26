@@ -77,6 +77,8 @@ if (response$status_code!= 200) {
 api_data = response %>% 
   resp_body_json(simplifyVector = TRUE) 
 
+if(length(api_data$data) == 0){next}
+   
 names(api_data$data$values) <- api_data$data$timestamp
 
 api_data = do.call(rbind.data.frame, api_data$data$values)
@@ -155,6 +157,9 @@ if (response$status_code!= 200) {
 #Pull data and make dataframe
 gallops_data = response %>% 
   resp_body_json(simplifyVector = TRUE) 
+
+if(length(gallops_data$data) == 0){next}
+
 
 gallops_data  = as.data.frame(gallops_data$data)
 
