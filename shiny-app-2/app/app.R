@@ -463,8 +463,7 @@ server <- function(input, output, session) {
     HTML(paste0("This dashboard displays data from our real-time monitoring sensors. 
     For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
                                                                                        href = "https://canva.link/yne2ktj8dnz2c81", 
-                                                                                       target = '_blank'), "</u>"), 
-         "<br><br> <strong> Please note that the Harbor Entrance Buoy is currently down for maintenance. It will be back online the week of May 25."),
+                                                                                       target = '_blank'), "</u>")),
     easyClose = TRUE,
     footer = modalButton("Dismiss")
   ))
