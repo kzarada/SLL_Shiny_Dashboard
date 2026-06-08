@@ -14,12 +14,11 @@ library(sf)
 library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
-
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/01_Data_Products/Double_Shiny/Data/"
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
-
 
 instrument.map = instrument.locations %>% 
   filter(str_detect(Name, "Flood Sensor", negate = T)) %>% 
@@ -214,7 +213,8 @@ ui <- dashboardPage(
                                      "tide_select",
                                      label = NULL, 
                                      choices = list("Select Tide Gauge" = 'intro',
-                                                    "Gallops Island" = "gallops", 
+                                                    "Gallops Island" = "gallops",
+                                                    "Essex - Main St." = 'essex',
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river'),
                                      multiple = F), 
@@ -309,6 +309,7 @@ ui <- dashboardPage(
                               list("Boston NOAA Tide Gauge" = "Boston.Tide", 
                                    "Fall River NOAA Tide Gauge" = "Fall.River.Tide",
                                    "Gallops Island Tide Gauge" = "Gallops.Tide", 
+                                   "Essex - Main St. Tide Gauge" = "Essex.Tide",
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
                                    #"Rainsford NE Wave Buoy" = "Rainsford.Buoy",
@@ -649,6 +650,7 @@ server <- function(input, output, session) {
       input$tide_select == "gallops" ~ "Gallops Tide Gauge and NOAA Flood Predictions", 
       input$tide_select == "boston" ~ "NOAA Tide Gauge and Flood Predictions - Boston", 
       input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River", 
+      input$tide_select == 'essex' ~ "Essex - Main St. Tide Gauge",
       .default = NA
     )
     
@@ -658,6 +660,8 @@ server <- function(input, output, session) {
       combo_data()$Boston_Water_MLLW
     }else if(input$tide_select == 'fall.river'){
       combo_data()$Fall_River_Water_MLLW
+    }else if(input$tide_select == 'essex'){
+      combo_data()$Essex_Water_Level_ft
     }else if(input$tide_select == 'intro'){
       combo_data()$Gallops_Water_Level_ft
     }
@@ -675,6 +679,8 @@ server <- function(input, output, session) {
       tide_pred()$Fall_River_Water_Prediction
     }else if(input$tide_select == 'intro'){
       NA
+    } else if(input$tide_select == 'essex'){
+      NA
     }
     
     prediction = if(unit == "m"){
@@ -689,6 +695,8 @@ server <- function(input, output, session) {
       11.98
     }else if(input$tide_select == 'intro'){
       16
+    } else if(input$tide_select == 'essex') {
+      NA
     }
     
     major = if(unit == "m"){
@@ -702,6 +710,8 @@ server <- function(input, output, session) {
       9.48
     }else if(input$tide_select == 'intro'){
       14.49
+    } else if(input$tide_select == 'essex'){
+      NA
     }
     
     moderate = if(unit == "m"){
@@ -715,6 +725,8 @@ server <- function(input, output, session) {
       6.98
     }else if(input$tide_select == 'intro'){
       12.50
+    } else if(input$tide_select == 'essex'){
+      NA
     }
     
     minor = if(unit == "m"){
@@ -995,7 +1007,7 @@ server <- function(input, output, session) {
   
   output$instrument_text <- renderText({
     
-    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide")){
+    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide", "Essex.Tide")){
       
       "Tide gauges are acoustic or radar instruments that measure changes in sea level. The major, moderate, and minor flooding lines and the predicted future water level are from NOAA."
     }
@@ -1244,6 +1256,28 @@ server <- function(input, output, session) {
         scale_color_manual(
           values = c("#256EFF")) + 
         plot_theme()
+    }
+    else if(input$instrument.id == "Essex.Tide"){
+      
+      unit = unit_state()
+      y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
+      
+      water_level = combo_data()$Essex_Water_Level_ft
+      
+      if(unit == "m"){
+        water_level/3.281}else{water_level}
+      
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
+      
+      ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        ylab(y_label) +
+        xlab("Time (ET)") + 
+        scale_color_manual(
+          values = c("#002366")) + 
+        plot_theme() + 
+        theme(legend.position = 'none')
+      
     }
     
   })

@@ -99,6 +99,18 @@ gallops = read.csv(file.path(data_dir, "Outputs/Nexsens_Gallops_Data.csv")) %>%
   mutate(Gallops_Water_Level_ft = Gallops_Water_Level_ft + 5.5) %>% 
   distinct()
 
+
+essex_tide = read.csv(file.path(data_dir, "Outputs/Tide_Hohonu_Essex_Tide_Data.csv")) %>% 
+  mutate(Time_ET = as.POSIXct(Time_ET,format = "%Y-%m-%d %H:%M:%S",  tz = "America/New_York")) %>% 
+  filter(Time_ET > start_time & Time_ET < current_time) %>% 
+  filter(QC_Roll_Up == 1) %>% 
+  arrange(Time_ET) %>% 
+  rename(Essex_Water_Level_ft = Flood.Depth) %>% 
+  dplyr::select(Time_ET, Essex_Water_Level_ft) %>% 
+  mutate(Essex_Water_Level_ft = Essex_Water_Level_ft + 5.4) %>% 
+  distinct() 
+  
+
 noaa_boston_tide = read.csv(file.path(data_dir, "Outputs/NOAA_Boston_Data.csv")) %>%
   mutate(Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M", tz = "America/New_York")) %>%
   filter(Time_ET > start_time & Time_ET < current_time)  %>% 
@@ -118,6 +130,7 @@ combo = tibble(Time_ET = seq(start_time, current_time, by = "1 min")) %>%
   left_join(harbor_entrance) %>% 
   left_join(rainsford) %>% 
   left_join(gallops) %>% 
+  left_join(essex_tide) %>% 
   left_join(rainsford_buoy) %>% 
   left_join(north_shore) %>% 
   left_join(noaa_boston_tide) %>% 
@@ -133,7 +146,7 @@ combo = tibble(Time_ET = seq(start_time, current_time, by = "1 min")) %>%
 hohonu_locations = read.csv(file.path(data_dir, "Inputs/Hohonu Locations.csv"))
 
 files <- fs::dir_ls(path = file.path(data_dir, "Outputs/"), 
-                    glob = "*Hohonu_*")
+                    glob = "*/Hohonu_*")
 
 hohonu <- vroom::vroom(files, 
                        id = "source", 
@@ -162,6 +175,7 @@ hohonu <- vroom::vroom(files,
                 ~zoo::na.approx(.x, na.rm = F)), 
          Flood.Depth = round(Flood.Depth, 2)) %>% 
   ungroup()
+
 
 map_hohonu <- hohonu %>% 
   group_by(Time_ET) %>%
