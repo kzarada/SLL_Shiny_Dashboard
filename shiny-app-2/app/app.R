@@ -734,11 +734,11 @@ server <- function(input, output, session) {
     ymax = max(water_level, (major * 1.1))
     
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
-      geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
-      geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
       geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
       geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
       geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+      geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
+      geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
                     ymin= minor, 
@@ -1132,8 +1132,6 @@ server <- function(input, output, session) {
       shiny::validate(need(water_level, "Data are not available from this instrument"))
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
-        geom_line(aes(color = "Water Level"), linewidth = 1) +
-        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
         xlab("Time (ET)") + 
         ggtitle("NOAA Tide Gauge and Flood Predictions - Boston") + 
@@ -1142,6 +1140,8 @@ server <- function(input, output, session) {
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         geom_rect(aes(xmin = -Inf, 
                       xmax = Inf, 
                       ymin= minor, 
@@ -1185,8 +1185,6 @@ server <- function(input, output, session) {
         6.98/3.281}else{6.98}
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
-        geom_line(aes(color = "Water Level"), linewidth = 1) +
-        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         ylab(y_label) +
         ggtitle("NOAA Tide Gauge and Flood Predictions - Fall River") + 
         xlab("Time (ET)") + 
@@ -1195,6 +1193,8 @@ server <- function(input, output, session) {
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
         geom_rect(aes(xmin = -Inf, 
                       xmax = Inf, 
                       ymin= minor, 
