@@ -247,6 +247,7 @@ ui <- dashboardPage(
                               "station.id", 
                               "Select Station:", 
                               list("Boston - Border Street" = "Border.St", 
+                                   "Boston - Cathleen Stone Island" = "CSI", 
                                    "Boston - Lewis Mall" = "Lewis.Mall",
                                    "Boston - Long Wharf" = "Long.Wharf",
                                    "Boston - Morrissey Blvd" = "Morrissey.Blvd",
