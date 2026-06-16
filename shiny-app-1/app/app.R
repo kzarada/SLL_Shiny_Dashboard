@@ -180,6 +180,7 @@ ui <- dashboardPage(
                                                             "Boston - Tenean Beach" = "Tenean.Beach",
                                                             "Essex - Main Street" = "Essex", 
                                                             "Fall River - Stafford Square" = "Fall.River", 
+                                                            "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                                             "Salem - Collin's Cove" = "Salem", 
                                                             "Wareham - Besse Park" = "Wareham"),
                                             multiple = F)), 
@@ -239,7 +240,8 @@ ui <- dashboardPage(
                                              "Boston - Morrissey Blvd" = "Morrissey.Blvd",
                                              "Boston - Tenean Beach" = "Tenean.Beach",
                                              "Essex - Main Street" = "Essex", 
-                                             "Fall River - Stafford Square" = "Fall.River", 
+                                             "Fall River - Stafford Square" = "Fall.River",
+                                             "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                              "Salem - Collin's Cove" = "Salem", 
                                              "Wareham - Besse Park" = "Wareham"), 
                               multiple = F
