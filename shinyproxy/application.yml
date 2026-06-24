@@ -3,6 +3,9 @@ proxy:
   port: 8080
   container-wait-time: 60000
   hide-navbar: true
+  body-classes:
+    - shinyproxy-layout-grid
+    - shinyproxy-layout-grid-3-columns
 
   authentication: none
 
@@ -13,7 +16,7 @@ proxy:
   specs:
     - id: SLL_Flood_Dashboard
       display-name: SLL Flood Dashboard
-      description: Dashboard for flood conditions
+      description: Dashboard for current flood conditions
       container-image: sll_shiny_dashboard-shiny-app-1
       container-port: 3838
       container-path: /app/  
