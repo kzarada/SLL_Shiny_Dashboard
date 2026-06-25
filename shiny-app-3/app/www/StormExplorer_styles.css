@@ -1,0 +1,380 @@
+/* Register font */
+  @font-face {
+    font-family: 'Replica Mono LL TT';
+    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
+    url('ReplicaMonoLLTT-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+/* New — Replica (non-mono) for body text */
+@font-face {
+  font-family: 'Replica LL TT';
+  src: url('ReplicaLLTT-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Replica LL TT';
+  src: url('ReplicaLLTT-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Replica LL TT';
+  src: url('ReplicaLLTT-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+
+.js-plotly-plot,
+.plotly,
+.main-svg {
+  font-family: "Replica LL TT", sans-serif !important;
+}
+
+.js-plotly-plot text {
+  font-family: "Replica LL TT" !important;
+}
+/* Update body only */
+body {
+  font-family: 'Replica LL TT', sans-serif;
+}
+
+.context-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+
+/* ═══════════════════════════════════════
+   HEADER
+═══════════════════════════════════════ */
+
+/* Title text injected via JS into the navbar */
+.myClass {
+  font-size: clamp(13px, 2.5vw, 28px); /* scales from phone → desktop */
+  line-height: 40px;
+  text-align: left;
+  align-items: center;
+  font-family: "Replica Mono LL TT", monospace;
+  padding: 0 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: white;
+}
+
+/* Unit toggle inside navbar-custom-menu */
+.main-header .navbar .navbar-custom-menu .shiny-input-container {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 40px;
+}
+
+@media (max-width: 768px) {
+
+  .main-header .logo {
+    display: none !important;
+  }
+
+  /* Title — allow it to grow and fill remaining space */
+  .myClass {
+    display: inline-block !important;
+    line-height: 40px;
+    font-size: clamp(11px, 3.5vw, 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left !important;
+    padding: 0 6px !important;
+    max-width: calc(100% - 90px) !important; /* leave room for hamburger + switch */
+  }
+  /* Remove padding from the right container */
+  .main-header .navbar-custom-menu {
+    margin-right: 2 !important;
+    padding-right: 2 !important;
+  }
+
+  .main-header .navbar-custom-menu > .navbar-nav {
+    margin: 0 !important;
+  }
+
+  /* Force the toggle to the far right */
+  .unit-toggle-nav {
+    position: absolute;
+    right: 5px;     
+    top: 5px;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove extra spacing from Shiny input wrapper */
+  .unit-toggle-nav .shiny-input-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+
+  /* Shrink the switch */
+  .unit-toggle-nav .pretty {
+    transform: scale(0.75);
+    transform-origin: right center;
+    margin: 0;
+  }
+}   /* end media  */
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+
+.app-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #4890C3;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  z-index: 9999;
+}
+
+.app-footer a {
+  color: white;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    font-size: 12px;       /* smaller text */
+    padding: 5px 8px;      /* less vertical padding */
+    line-height: 1.3;
+  }
+}
+
+
+/* ═══════════════════════════════════════
+   LAYOUT — boxes & columns
+═══════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* Stack boxes vertically */
+  .context-wrapper {
+    flex-direction: column;
+  }
+
+  .box {
+    margin-bottom: 10px;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Map fills most of the viewport height */
+  .map-box {
+    height: 55vh;
+    min-height: 280px;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Plots match map height */
+  .plot-box {
+    height: 55vh;
+    min-height: 280px;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Leaflet and Shiny output wrappers fill their parent */
+  .leaflet-container,
+  .shiny-plot-output,
+  .plotly.html-widget {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Prevent Bootstrap grid horizontal overflow */
+  .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4,
+  .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8,
+  .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
+    width: 100% !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
+
+  /* Add bottom padding so footer doesn't cover content */
+  .content-wrapper {
+    padding-bottom: 50px !important;
+  }
+
+  /* Larger tap targets for selectize inputs */
+  .selectize-input {
+    height: 36px !important;
+    font-size: 16px !important;  /* prevents iOS auto-zoom */
+    line-height: 1.5 !important;
+    padding: 6px 8px !important;
+  }
+
+  /* Slider readability */
+  .irs-grid-text {
+    font-size: 9pt;
+  }
+
+  .irs--shiny .irs-min,
+  .irs--shiny .irs-max {
+    font-size: 9pt;
+  }
+}
+
+
+/* ═══════════════════════════════════════
+   TABLET (769px – 1024px)
+═══════════════════════════════════════ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .map-box,
+  .plot-box {
+    height: 55vh;
+  }
+
+  .myClass {
+    font-size: clamp(16px, 2.5vw, 26px);
+  }
+}
+
+
+/* ═══════════════════════════════════════
+   BOX TITLES & TEXT
+═══════════════════════════════════════ */
+
+.selectize-input {
+  padding: 0;
+}
+
+.box-title {
+  font-family: "Replica Mono LL TT", monospace;
+  font-size: clamp(14px, 3vw, 20px);
+  overflow: visible;
+  text-align: left;
+}
+
+.box-header .form-group  { margin: 0 !important; padding: 0 !important; }
+.box-header .selectize-control { margin: 0 !important; padding: 0 !important; }
+.box-header .selectize-input {
+  margin: 0 !important;
+  min-height: unset !important;
+  height: 20px !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+}
+.box-header .selectize-input::after { margin: 0 !important; }
+
+.box-text {
+  font-family: "Replica Mono LL TT", monospace;
+  font-size: clamp(16px, 4vw, 24px);
+  overflow-y: auto;
+  text-align: left;
+}
+
+.state span { 
+  color: white !important;
+  font-size: clamp(10px, 16px, 16px); }
+
+/* Changes the color of the dropdown items */
+  .dropdown-menu.inner li a span.text {
+        color: black !important;
+      }
+      
+  .dropdown-menu {
+    padding: 0 !important; 
+    margin:0 !important;
+  }
+/* Changes the color of the button text (selected value) */
+  .filter-option-inner-inner {
+        color: black;
+      }
+      
+/* Target the buttons inside the actions box */
+  .bs-actionsbox .btn-group button {
+        color: black !important;
+      }
+/* ═══════════════════════════════════════
+   DESKTOP — default box heights
+═══════════════════════════════════════ */
+
+.map-box {
+  height: 40vh;
+}
+
+.plot-box {
+  height: 40vh;
+}
+
+/* ═══════════════════════════════════════
+   SLIDER
+═══════════════════════════════════════ */
+
+.shiny-input-container {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.irs { margin-left: auto; margin-right: auto; }
+
+.irs-grid-text {
+  font-size: 12pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
+
+.irs-grid-text:last-child { display: none; }
+
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  font-size: 12pt;
+  font-family: 'Replica Mono LL TT', monospace;
+}
+
+
+
+/* ═══════════════════════════════════════
+   MAP CLUSTERS
+═══════════════════════════════════════ */
+/* Outer container — transparent so rings show through */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: transparent !important;
+  border-radius: 50%;
+}
+
+/* Inner div — the center circle with rings radiating outward */
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color:#2EBBAD  !important;
+  color: black !important;
+  border-radius: 50%;
+  
+   box-shadow:
+    0 0 0 6px  rgba(46, 187, 173, 0.50),   /* ring 1 — medium blue */
+    0 0 0 12px rgba(46, 187, 173, 0.30),  /* ring 2 — faint blue */
+    0 0 0 18px rgba(46, 187, 173, 0.20);
+    
+}

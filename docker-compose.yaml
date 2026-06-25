@@ -37,6 +37,15 @@ services:
     networks:
       - sp-net
 
+  shiny-app-3:
+    build: ./shiny-app-3
+    platform: linux/amd64
+    volumes:
+      - ./Data:/app/Data
+    restart: unless-stopped
+    networks:
+      - sp-net
+
 networks:
   sp-net:
     name: sp-net

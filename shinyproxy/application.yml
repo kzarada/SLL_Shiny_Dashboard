@@ -37,3 +37,15 @@ proxy:
 
       container-volumes:
          - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data
+
+    - id: SLL_Storm_Explorer
+      display-name: SLL Storm Explorer
+      description: Dashboard to explore storms
+      container-image: sll_shiny_dashboard-shiny-app-3
+      container-port: 3838
+      container-path: /app/  
+      container-network: sp-net 
+      pull-policy: IfNotPresent
+
+      container-volumes:
+         - /root/apps/sll_shiny/SLL_Shiny_Dashboard/Data:/srv/shiny-server/Data
