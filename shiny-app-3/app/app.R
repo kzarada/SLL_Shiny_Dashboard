@@ -17,7 +17,6 @@ library(plotly)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
-
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
@@ -731,7 +730,7 @@ server <- function(input, output, session) {
         target = "_blank",
         HTML(
           "The October 2025 Nor'easter was a multi-day storm. The storm caused strong, gusty winds that led to coastal flooding during 
-        high tide cycles. Tenean Beach in Dorchester recorded flood depths between 0.5 - 1 feet.<u>Click here</u> to learn more about this storm in the 
+        high tide cycles. Tenean Beach in Dorchester recorded flood depths between 0.5 - 1 feet. <u>Click here</u> to learn more about this storm in the 
           SLL Field Observation post. Use the time slider below to explore storm conditions."))
     }#end if else statements
     
