@@ -1278,8 +1278,8 @@ server <- function(input, output, session) {
                     ymin= major + 0.05, 
                     ymax = major *1.1, 
                     fill = "NOAA - Major Flooding")) + 
-      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = water_level_1, color = paste0("Observed water level for ", storm_1)), linewidth = 1) +
-      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = water_level_2, color =paste0("Observed water level for ", storm_2)), linewidth = 1, linetype = 'dashed') +
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = water_level_1, color = paste0("Water level for ", storm_1)), linewidth = 1) +
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = water_level_2, color =paste0("Water level for ", storm_2)), linewidth = 1, linetype = 'dashed') +
       scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
       geom_vline(xintercept = input$compare_time , 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
