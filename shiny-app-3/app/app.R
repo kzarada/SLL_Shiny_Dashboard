@@ -560,8 +560,8 @@ server <- function(input, output, session) {
   ################## Popup ################## 
   ################## Popup ################## 
   showModal(modalDialog(
-    title = "Welcome to the Stone Living Lab Current Coastal Conditions Dashboard!",
-    HTML(paste0("This dashboard displays data from our real-time monitoring sensors. 
+    title = "Welcome to the Stone Living Lab Storm Explorer Dashboard!",
+    HTML(paste0("This dashboard displays data from our real-time monitoring sensors during past storms. 
     For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
                                                                                        href = "https://www.canva.com/design/DAGzC4w-HyY/FTvLHmZpkhQShXF0yTdktg/view?utm_content=DAGzC4w-HyY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h023b1e34ec", 
                                                                                        target = '_blank'), "</u>")),
