@@ -15,6 +15,7 @@ library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
+
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
@@ -465,7 +466,8 @@ server <- function(input, output, session) {
     HTML(paste0("This dashboard displays data from our real-time monitoring sensors. 
     For more information on how to navigate the dashboard, please see our <u>", tags$a("dashboard user guide.", 
                                                                                        href = "https://canva.link/yne2ktj8dnz2c81", 
-                                                                                       target = '_blank'), "</u>")),
+                                                                                       target = '_blank'), "</u>"), 
+         "<strong> Please note that the Harbor Entrance Wave Buoy is currently down for maintenance. It will be re-deployed as soon as possible </strong>"),
     easyClose = TRUE,
     footer = modalButton("Dismiss")
   ))
