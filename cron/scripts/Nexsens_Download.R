@@ -12,6 +12,7 @@ library(vroom)
 
 data_dir = "/app/Data/"
 
+
 source(file.path(data_dir, "Inputs/api_keys.R"))
 
 
@@ -128,13 +129,12 @@ current_time = now(tzone = "UTC")
 
 last_time = current_time - days(2)
 
-if(str_detect(last_time, ":00", negate = TRUE)){
-  last_time = paste0(last_time, "%2000:00:00")}
-
 last_time = str_replace(as.character(round_date(last_time, unit = "minute")), " ", "%20")
 
-current_time = str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20")
+if(str_detect(last_time, ":00", negate = T)){
+  last_time = paste0(last_time, "%2000:00:00")}
 
+current_time = str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20")
 
 #API URL
 url = paste0("https://www.wqdatalive.com/api/v1/devices/", device_id$ID[1],
