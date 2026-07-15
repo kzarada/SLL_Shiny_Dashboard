@@ -1108,7 +1108,7 @@ server <- function(input, output, session) {
     
   
     ggplot(combo_data(), aes(x = Time_ET, y = temp)) +
-      geom_line(linewidth = 1, color = "#002366") +
+      geom_line(linewidth = 1, color = "#256EFF") +
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       xlab("Time (ET)") + 
