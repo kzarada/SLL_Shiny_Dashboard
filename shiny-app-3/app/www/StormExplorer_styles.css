@@ -180,16 +180,15 @@ body {
     box-sizing: border-box;
   }
 
-  /* Map fills most of the viewport height */
-  .map-box {
+  /* Plots match map height */
+  .plot-box {
     height: 55vh;
     min-height: 280px;
     width: 100% !important;
     box-sizing: border-box;
   }
-
-  /* Plots match map height */
-  .plot-box {
+  
+  .select-box{
     height: 55vh;
     min-height: 280px;
     width: 100% !important;
@@ -249,7 +248,8 @@ body {
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .map-box,
-  .plot-box {
+  .plot-box, 
+  .select-box{
     height: 55vh;
   }
 
@@ -324,6 +324,10 @@ body {
 
 .plot-box {
   height: 40vh;
+}
+
+.select-box{
+  height: 41.5vh;
 }
 
 /* ═══════════════════════════════════════

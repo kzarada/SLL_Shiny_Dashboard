@@ -334,30 +334,3 @@ body {
   font-family: 'Replica Mono LL TT', monospace;
 }
 }
-
-
-/* ═══════════════════════════════════════
-   MAP CLUSTERS
-═══════════════════════════════════════ */
-/* Outer container — transparent so rings show through */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large {
-  background-color: transparent !important;
-  border-radius: 50%;
-}
-
-/* Inner div — the center circle with rings radiating outward */
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-  background-color:#2EBBAD  !important;
-  color: black !important;
-  border-radius: 50%;
-  
-   box-shadow:
-    0 0 0 6px  rgba(46, 187, 173, 0.50),   /* ring 1 — medium blue */
-    0 0 0 12px rgba(46, 187, 173, 0.30),  /* ring 2 — faint blue */
-    0 0 0 18px rgba(46, 187, 173, 0.20);
-    
-}

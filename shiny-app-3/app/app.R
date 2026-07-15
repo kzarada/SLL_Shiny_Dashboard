@@ -4,6 +4,9 @@
 #
 ########################################
 
+### working on Rel Humid, Air Pressure, need to fix layout
+### fix colors on NOAA map 
+
 
 library(shiny)
 library(tidyverse)
@@ -17,6 +20,7 @@ library(plotly)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
+
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
@@ -165,7 +169,7 @@ ui <- dashboardPage(
                                      status = 'primary', 
                                      uiOutput("storm_overview")
                                    )
-                            ),
+                            )),
                             
                             fluidRow(
                               column(width = 12, 
@@ -181,7 +185,7 @@ ui <- dashboardPage(
                                        width = "85%"))),
                             
                             
-                            
+                          fluidRow(  
                             column(width = 6, 
                                    class = "col-12 col-md-6", 
                                    box(
@@ -216,7 +220,14 @@ ui <- dashboardPage(
                                      solidHeader = TRUE,
                                      width = 12,
                                      status = 'primary',
-                                     shinyfullscreen::fullscreen_this(plotOutput("wind_plot", height = "100%")))
+                                     shinyfullscreen::fullscreen_this(plotOutput("wind_plot", height = "100%"))), 
+                                   box(
+                                     title = "Air Temperature at Rainsford Island",
+                                     class = 'plot-box',
+                                     solidHeader = TRUE,
+                                     width = 12,
+                                     status = 'primary',
+                                     shinyfullscreen::fullscreen_this(plotOutput("temp_plot", height = "100%")))
                             ), #end column
                             
                             column(width = 6, 
@@ -232,7 +243,7 @@ ui <- dashboardPage(
                                      multiple = F), 
                                      solidHeader = TRUE, 
                                      width = 12, 
-                                     class = 'plot-box',
+                                     class = 'select-box',
                                      status = 'primary',
                                      shinyfullscreen::fullscreen_this(plotOutput("tide_plot", height= '100%'))), 
                                    
@@ -250,7 +261,21 @@ ui <- dashboardPage(
                                      class = 'plot-box',
                                      status = 'primary',
                                      width = 12,
-                                     shinyfullscreen::fullscreen_this(plotOutput("wave_plot", height = "100%"))))
+                                     shinyfullscreen::fullscreen_this(plotOutput("wave_plot", height = "100%"))), 
+                                   box(
+                                     title = selectInput(
+                                       "air_select",
+                                       label = NULL, 
+                                       choices = list("Select Parameter" = "intro",
+                                                      "Relative Humidity (%)" = "RH", 
+                                                      "Air Pressure (in Hg)" = "Pressure"),
+                                       multiple = F),
+                                     solidHeader = TRUE,
+                                     class = 'plot-box',
+                                     status = 'primary',
+                                     width = 12,
+                                     shinyfullscreen::fullscreen_this(plotOutput("air_plot", height = "100%"))))  #end col
+       
                           ) #end fluid row
                   ), #end TabItem
                   
@@ -331,7 +356,15 @@ ui <- dashboardPage(
                                      solidHeader = TRUE,
                                      width = 12,
                                      status = 'primary',
-                                     shinyfullscreen::fullscreen_this(plotOutput("wind_compare", height = "100%")))
+                                     shinyfullscreen::fullscreen_this(plotOutput("wind_compare", height = "100%"))), 
+                                   
+                                   box(
+                                     title =  "Air Temperature at Rainsford Island",
+                                     class = 'plot-box',
+                                     solidHeader = TRUE,
+                                     width = 12,
+                                     status = 'primary',
+                                     shinyfullscreen::fullscreen_this(plotOutput("temp_compare", height = "100%")))
                             ), #end column
                             
                             column(width = 6, 
@@ -366,7 +399,20 @@ ui <- dashboardPage(
                                      class = 'plot-box',
                                      status = 'primary',
                                      width = 12,
-                                     shinyfullscreen::fullscreen_this(plotOutput("wave_compare", height = "100%"))))
+                                     shinyfullscreen::fullscreen_this(plotOutput("wave_compare", height = "100%"))), 
+                                   box(title = selectInput(
+                                     "air_select_compare",
+                                     label = NULL, 
+                                     choices = list("Select Air Parameter" = 'intro',
+                                                    "Relative Humidity (%)" = "RH", 
+                                                    "Air Pressure (inHg)" = 'Pressure'),
+                                     multiple = F), 
+                                     solidHeader = TRUE, 
+                                     width = 12, 
+                                     class = 'plot-box',
+                                     status = 'primary',
+                                     shinyfullscreen::fullscreen_this(plotOutput("air_compare", height= '100%')))) 
+                                   
                           ) #end fluid row
                   ), #end TabItem
                   
@@ -945,7 +991,7 @@ server <- function(input, output, session) {
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
       geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
       geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-      geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+      geom_hline(yintercept = major, color =  "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
                     ymin= minor, 
@@ -962,7 +1008,7 @@ server <- function(input, output, session) {
                     ymax = major *1.1, 
                     fill = "NOAA - Major Flooding")) + 
       geom_line(aes(color = "Observed Water Level"), linewidth = 1) +
-      scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+      scale_fill_manual(values = c( "#8F62FF", "#F6C871", "#EE7E6D")) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
@@ -1048,7 +1094,67 @@ server <- function(input, output, session) {
   })
   
   
+  output$temp_plot <- renderPlot({
+    
+    
+    unit = unit_state()
+    
+    y_label = ifelse(unit == 'ft', "Temperature (\u00B0 F)", "Temperature (\u00B0 C)")
+    
+    temp = if(unit == "m"){
+      (combo_data()$Temperature_degF-32) * 5/9}else{combo_data()$Temperature_degF}
+
+    shiny::validate(need(temp, "Data are not available from this instrument"))
+    
   
+    ggplot(combo_data(), aes(x = Time_ET, y = temp)) +
+      geom_line(linewidth = 1, color = "#002366") +
+      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
+                 color = "darkred", linewidth = 1, linetype = "dashed") +
+      xlab("Time (ET)") + 
+      ylab(y_label) +
+      plot_theme()
+    
+    
+  })
+  
+  output$air_plot <- renderPlot({
+    
+    unit = unit_state() 
+    
+    air = if(input$air_select == 'intro'){
+              combo_data()$RH_.}else if(input$air_select == 'RH'){
+                combo_data()$RH_.}else if(input$air_select == 'Pressure'){
+                  combo_data()$Pressure_inHg}
+            
+
+    shiny::validate(need(air, "Data are not available from this instrument"))
+    
+    ggtitle = case_when(
+      input$air_select == "intro" ~ "Relative Humidity (%) at Rainsford Island",
+      input$air_select == "RH" ~ "Relative Humidity (%) at Rainsford Island", 
+      input$air_select == "Pressure" ~ "Air Pressure (inHg) at Rainsford Island", 
+      .default = NA
+    )
+    
+    y_label = case_when(
+      input$air_select == "intro" ~ "Relative Humidity (%)",
+      input$air_select == "RH" ~ "Relative Humidity (%)", 
+      input$air_select == "Pressure" ~ "Air Pressure (inHg)", 
+      .default = NA
+    )
+    
+    ggplot(combo_data(), aes(x = Time_ET, y = air)) + 
+      geom_line( linewidth= 1, color = "#2EBBAD") + 
+      ylab(y_label) + 
+      xlab("Time (ET)") + 
+      ggtitle(ggtitle) + 
+      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
+                 color = "darkred", linewidth = 1, linetype = "dashed") +
+      plot_theme() + 
+      theme(plot.title = element_text(size = 18))
+    
+  })
   
   
   ############################################################### 
@@ -1282,7 +1388,7 @@ server <- function(input, output, session) {
     ggplot(compare_data_1(), aes(x = Time_Seq/60, y = water_level_1)) + 
       geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
       geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-      geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+      geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
                     ymin= minor, 
@@ -1300,7 +1406,7 @@ server <- function(input, output, session) {
                     fill = "NOAA - Major Flooding")) + 
       geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = water_level_1, color = paste0("Water level for ", storm_1)), linewidth = 1) +
       geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = water_level_2, color =paste0("Water level for ", storm_2)), linewidth = 1, linetype = 'dashed') +
-      scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+      scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
       geom_vline(xintercept = input$compare_time , 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
@@ -1383,6 +1489,99 @@ server <- function(input, output, session) {
     
   })
   
+  output$temp_compare <- renderPlot({
+    
+    
+    unit = unit_state()
+    
+    y_label = ifelse(unit == 'ft', "Temperature (\u00B0 F)", "Temperature (\u00B0 C)")
+    
+    
+    storm_1 = str_replace_all(input$compare_1, "_", " ")
+    storm_2 = str_replace_all(input$compare_2, "_", " ")
+    
+
+   temp_1 = if(unit == "m"){
+     (compare_data_1()$Temperature_degF-32) * 5/9}else{compare_data_1()$Temperature_degF}
+    
+   temp_2 = if(unit == "m"){
+     (compare_data_2()$Temperature_degF-32) * 5/9}else{compare_data_2()$Temperature_degF}
+    
+    
+    
+    shiny::validate(need(temp_1, "Data are not available from this instrument for the first storm"))
+    shiny::validate(need(temp_2, "Data are not available from this instrument for the second storm"))
+    
+    ggplot(compare_data_1(), aes(x = Time_Seq/60, y = temp_1)) +
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = temp_1, color = storm_1), linewidth = 1) +
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = temp_2, color = storm_2), linewidth = 1) +
+      geom_vline(xintercept =input$compare_time , 
+                 color = "darkred", linewidth = 1, linetype = "dashed") +
+      xlab("Time (hours)") + 
+      ylab(y_label) +
+      scale_color_manual(
+        values = c("#2EBBAD", 'gray40')) +
+      plot_theme() + 
+      theme(plot.title = element_text(size = 18))
+    
+    
+    
+  })
+  
+  output$air_compare <- renderPlot({
+    
+    unit = unit_state() 
+    
+    storm_1 = str_replace_all(input$compare_1, "_", " ")
+    storm_2 = str_replace_all(input$compare_2, "_", " ")
+    
+    
+    air_1 = if(input$air_select_compare == 'intro'){
+            compare_data_1()$RH_.}else if(input$air_select_compare == "RH"){
+              compare_data_1()$RH_.}else if(input$air_select_compare == 'Pressure'){
+                compare_data_1()$Pressure_inHg
+              }
+            
+    air_2 = if(input$air_select_compare == 'intro'){
+      compare_data_2()$RH_.}else if(input$air_select_compare == "RH"){
+        compare_data_2()$RH_.}else if(input$air_select_compare == 'Pressure'){
+          compare_data_2()$Pressure_inHg
+        }       
+
+    shiny::validate(need(air_1, "Data are not available from this instrument for the first storm"))
+    shiny::validate(need(air_2, "Data are not available from this instrument for the second storm"))
+    
+
+    ggtitle =  ggtitle = case_when(
+      input$air_select_compare == "intro" ~ "Relative Humidity (%) at Rainsford Island",
+      input$air_select_compare == "RH" ~ "Relative Humidity (%) at Rainsford Island", 
+      input$air_select_compare == 'Pressure' ~ "Air Pressure (inHg) at Rainsford Island", 
+      .default = NA
+    )
+    
+    y_label =  ggtitle = case_when(
+      input$air_select_compare == "intro" ~ "Relative Humidity (%)",
+      input$air_select_compare == "RH" ~ "Relative Humidity (%)", 
+      input$air_select_compare == 'Pressure' ~ "Air Pressure (inHg)", 
+      .default = NA
+    )
+    
+    ggplot(compare_data_1(), aes(x = Time_Seq/60, y = air_1)) + 
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = air_1, color = storm_1), linewidth= 1) + 
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = air_2, color = storm_2), linewidth = 1) + 
+      geom_vline(xintercept = input$compare_time, 
+                 color = "darkred", linewidth = 1, linetype = "dashed") +
+      ylab(y_label) + 
+      xlab("Time (hours)") + 
+      ggtitle(ggtitle) + 
+      scale_color_manual(
+        values = c("#2EBBAD", 'gray40')) +
+      plot_theme() + 
+      theme(plot.title = element_text(size = 18))
+    
+    
+    
+  })
   
   ############## Sensor Page ##############
   
@@ -1588,7 +1787,7 @@ server <- function(input, output, session) {
           values = c("#002366", "#2E3440")) + 
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-        geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
         geom_rect(aes(xmin = -Inf, 
                       xmax = Inf, 
                       ymin= minor, 
@@ -1605,7 +1804,7 @@ server <- function(input, output, session) {
                       ymax = major + 2, 
                       fill = "NOAA - Major Flooding")) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
-        scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
         theme(legend.box = 'vertical')
       
