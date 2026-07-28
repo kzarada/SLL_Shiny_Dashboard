@@ -37,9 +37,6 @@ parms = read.csv(file.path(data_dir, "/Inputs/CCO_Sensor_Parameters.csv")) %>%
 
 for(i in 1:dim(device_id)[1]){
 
-#log file 
-log_con <- file("/app/Data/Outputs/logs/Nexsens_log.txt", open = "a")
-  
 filename = paste0(data_dir,"Outputs/", device_id$API[i], "_",  device_id$Location[i], "_Data.csv")
 
 current_time = now(tzone = "UTC")
@@ -65,13 +62,6 @@ req <- request(url)
 
 response <- req_perform(req)
 
-if (response$status_code!= 200) {
-  cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-             " to: ", current_time, " failed with error ", resp_status_desc(response), " at ", Sys.time()), file = log_con, sep = "\n")
-  next
-  
-} else{cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-                  " to: ", current_time, " succeeded at ", Sys.time()), file = log_con, sep = "\n")}
 
 
 #Pull data and make dataframe
@@ -103,8 +93,6 @@ api_wide = api_data %>%
 write.csv(api_wide, filename)
 
 
-close(log_con)
-
 }
 
 
@@ -118,9 +106,7 @@ device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>%
 
 for(i in 1:dim(device_id)[1]){
 
-#log file 
-log_con <- file("/app/Data/Outputs/logs/Nexsens_log.txt", open = "a")
-  
+
 filename = paste0(data_dir, "Outputs/Nexsens_", device_id$Location[i], "_Data.csv")
 
 current_time = now(tzone = "UTC")
@@ -145,15 +131,6 @@ req <- request(url)
 
 response <- req_perform(req)
 
-if (response$status_code!= 200) {
-  cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-             " to: ", current_time, " failed with error ", resp_status_desc(response), " at ", Sys.time()), file = log_con, sep = "\n")
-  next
-  
-} else{cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-                  " to: ", current_time, " succeeded at ", Sys.time()), file = log_con, sep = "\n")}
-
-
 #Pull data and make dataframe
 gallops_data = response %>% 
   resp_body_json(simplifyVector = TRUE) 
@@ -174,7 +151,6 @@ gallops_data  = gallops_data  %>%
 
 write.csv(gallops_data , filename)
 
-close(log_con)
 
 }
 
