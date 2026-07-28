@@ -430,7 +430,7 @@ server <- function(input, output, session) {
   })
   
   water_depth <- reactive({
-    hohonu_data() %>% 
+    map_hohonu_data() %>% 
       filter(Location == input$station_select) %>%  
       filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
       pull(Flood.Depth)
