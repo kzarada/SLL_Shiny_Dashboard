@@ -12,7 +12,6 @@ library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
-
 ###### Read in Data #######
 hohonu = read.csv(file.path(data_dir, "Outputs/hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -467,9 +466,12 @@ server <- function(input, output, session) {
     
     unit_label <- unit_state()
     
-    if(length(depth)== 0){
+    if(length(depth)== 0 | is.na(depth)){
       
-      paste0("There is not data available for this station at the time selected. Please choose another location or time.")
+     paste0(map_hohonu_data() %>% 
+        filter(Location == input$station_select) %>%  
+        filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
+        pull(Last_Available), ' Please select another time or sensor to view flood context.')
     }
     else if(input$icon_select == 'bus'){
       paste0("This icon shows the flood depth of <strong> ", depth, " ", unit_label, 
