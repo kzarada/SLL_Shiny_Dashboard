@@ -95,7 +95,7 @@ getColor <- function(hohonu) {
     } 
     
     else if(Flood.Depth >= 0.5 & Flood.Depth < 1){
-      "#F5A30C"
+      "#F59115"
     }
     
     else if(Flood.Depth >=1 & Flood.Depth < 2){
@@ -740,7 +740,7 @@ server <- function(input, output, session) {
     ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
       geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
       geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-      geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+      geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
       geom_rect(aes(xmin = -Inf, 
                     xmax = Inf, 
                     ymin= minor, 
@@ -758,7 +758,7 @@ server <- function(input, output, session) {
                     fill = "NOAA - Major Flooding")) + 
       geom_line(aes(color = "Actual Water Level"), linewidth = 1) +
       geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
-      scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+      scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
@@ -822,9 +822,9 @@ server <- function(input, output, session) {
     unit = unit_state()
     
     ft_label = c("None", "< 0.5 ft", "0.5 - 1 ft", 
-                 "1 - 2 ft", "> 2 ft", "No Data Available")
+                 "1 - 2 ft", "> 2 ft", "Data Temporarily Unavailable")
     m_label =  c("None", "< 0.15 m", "0.15 - 0.3 m", 
-                 "0.3 m - 0.6 m", "> 0.6 m", "No Data Available")
+                 "0.3 m - 0.6 m", "> 0.6 m", "Data Temporarily Unavailable")
     legend_label = if(unit == 'ft'){ft_label
     }else{m_label}
     
@@ -834,7 +834,7 @@ server <- function(input, output, session) {
       setView(lng = -70.88, lat = 42.23, zoom = 7.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
-                colors = c("#2CBF04", "#FAEE07", "#F5A30C", "#E82D07", "#8F00FF", "lightgray"), 
+                colors = c("#2CBF04", "#FAEE07", "#F59115", "#E82D07", "#8F00FF", "lightgray"), 
                 labels = legend_label, 
                 title = "Flood Depth") 
   })
@@ -1140,7 +1140,7 @@ server <- function(input, output, session) {
           values = c("#002366", "#2E3440")) + 
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-        geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
         geom_rect(aes(xmin = -Inf, 
                       xmax = Inf, 
                       ymin= minor, 
@@ -1158,7 +1158,7 @@ server <- function(input, output, session) {
                       fill = "NOAA - Major Flooding")) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
-        scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
         theme(legend.box = 'vertical')
       
@@ -1193,7 +1193,7 @@ server <- function(input, output, session) {
           values = c("#002366", "#2E3440")) +  
         geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
         geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
-        geom_hline(yintercept = major, color = "#F28FDB", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
         geom_rect(aes(xmin = -Inf, 
                       xmax = Inf, 
                       ymin= minor, 
@@ -1211,7 +1211,7 @@ server <- function(input, output, session) {
                       fill = "NOAA - Major Flooding")) + 
         geom_line(aes(color = "Water Level"), linewidth = 1) +
         geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
-        scale_fill_manual(values = c("#F28FDB", "#F6C871", "#EE7E6D")) + 
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
         theme(legend.box = 'vertical')
       

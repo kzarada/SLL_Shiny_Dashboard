@@ -44,7 +44,9 @@ body {
   gap: 10px;
 }
 
-
+*{
+  color: black !important;
+}
 /* ═══════════════════════════════════════
    HEADER
 ═══════════════════════════════════════ */
@@ -59,7 +61,7 @@ body {
   padding: 0 8px;
   overflow: hidden;
   white-space: nowrap;
-  color: white;
+  color: black;
 }
 
 /* Unit toggle inside navbar-custom-menu */
@@ -68,7 +70,26 @@ body {
   align-items: center;
   padding: 0 16px;
   height: 40px;
+  border-color: black !important;
 }
+
+ .pretty.p-switch .state:before{
+   border: 2px solid black !important;
+  }
+  
+   /* track border (off state) */
+      #unit_toggle ~ .state label:before {
+        border-color: black !important;
+      }
+      /* knob color */
+      #unit_toggle ~ .state label:after {
+        background-color: black !important;
+      }
+      /* keep border black + control fill color when switch is ON */
+      #unit_toggle:checked ~ .state label:before {
+        border-color: black !important;
+        background-color: black !important;  /* since fill = TRUE */
+      }
 
 @media (max-width: 768px) {
 
@@ -86,6 +107,7 @@ body {
     text-overflow: ellipsis;
     text-align: left !important;
     padding: 0 6px !important;
+    color: black;
     max-width: calc(100% - 90px) !important; /* leave room for hamburger + switch */
   }
   /* Remove padding from the right container */
@@ -105,6 +127,7 @@ body {
     top: 5px;
     padding: 0 !important;
     margin: 0 !important;
+    border-color: black !important;
   }
 
   /* Remove extra spacing from Shiny input wrapper */
@@ -112,6 +135,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     width: auto !important;
+    border-color: black !important;
   }
 
   /* Shrink the switch */
@@ -119,7 +143,10 @@ body {
     transform: scale(0.75);
     transform-origin: right center;
     margin: 0;
+    border-color: black !important;
   }
+  
+
 }   /* end media  */
 
 /* ═══════════════════════════════════════
@@ -132,7 +159,7 @@ body {
   left: 0;
   width: 100%;
   background-color: #2EBBAD;
-  color: white;
+  color: black;
   text-align: center;
   padding: 10px;
   font-size: 18px;
@@ -140,7 +167,7 @@ body {
 }
 
 .app-footer a {
-  color: white;
+  color: black;
   text-decoration: none;
 }
 
@@ -188,6 +215,15 @@ body {
     min-height: 280px;
     width: 100% !important;
     box-sizing: border-box;
+  }
+  
+    /* Plots match map height */
+  .text-box {
+    height: 35vh;
+    min-height: 280px;
+    width: 100% !important;
+    box-sizing: border-box;
+    text-overflow:scroll; 
   }
 
   /* Leaflet and Shiny output wrappers fill their parent */
@@ -238,6 +274,7 @@ body {
 
 
 
+
 /* ═══════════════════════════════════════
    BOX TITLES & TEXT
 ═══════════════════════════════════════ */
@@ -271,9 +308,11 @@ body {
   text-align: left;
 }
 
-.state span { 
-  font-size: clamp(10px, 16px, 16px); }
-
+.state span {
+  color: black !important;
+  border-color: black !important;
+  font-size:clamp(10px, 16px, 16px);
+}
 
 /* ═══════════════════════════════════════
    DESKTOP — default box heights
@@ -287,6 +326,10 @@ body {
   height: 40vh;
 }
 
+.text-box {
+    height: 25vh;
+    text-overflow:scroll; 
+  }
 /* ═══════════════════════════════════════
    SLIDER
 ═══════════════════════════════════════ */
