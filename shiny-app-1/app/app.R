@@ -13,7 +13,6 @@ library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
 
-
 ###### Read in Data #######
 hohonu = read.csv(file.path(data_dir, "Outputs/hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -21,7 +20,10 @@ hohonu = read.csv(file.path(data_dir, "Outputs/hohonu.csv")) %>%
 
 map_hohonu = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>%
+  mutate(Last_Available = as.character(Last_Available), 
+         Last_Available = replace_na(Last_Available, ""))
+
 
 start_time = round_date(min(map_hohonu$Time_ET, na.rm = T), "10 mins")
 end_time = max(map_hohonu$Time_ET, na.rm = T)
@@ -414,7 +416,9 @@ server <- function(input, output, session) {
   filtered_flood_data <- reactive({
     
     map_hohonu_data()  %>% filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
-      mutate(Flood.Depth = convert_units(Flood.Depth, unit_state()))
+      mutate(Flood.Depth = convert_units(Flood.Depth, unit_state())) %>%
+      mutate(Last_Available = as.character(Last_Available), 
+             Last_Available = replace_na(Last_Available, ""))
   })
   
   sensor_loc <- reactive({
@@ -817,7 +821,9 @@ server <- function(input, output, session) {
     readFunc = function(path){
       read.csv(path) %>% 
         mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>%
+        mutate(Last_Available = as.character(Last_Available), 
+               Last_Available = replace_na(Last_Available, ""))
     }
   )
   
