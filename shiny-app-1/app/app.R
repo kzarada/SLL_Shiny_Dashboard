@@ -68,7 +68,7 @@ getColor <- function(hohonu) {
     } 
     
     else if(Flood.Depth >= 0.5 & Flood.Depth < 1){
-      "#F5A30C"
+      "#F59115"
     }
     
     else if(Flood.Depth >=1 & Flood.Depth < 2){
@@ -260,11 +260,10 @@ ui <- dashboardPage(
                             
                             column(
                               width = 6,
-                              class = "col-12 col-md-6", 
                               box(
                                 title = 'Sensor Information', 
                                 solidHeader = TRUE, 
-                                height = "15vh",
+                                class = 'text-box', 
                                 status = "primary",  
                                 htmlOutput("sensor_info"), 
                                 width = 12
@@ -664,9 +663,9 @@ server <- function(input, output, session) {
     unit = unit_state()
     
     ft_label = c("None", "< 0.5 ft", "0.5 - 1 ft", 
-                 "1 - 2 ft", "> 2 ft", "No Data Available")
+                 "1 - 2 ft", "> 2 ft", "Data Temporarily Unavailable")
     m_label =  c("None", "< 0.15 m", "0.15 - 0.3 m", 
-                 "0.3 m - 0.6 m", "> 0.6 m", "No Data Available")
+                 "0.3 m - 0.6 m", "> 0.6 m", "Data Temporarily Unavailable")
     legend_label = if(unit == 'ft'){ft_label
     }else{m_label}
     
@@ -677,7 +676,7 @@ server <- function(input, output, session) {
       setView(lng = -70.88, lat = 42.23, zoom = 8.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
-                colors = c("#2CBF04", "#FAEE07", "#F5A30C", "#E82D07", "#8F00FF", "lightgray"), 
+                colors = c("#2CBF04", "#FAEE07", "#F59115", "#E82D07", "#8F00FF", "lightgray"), 
                 labels = legend_label, 
                 title = "Flood Depth") 
     
@@ -693,9 +692,6 @@ server <- function(input, output, session) {
       addCircleMarkers(data = filtered_flood_data(), 
                        lat = ~Latitude, 
                        lng = ~Longitude, 
-                       # clusterOptions = markerClusterOptions(disableClusteringAtZoom = 11, 
-                       #                                       zoomToBoundsOnClick = TRUE, 
-                       #                                       singleMarkerMode = TRUE),
                        color = getColor(filtered_flood_data()), 
                        radius = marker_radius(),  
                        fillOpacity = 1,
@@ -710,7 +706,7 @@ server <- function(input, output, session) {
                        popup = ~paste0("<strong>", Station.Name,
                                        "</strong><br/>
                                       Flood Depth: ", Flood.Depth, " ", unit, 
-                                       "<br/> Data quality note: ", QC_Note,
+                                       "<br/>", Last_Available,
                                        "<br/> <a href='#'
                                           onclick=\"
                                           Shiny.setInputValue('go_to_tab',\'", 
@@ -749,7 +745,12 @@ server <- function(input, output, session) {
                   target = "_blank",
                   HTML(paste0("<u>",unique(sensor_loc()$Type) ,"</u>"))), 
                 " overland flood sensor in partnership with the ", 
-                unique(sensor_loc()$Sponsor), "."))
+                unique(sensor_loc()$Sponsor), ". <br><br>
+                Flood data is collected in real-time. The data have not been reviewed or edited and may be inaccurate. 
+                Additionally, data may be temporarily unavailable for many reasons including 
+                missed data transmissions, temporary loss of cellular connection, 
+                or an object blocking the sensor. Sensors typically transmit data every 4 to 12 minutes, 
+                and any missed connections are backfilled once connection is restored."))
   })
   
   output$sensor_photo <- renderUI({

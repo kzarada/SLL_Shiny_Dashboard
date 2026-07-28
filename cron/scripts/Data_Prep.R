@@ -9,7 +9,6 @@ library(tidyverse)
 library(zoo)
 
 
-#data_dir = "/Users/katherinezarada/Documents/Projects/Climate_Change_Observatory/01_Analysis/Monitoring_Data_Download/00_Data"
 data_dir = "/app/Data/"
 
 
@@ -160,12 +159,12 @@ hohonu <- vroom::vroom(files,
          QC_Sensor_Error= ifelse(min > 0, 4, NA)) %>% 
   ungroup() %>% 
   mutate(QC_Note = case_when(
-    QC_Sensor_Error == 4 ~ "Likely sensor error", 
-    QC_Roll_Up == 9 ~ "No data collected", 
-    QC_Roll_Up == 4 ~ "Data failed quality control checks", 
+    QC_Sensor_Error == 4 ~ "Likely sensor error (e.g., object or snow blocking sensor", 
+    QC_Roll_Up == 9 ~ "No data collected - check back in a couple of minutes", 
+    QC_Roll_Up == 4 ~ "Data failed quality control checks (e.g., data out of range)", 
     QC_Roll_Up == 3 ~ "Suspect data, use with caution", 
-    is.na(Flood.Depth) ~ "No data collected", 
-    .default = "Data passed quality control checks")) %>% 
+    is.na(Flood.Depth) ~ "No data collected - check back in a couple minutes", 
+    .default = "Data passed Hohonu's quality control checks")) %>% 
   left_join(hohonu_locations, by = c("Location" = "Station")) %>% 
   mutate(Flood.Depth = ifelse(Location == "Salem" & Flood.Depth < 0.2, 0, Flood.Depth)) %>% 
   distinct() %>% 
@@ -174,16 +173,39 @@ hohonu <- vroom::vroom(files,
   mutate(across(where(is.numeric), 
                 ~zoo::na.approx(.x, na.rm = F)), 
          Flood.Depth = round(Flood.Depth, 2)) %>% 
-  ungroup()
-
+  ungroup() 
 
 map_hohonu <- hohonu %>% 
-  group_by(Time_ET) %>%
-  mutate(Count = n_distinct(Location)) %>% 
-  ungroup() %>% 
-  filter(Count > length(files)-2) %>% 
-  arrange(Time_ET) 
+  complete(., Time_ET, Location, 
+           fill = list(QC_Note = "Gap Filled Data", 
+                       Unit = "Flood Depth_ft", 
+                       min = 0)) |> 
+  group_by(Location) %>%
+  mutate(Flood.Depth = na.approx(Flood.Depth, maxgap = 10, rule = 2)) |> 
+  fill(c(Sponsor, Station.Name, Latitude, Longitude, Type, Directions), .direction = "down") 
 
+
+data_avail = map_hohonu |> 
+              group_by(Location) |> 
+              slice_max(Time_ET) |> 
+              filter(is.na(Flood.Depth)) |> 
+              dplyr::select(Location, Time_ET)
+
+data_avail_2 = map_hohonu |> 
+                  filter(Location %in% data_avail$Location) |> 
+                  drop_na(Flood.Depth) |> 
+                  slice_max(Time_ET) |> 
+                  dplyr::select(Location, Time_ET) |> 
+                  rename(Last_Time = Time_ET) |> 
+                  mutate(Time_Diff = current_time - Last_Time) |> 
+                  mutate(Last_Available = paste0("Data temporarily unavailable. Data was last recorded ", Time_Diff, " minutes ago. 
+                                                 Please check back in a couple of minutes for updated data. The Dashboard updates every 10 minutes")) |> 
+                  dplyr::select(Location, Last_Available) |> 
+                  left_join(data_avail)
+
+map_hohonu = map_hohonu |> 
+              left_join(data_avail_2) |> 
+              mutate(Last_Available = replace_na(Last_Available, ""))
 
 ################################################
 ##### NOAA Predictions

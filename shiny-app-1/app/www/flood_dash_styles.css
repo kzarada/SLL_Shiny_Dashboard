@@ -190,6 +190,15 @@ body {
     width: 100% !important;
     box-sizing: border-box;
   }
+  
+   /* Plots match map height */
+  .text-box {
+    height: 15vh;
+    min-height: 280px;
+    width: 100% !important;
+    box-sizing: border-box;
+    text-overflow:scroll; 
+  }
 
   /* Leaflet and Shiny output wrappers fill their parent */
   .leaflet-container,
@@ -281,6 +290,11 @@ body {
 .plot-box {
   height: 40vh;
 }
+
+.text-box {
+    height: 18vh;
+    text-overflow:scroll; 
+  }
 
 /* ═══════════════════════════════════════
    SLIDER
@@ -495,34 +509,3 @@ body {
 
 }
 
-       
-
-
-
- 
-/* ═══════════════════════════════════════
-   MAP CLUSTERS
-═══════════════════════════════════════ */
-
-/* Outer container — transparent so rings show through */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large {
-  background-color: transparent !important;
-  border-radius: 50%;
-}
-
-/* Inner div — the center circle with rings radiating outward */
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-  background-color: #002366 !important;
-  color: white !important;
-  border-radius: 50%;
-  
-   box-shadow:
-    0 0 0 6px  rgba(0, 35, 102, 0.5),   /* ring 1 — medium blue */
-    0 0 0 12px rgba(0, 35, 102, 0.25);  /* ring 2 — faint blue */
-    0 0 0 18px rgba(0, 35, 102, 0.15);
-    
-}
