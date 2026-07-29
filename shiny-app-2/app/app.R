@@ -14,8 +14,7 @@ library(sf)
 library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
-#data_dir = "/srv/shiny-server/Data/"
-data_dir = "~/Documents/01_Data_Products/Double_Shiny/Data/"
+data_dir = "/srv/shiny-server/Data/"
 
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
