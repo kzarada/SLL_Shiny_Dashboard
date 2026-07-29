@@ -1,5 +1,5 @@
 ﻿Station,Station.Name,Latitude,Longitude,Type,Sponsor,Directions
-Long.Wharf,Boston - Long Wharf,42.3601,-71.0484,radar,City of Boston,https://maps.app.goo.gl/4Xo7PL747sF612fG9
+Long.Wharf,Boston - Long Wharf,42.3601,-71.04778125,radar,City of Boston,https://maps.app.goo.gl/4Xo7PL747sF612fG9
 Morrissey.Blvd,Boston - Morrissey Blvd,42.3107,-71.0453,radar,City of Boston,https://maps.app.goo.gl/D4jdnNWQ7S2jeyZEA
 Tenean.Beach,Boston - Tenean Beach,42.29139,-71.0424,radar,City of Boston,https://maps.app.goo.gl/aYWeqcaZen26JbRC7
 Lewis.Mall,Boston - Lewis Mall,42.3663,-71.0417,ultrasonic,City of Boston,https://maps.app.goo.gl/7JEpb8W8TKiTKhyN9
