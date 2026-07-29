@@ -14,7 +14,8 @@ library(sf)
 library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "~/Documents/01_Data_Products/Double_Shiny/Data/"
 
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
@@ -64,7 +65,7 @@ arrow_length_y <- 0.5   # wind-speed units (vertical size)
 
 mytheme <- create_theme(
   adminlte_color(
-    light_blue = "#2EBBAD"
+    light_blue = "#14635B"
   ),
   adminlte_sidebar(
     width = "200",
@@ -271,11 +272,11 @@ ui <- dashboardPage(
                                    )),
                             column(
                               width = 6,
-                              class = "col-12 col-md-6", 
+                              
                               box(
                                 title = 'Sensor Information', 
                                 solidHeader = TRUE, 
-                                height = "15vh",
+                                class = 'text-box',
                                 status = "primary",  
                                 htmlOutput("sensor_info"), 
                                 width = 12
@@ -583,7 +584,7 @@ server <- function(input, output, session) {
       xlab("Time (ET)") + 
       ylab(y_label) +
       scale_color_manual(
-        values = c("#256EFF", "#002366", "#2EBBAD")) +
+        values = c("#256EFF", "#002366", "#14635B")) +
       plot_theme()
     
     
@@ -638,7 +639,7 @@ server <- function(input, output, session) {
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       scale_color_manual(
-        values = c("#256EFF","#2EBBAD")) + 
+        values = c("#256EFF","#14635B")) + 
       plot_theme()
 
   })
@@ -879,7 +880,7 @@ server <- function(input, output, session) {
                        popup = ~paste0("<strong>", Station.Name,
                                        "</strong><br/>
                                       Flood Depth: ", Flood.Depth, " ", unit, 
-                                       "<br/> Data quality note: ", QC_Note,
+                                       "<br/> Data quality note: ", QC_Note, 
                                        "<br/> <a href='#'
                                           onclick=\"
                                           Shiny.setInputValue('go_to_tab',\'", 
@@ -955,7 +956,12 @@ server <- function(input, output, session) {
                   target = "_blank",
                   HTML(paste0("<u>",unique(sensor_loc()$Type) ,"</u>"))), 
                 " overland flood sensor in partnership with the ", 
-                unique(sensor_loc()$Sponsor), "."))
+                unique(sensor_loc()$Sponsor), ". <br><br>
+                Flood data is collected in real-time. The data have not been reviewed or edited and may be inaccurate. 
+                Additionally, data may be temporarily unavailable for many reasons including 
+                missed data transmissions, temporary loss of cellular connection, 
+                or sensor errors (e.g., objects underneath sensors, unusally high data points). Sensors typically transmit data every 4 to 12 minutes. 
+                Any missed connections are backfilled once connection is restored, but sensor errors will remain as missing data."))
   })
   
   
@@ -983,7 +989,7 @@ server <- function(input, output, session) {
     shiny::validate(need(depth, "Data are not available from this instrument"))
     
     ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
-      geom_line(linewidth = 1.5, color = "#2EBBAD") + 
+      geom_point(color = "#14635B") + 
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
@@ -1053,7 +1059,7 @@ server <- function(input, output, session) {
         ylab(y_label) + 
         xlab("Time (ET)") + 
         scale_color_manual(
-          values = c("#256EFF","#2EBBAD")) + 
+          values = c("#256EFF","#14635B")) + 
         plot_theme()
     }
     else if(input$instrument.id == "Rainsford.Weather"){
@@ -1085,7 +1091,7 @@ server <- function(input, output, session) {
         xlab("Time (ET)") + 
         ylab(y_label) +
         scale_color_manual(
-          values = c("#256EFF", "#002366", "#2EBBAD")) +
+          values = c("#256EFF", "#002366", "#14635B")) +
         plot_theme()
       
     }
@@ -1235,7 +1241,7 @@ server <- function(input, output, session) {
                    color = "darkred", linewidth = 1, linetype = "dashed") +
         theme_bw(base_family = "Replica Mono LL TT") + 
         scale_color_manual(
-          values = c("#256EFF","#2EBBAD")) + 
+          values = c("#256EFF","#14635B")) + 
         plot_theme()
     }
     else if(input$instrument.id == "Rainsford.Buoy"){

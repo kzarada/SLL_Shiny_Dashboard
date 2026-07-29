@@ -44,9 +44,7 @@ body {
   gap: 10px;
 }
 
-*{
-  color: black !important;
-}
+
 /* ═══════════════════════════════════════
    HEADER
 ═══════════════════════════════════════ */
@@ -61,7 +59,7 @@ body {
   padding: 0 8px;
   overflow: hidden;
   white-space: nowrap;
-  color: black;
+  color: white !important;
 }
 
 /* Unit toggle inside navbar-custom-menu */
@@ -70,25 +68,24 @@ body {
   align-items: center;
   padding: 0 16px;
   height: 40px;
-  border-color: black !important;
 }
 
  .pretty.p-switch .state:before{
-   border: 2px solid black !important;
+   border: 2px solid white!important;
   }
   
    /* track border (off state) */
       #unit_toggle ~ .state label:before {
-        border-color: black !important;
+        border-color: white !important;
       }
       /* knob color */
       #unit_toggle ~ .state label:after {
-        background-color: black !important;
+        background-color: white !important;
       }
       /* keep border black + control fill color when switch is ON */
       #unit_toggle:checked ~ .state label:before {
-        border-color: black !important;
-        background-color: black !important;  /* since fill = TRUE */
+        border-color: white !important;
+        background-color: white !important;  /* since fill = TRUE */
       }
 
 @media (max-width: 768px) {
@@ -107,7 +104,7 @@ body {
     text-overflow: ellipsis;
     text-align: left !important;
     padding: 0 6px !important;
-    color: black;
+    color: white;
     max-width: calc(100% - 90px) !important; /* leave room for hamburger + switch */
   }
   /* Remove padding from the right container */
@@ -127,7 +124,6 @@ body {
     top: 5px;
     padding: 0 !important;
     margin: 0 !important;
-    border-color: black !important;
   }
 
   /* Remove extra spacing from Shiny input wrapper */
@@ -135,7 +131,6 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     width: auto !important;
-    border-color: black !important;
   }
 
   /* Shrink the switch */
@@ -143,7 +138,6 @@ body {
     transform: scale(0.75);
     transform-origin: right center;
     margin: 0;
-    border-color: black !important;
   }
   
 
@@ -158,8 +152,8 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #2EBBAD;
-  color: black;
+  background-color: #14635B;
+  color: white;
   text-align: center;
   padding: 10px;
   font-size: 18px;
@@ -167,7 +161,7 @@ body {
 }
 
 .app-footer a {
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
@@ -217,14 +211,15 @@ body {
     box-sizing: border-box;
   }
   
-    /* Plots match map height */
+  /* Plots match map height */
   .text-box {
-    height: 35vh;
+    height: 15vh;
     min-height: 280px;
     width: 100% !important;
     box-sizing: border-box;
     text-overflow:scroll; 
   }
+
 
   /* Leaflet and Shiny output wrappers fill their parent */
   .leaflet-container,
@@ -309,9 +304,8 @@ body {
 }
 
 .state span {
-  color: black !important;
-  border-color: black !important;
   font-size:clamp(10px, 16px, 16px);
+  color: white !important;
 }
 
 /* ═══════════════════════════════════════
@@ -327,7 +321,7 @@ body {
 }
 
 .text-box {
-    height: 25vh;
+    height: 18vh;
     text-overflow:scroll; 
   }
 /* ═══════════════════════════════════════
