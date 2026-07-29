@@ -166,13 +166,14 @@ hohonu <- vroom::vroom(files,
     is.na(Flood.Depth) ~ "No data collected - check back in a couple minutes", 
     .default = "Data passed Hohonu's quality control checks")) %>% 
   left_join(hohonu_locations, by = c("Location" = "Station")) %>% 
-  mutate(Flood.Depth = ifelse(Location == "Salem" & Flood.Depth < 0.2, 0, Flood.Depth)) %>% 
+  mutate(Flood.Depth = ifelse(Location == "Salem" & Flood.Depth < 0.2, 0, Flood.Depth), 
+         Flood.Depth = ifelse(QC_Roll_Up != 1, NA, Flood.Depth)) %>% 
   distinct() %>% 
-  group_by(Location) %>% 
-  arrange(Time_ET) %>% 
-  mutate(across(where(is.numeric), 
-                ~zoo::na.approx(.x, na.rm = F)), 
-         Flood.Depth = round(Flood.Depth, 2)) %>% 
+  #group_by(Location) %>% 
+  #arrange(Time_ET) %>% 
+  #mutate(across(where(is.numeric), 
+  #              ~zoo::na.approx(.x, na.rm = F)), 
+  #       Flood.Depth = round(Flood.Depth, 2)) %>% 
   ungroup() 
 
 map_hohonu <- hohonu %>% 
@@ -181,7 +182,7 @@ map_hohonu <- hohonu %>%
                        Unit = "Flood Depth_ft", 
                        min = 0)) |> 
   group_by(Location) %>%
-  mutate(Flood.Depth = na.approx(Flood.Depth, maxgap = 10, rule = 2)) |> 
+  mutate(Flood.Depth = zoo::na.approx(Flood.Depth, maxgap = 10, rule = 2)) |> 
   fill(c(Sponsor, Station.Name, Latitude, Longitude, Type, Directions), .direction = "down") 
 
 
@@ -205,7 +206,10 @@ data_avail_2 = map_hohonu |>
 
 map_hohonu = map_hohonu |> 
               left_join(data_avail_2) |> 
-              mutate(Last_Available = replace_na(Last_Available, ""))
+              mutate(Last_Available = ifelse(is.na(Flood.Depth) & is.na(Last_Available), 
+                                             "No data available for this sensor at this time point. Missing data is likely due to a sensor reading error (e.g., abnormally high reading or reading out of normal range).", 
+                                             Last_Available),
+                      Last_Available = replace_na(Last_Available, ""))
 
 ################################################
 ##### NOAA Predictions

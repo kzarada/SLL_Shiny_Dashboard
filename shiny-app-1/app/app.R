@@ -628,7 +628,7 @@ server <- function(input, output, session) {
     
     
     ggplot(main_flood_graph(), aes(x = Time_ET, y = depth)) + 
-      geom_line(linewidth = 1.5, color = "#2EBBAD") + 
+      geom_point(color = "#2EBBAD") + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") + 
       ylab(y_label) + 
@@ -755,8 +755,8 @@ server <- function(input, output, session) {
                 Flood data is collected in real-time. The data have not been reviewed or edited and may be inaccurate. 
                 Additionally, data may be temporarily unavailable for many reasons including 
                 missed data transmissions, temporary loss of cellular connection, 
-                or an object blocking the sensor. Sensors typically transmit data every 4 to 12 minutes, 
-                and any missed connections are backfilled once connection is restored."))
+                or sensor errors (e.g., objects underneath sensors, unusally high data points). Sensors typically transmit data every 4 to 12 minutes. 
+                Any missed connections are backfilled once connection is restored, but sensor errors will remain as missing data."))
   })
   
   output$sensor_photo <- renderUI({
@@ -795,7 +795,7 @@ server <- function(input, output, session) {
     shiny::validate(need(depth, "Data are not available from this sensor"))
     
     ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
-      geom_line(linewidth = 1.5, color = "#2EBBAD") + 
+      geom_point(color = "#2EBBAD") + 
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Time (ET)") + 
