@@ -76,6 +76,24 @@ body {
   height: 40px;
 }
 
+ .pretty.p-switch .state:before{
+   border: 2px solid white !important;
+  }
+  
+   /* track border (off state) */
+      #unit_toggle ~ .state label:before {
+        border-color: white !important;
+      }
+      /* knob color */
+      #unit_toggle ~ .state label:after {
+        background-color: white !important;
+      }
+      /* keep border black + control fill color when switch is ON */
+      #unit_toggle:checked ~ .state label:before {
+        border-color: white !important;
+        background-color: white !important;  /* since fill = TRUE */
+      }
+
 @media (max-width: 768px) {
 
   .main-header .logo {
@@ -137,8 +155,8 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #4890C3;
-  color: white;
+  background-color: #2C5D80;
+  color:#D8DEE9;
   text-align: center;
   padding: 10px;
   font-size: 18px;
@@ -146,7 +164,7 @@ body {
 }
 
 .app-footer a {
-  color: white;
+  color:#D8DEE9;
   text-decoration: none;
 }
 
@@ -357,28 +375,3 @@ body {
 
 
 
-/* ═══════════════════════════════════════
-   MAP CLUSTERS
-═══════════════════════════════════════ */
-/* Outer container — transparent so rings show through */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large {
-  background-color: transparent !important;
-  border-radius: 50%;
-}
-
-/* Inner div — the center circle with rings radiating outward */
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-  background-color:#2EBBAD  !important;
-  color: black !important;
-  border-radius: 50%;
-  
-   box-shadow:
-    0 0 0 6px  rgba(46, 187, 173, 0.50),   /* ring 1 — medium blue */
-    0 0 0 12px rgba(46, 187, 173, 0.30),  /* ring 2 — faint blue */
-    0 0 0 18px rgba(46, 187, 173, 0.20);
-    
-}
