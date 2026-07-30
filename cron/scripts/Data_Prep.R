@@ -198,7 +198,7 @@ data_avail_2 = map_hohonu |>
                   slice_max(Time_ET) |> 
                   dplyr::select(Location, Time_ET) |> 
                   rename(Last_Time = Time_ET) |> 
-                  mutate(Time_Diff = current_time - Last_Time) |> 
+                  mutate(Time_Diff = as.numeric(difftime(current_time, Last_Time, units = 'mins'))) |> 
                   mutate(Last_Available = paste0("Data temporarily unavailable from this sensor. Data was last recorded from this sensor ", Time_Diff, " minutes ago. 
                                                 The Dashboard updates every 10 minutes - check back soon for updates.")) |> 
                   dplyr::select(Location, Last_Available) |> 
