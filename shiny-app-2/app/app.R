@@ -879,7 +879,7 @@ server <- function(input, output, session) {
                        popup = ~paste0("<strong>", Station.Name,
                                        "</strong><br/>
                                       Flood Depth: ", Flood.Depth, " ", unit, 
-                                       "<br/> Data quality note: ", QC_Note, 
+                                       "<br/>", Last_Available,
                                        "<br/> <a href='#'
                                           onclick=\"
                                           Shiny.setInputValue('go_to_tab',\'", 
