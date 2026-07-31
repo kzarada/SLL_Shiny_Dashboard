@@ -157,6 +157,23 @@ body {
   }
 }
 
+.pretty.p-switch .state:before{
+   border: 2px solid white!important;
+  }
+  
+   /* track border (off state) */
+      #unit_toggle ~ .state label:before {
+        border-color: white !important;
+      }
+      /* knob color */
+      #unit_toggle ~ .state label:after {
+        background-color: white !important;
+      }
+      /* keep border black + control fill color when switch is ON */
+      #unit_toggle:checked ~ .state label:before {
+        border-color: white !important;
+        background-color: white !important;  /* since fill = TRUE */
+      }
 
 /* ═══════════════════════════════════════
    LAYOUT — boxes & columns
