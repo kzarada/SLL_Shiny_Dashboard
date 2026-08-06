@@ -680,7 +680,7 @@ server <- function(input, output, session) {
     
     leaflet() %>% 
       addProviderTiles(providers$CartoDB.Positron) %>% 
-      setView(lng = -70.88, lat = 42.23, zoom = 8.5) %>% 
+      setView(lng = -70.99, lat = 42.099, zoom = 8.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
                 colors = c("#2CBF04", "#FAEE07", "#F59115", "#E82D07", "#8F00FF", "lightgray"), 
