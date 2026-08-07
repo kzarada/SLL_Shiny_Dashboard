@@ -255,6 +255,7 @@ ui <- dashboardPage(
                                    "Boston - Tenean Beach" = "Tenean.Beach",
                                    "Essex - Main Street" = "Essex", 
                                    "Fall River - Stafford Square" = "Fall.River", 
+                                   "Marshfield - Ocean St." = "Marshfield",
                                    "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                    "Salem - Collin's Cove" = "Salem", 
                                    "Wareham - Besse Park" = "Wareham"), 
