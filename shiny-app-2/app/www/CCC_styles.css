@@ -87,6 +87,22 @@ body {
         border-color: white !important;
         background-color: white !important;  /* since fill = TRUE */
       }
+      
+      /* Checkmark color for selected pickerInput items */
+.bootstrap-select .dropdown-menu li a span.check-mark {
+  color: black !important;
+}
+
+/* Some bootstrap-select versions draw the check via ::after instead */
+.bootstrap-select .dropdown-menu li a span.check-mark:after {
+  color: black !important;
+}
+
+/* Make sure the active/selected item text color doesn't override it */
+.bootstrap-select .dropdown-menu li a.active,
+.bootstrap-select .dropdown-menu li a.selected {
+  color: black !important;
+}
 
 @media (max-width: 768px) {
 
@@ -308,6 +324,25 @@ body {
   color: white !important;
 }
 
+/* Changes the color of the dropdown items */
+  .dropdown-menu.inner li a span.text {
+        color: black !important;
+      }
+      
+  .dropdown-menu {
+    padding: 0 !important; 
+    margin:0 !important;
+  }
+/* Changes the color of the button text (selected value) */
+  .filter-option-inner-inner {
+        color: black;
+      }
+      
+/* Target the buttons inside the actions box */
+  .bs-actionsbox .btn-group button {
+        color: black !important;
+      }
+
 /* ═══════════════════════════════════════
    DESKTOP — default box heights
 ═══════════════════════════════════════ */
@@ -321,7 +356,7 @@ body {
 }
 
 .text-box {
-    height: 18vh;
+    height: 20vh;
     text-overflow:scroll; 
   }
 /* ═══════════════════════════════════════
