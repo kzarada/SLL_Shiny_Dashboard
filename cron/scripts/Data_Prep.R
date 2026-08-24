@@ -49,7 +49,8 @@ north_shore= read.csv(file.path(data_dir, "Outputs/Nexsens_North_Shore_Data.csv"
   dplyr::select(Time_ET, 
                 Hs_Wave_Height_m, 
                 Hmax_Wave_Height_m,
-                Mean_Wave_Direction_.MWD._Deg) %>% 
+                Mean_Wave_Direction_.MWD._Deg
+                ) %>% 
   mutate(Hs_Wave_Height_m = ifelse(Hs_Wave_Height_m < 0 | Hs_Wave_Height_m > 10, NA, Hs_Wave_Height_m), 
          Mean_Wave_Direction_.MWD._Deg = ifelse(Mean_Wave_Direction_.MWD._Deg < 0 | Mean_Wave_Direction_.MWD._Deg > 360, NA, Mean_Wave_Direction_.MWD._Deg)) %>% 
   distinct() %>% 
@@ -79,7 +80,7 @@ rainsford = read.csv(file.path(data_dir, "Outputs/LiCOR_Rainsford_Island_Data.cs
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
   filter(Time_ET > start_time & Time_ET < current_time)  %>% 
   dplyr::select(Time_ET, Wind.Speed_RMYoung_mph, Gust.Speed_RMYoung_mph, 
-                Wind.Direction_RMYoung_deg) %>% 
+                Wind.Direction_RMYoung_deg, Pressure_inHg, `RH_.`, Temperature_degF) %>% 
   mutate(Wind.Speed_RMYoung_mph = ifelse(Wind.Speed_RMYoung_mph < 0 | Wind.Speed_RMYoung_mph > 120, NA, Wind.Speed_RMYoung_mph ),
          Gust.Speed_RMYoung_mph = ifelse(Gust.Speed_RMYoung_mph < 0 | Gust.Speed_RMYoung_mph > 130, NA, Gust.Speed_RMYoung_mph ), 
          Wind.Direction_RMYoung_deg = ifelse(Wind.Direction_RMYoung_deg < 0 | Wind.Direction_RMYoung_deg > 360, NA, Wind.Direction_RMYoung_deg)) %>% 
@@ -96,6 +97,17 @@ gallops = read.csv(file.path(data_dir, "Outputs/Nexsens_Gallops_Data.csv")) %>%
   dplyr::select(Time_ET, Water_Level_ft) %>%
   rename(Gallops_Water_Level_ft = Water_Level_ft) %>% 
   mutate(Gallops_Water_Level_ft = Gallops_Water_Level_ft + 5.5) %>% 
+  distinct()
+
+csi = read.csv(file.path(data_dir, "Outputs/Nexsens_CSI_Data.csv")) %>% 
+  dplyr::mutate(across(where(is.numeric), \(x) na_if(x, -100000))) %>% 
+  arrange(Time_ET) %>% 
+  mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
+         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>% 
+  filter(Time_ET > start_time & Time_ET < current_time)  %>% 
+  dplyr::select(Time_ET, Water_Level_ft) %>%
+  rename(CSI_Water_Level_ft = Water_Level_ft) %>% 
+  mutate(CSI_Water_Level_ft = CSI_Water_Level_ft + 5.5) %>% 
   distinct()
 
 
@@ -129,6 +141,7 @@ combo = tibble(Time_ET = seq(start_time, current_time, by = "1 min")) %>%
   left_join(harbor_entrance) %>% 
   left_join(rainsford) %>% 
   left_join(gallops) %>% 
+  left_join(csi) %>% 
   left_join(essex_tide) %>% 
   left_join(rainsford_buoy) %>% 
   left_join(north_shore) %>% 
@@ -178,7 +191,7 @@ hohonu <- vroom::vroom(files,
 
 map_hohonu <- hohonu %>% 
   complete(., Time_ET, Location, 
-           fill = list(QC_Note = "Gap Filled Data", 
+           fill = list(QC_Note = " ", 
                        Unit = "Flood Depth_ft", 
                        min = 0)) |> 
   group_by(Location) %>%

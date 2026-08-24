@@ -16,7 +16,7 @@ Nexsens,79799,Dominant Wave Direction,Deg,0,360
 Nexsens,79800,Mean Wave Direction ,Deg,0,360
 Nexsens,79801,Hmax Wave Height,m,0,10
 Nexsens,79802,H10 Wave Height,m,0,10
-Nexsens,78922,WL radar,ft,,
+Nexsens,75337,WL radar (Gallops),ft,,
 Nexsens,73256,Latitude,Deg,,
 Nexsens,73257,Longitude,Deg,,
 Nexsens,73259,Hs Wave Height,m,0,10
@@ -75,3 +75,4 @@ Nexsens,132119,Heat Index,C,,
 Nexsens,132120,Air Density,Kg/m3,,
 Nexsens,132121,Wet Bulb Temperature,C,,
 Nexsens,132122,Dewpoint,C,,
+Nexsens,145790,WL Radar NAVD88 (CsI),ft,,

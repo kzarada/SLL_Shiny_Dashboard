@@ -98,10 +98,11 @@ write.csv(api_wide, filename)
 
 
 
-##### Separate Loop for Gallops Data 
+##### Separate Loop for Tide Data ############
+
 #The water level variable wasn't pulling with the full parameter pull but works fine if we just pull water level
 device_id = read.csv(file.path(data_dir, "Inputs/CCO_Sensor_ID.csv")) %>% 
-  filter(API == "Gallops") %>% 
+  filter(API %in% c("Gallops", "CSI" )) %>% 
   filter(Active == "Yes")
 
 for(i in 1:dim(device_id)[1]){
@@ -110,6 +111,8 @@ for(i in 1:dim(device_id)[1]){
 filename = paste0(data_dir, "Outputs/Nexsens_", device_id$Location[i], "_Data.csv")
 
 current_time = now(tzone = "UTC")
+
+param_code = ifelse(device_id$Location[i] == "Gallops", 75337, 145790)
 
 #if statement to capture missing last_time values
 
@@ -123,8 +126,8 @@ if(str_detect(last_time, ":00", negate = T)){
 current_time = str_replace(as.character(round_date(current_time, unit = "minute")), " ", "%20")
 
 #API URL
-url = paste0("https://www.wqdatalive.com/api/v1/devices/", device_id$ID[1],
-             "/parameters/75337/data?apiKey=", nexsens_key, "&from=", last_time, 
+url = paste0("https://www.wqdatalive.com/api/v1/devices/", device_id$ID[i],
+             "/parameters/", param_code, "/data?apiKey=", nexsens_key, "&from=", last_time, 
              "&to=", current_time)
 
 req <- request(url)
@@ -132,24 +135,24 @@ req <- request(url)
 response <- req_perform(req)
 
 #Pull data and make dataframe
-gallops_data = response %>% 
+tide_data = response %>% 
   resp_body_json(simplifyVector = TRUE) 
 
-if(length(gallops_data$data) == 0){next}
+if(length(tide_data$data) == 0){next}
 
 
-gallops_data  = as.data.frame(gallops_data$data)
+tide_data  = as.data.frame(tide_data$data)
 
 
 #convert to wide dataframe
-gallops_data  = gallops_data  %>% 
+tide_data  = tide_data  %>% 
               rename(Time_UTC = timestamp) %>%  
               rename(Water_Level_ft = value) %>% 
               mutate(Time_UTC = as.POSIXct(Time_UTC, tz = "UTC")) %>% 
               mutate(Time_ET = round_date(with_tz(Time_UTC, tzone = "America/New_York"), unit = "minute")) 
   
 
-write.csv(gallops_data , filename)
+write.csv(tide_data , filename)
 
 
 }

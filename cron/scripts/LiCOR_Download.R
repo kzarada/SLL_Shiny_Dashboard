@@ -53,18 +53,7 @@ for(i in 1:dim(device_id)[1]){
     
   response <- req_perform(req)
   
-  #log file 
-  log_con <- file("/app/Data/Outputs/logs/licor_log.txt", open = "a")
-  
 
-  if (response$status_code!= 200) {
-    cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-               " to: ", current_time, " failed with error ", resp_status_desc(response), " at ", Sys.time()), file = log_con, sep = "\n")
-    next
-  } else{cat(paste0("API request for ", device_id$Location[i], " for last time: ", last_time, 
-                    " to: ", current_time, " succeeded at ", Sys.time()), file = log_con, sep = "\n")}
-  
-  close(log_con)
   #Pull data and make dataframe
   api_data = response %>% 
     resp_body_json(simplifyVector = TRUE) 

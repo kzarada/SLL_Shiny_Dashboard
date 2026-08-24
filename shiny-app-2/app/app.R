@@ -214,6 +214,7 @@ ui <- dashboardPage(
                                      label = NULL, 
                                      choices = list("Select Tide Gauge" = 'intro',
                                                     "Gallops Island" = "gallops",
+                                                    "Cathleen Stone Island" = 'csi',
                                                     "Essex - Main St." = 'essex',
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river'),
@@ -312,6 +313,7 @@ ui <- dashboardPage(
                               list("Boston NOAA Tide Gauge" = "Boston.Tide", 
                                    "Fall River NOAA Tide Gauge" = "Fall.River.Tide",
                                    "Gallops Island Tide Gauge" = "Gallops.Tide", 
+                                   "Cathleen Stone Island Tide Gauge" = "CSI.Tide",
                                    "Essex - Main St. Tide Gauge" = "Essex.Tide",
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
@@ -651,6 +653,7 @@ server <- function(input, output, session) {
     ggtitle = case_when(
       input$tide_select == "intro" ~ "Gallops Tide Gauge and NOAA Flood Predictions",
       input$tide_select == "gallops" ~ "Gallops Tide Gauge and NOAA Flood Predictions", 
+      input$tide_select == 'csi' ~ "Cathleen Stone Island Tide Gauge and NOAA Flood Predictions",
       input$tide_select == "boston" ~ "NOAA Tide Gauge and Flood Predictions - Boston", 
       input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River", 
       input$tide_select == 'essex' ~ "Essex - Main St. Tide Gauge",
@@ -659,6 +662,9 @@ server <- function(input, output, session) {
     
     water_level = if(input$tide_select == "gallops"){
       combo_data()$Gallops_Water_Level_ft}
+    else if(input$tide_select == 'csi'){
+      combo_data()$CSI_Water_Level_ft
+    }
     else if(input$tide_select == "boston"){
       combo_data()$Boston_Water_MLLW
     }else if(input$tide_select == 'fall.river'){
@@ -676,6 +682,9 @@ server <- function(input, output, session) {
     
     prediction = if(input$tide_select == "gallops"){
       NA}
+    else if(input$tide_select == 'csi'){
+      NA
+    }
     else if(input$tide_select == "boston"){
       tide_pred()$Boston_Water_Prediction
     }else if(input$tide_select == 'fall.river'){
@@ -692,6 +701,9 @@ server <- function(input, output, session) {
     
     major = if(input$tide_select == "gallops"){
       16}
+    else if(input$tide_select == 'csi'){
+      16
+    }
     else if(input$tide_select == "boston"){
       16
     }else if(input$tide_select == 'fall.river'){
@@ -707,6 +719,9 @@ server <- function(input, output, session) {
     
     moderate = if(input$tide_select == "gallops"){
       14.49}
+    else if(input$tide_select == 'csi'){
+      14.49
+    }
     else if(input$tide_select == "boston"){
       14.49
     }else if(input$tide_select == 'fall.river'){
@@ -722,6 +737,9 @@ server <- function(input, output, session) {
     
     minor = if(input$tide_select == "gallops"){
       12.50}
+    else if(input$tide_select == 'csi'){
+      12.50
+    }
     else if(input$tide_select == "boston"){
       12.50
     }else if(input$tide_select == 'fall.river'){
