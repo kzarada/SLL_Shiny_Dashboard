@@ -1030,7 +1030,7 @@ server <- function(input, output, session) {
   
   output$instrument_text <- renderText({
     
-    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide", "Essex.Tide")){
+    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide", "Essex.Tide", "CSI.Tide")){
       
       "Tide gauges are acoustic or radar instruments that measure changes in sea level. The major, moderate, and minor flooding lines and the predicted future water level are from NOAA."
     }
@@ -1122,14 +1122,96 @@ server <- function(input, output, session) {
       if(unit == "m"){
         water_level/3.281}else{water_level}
       
+      major = if(unit == "m"){
+        16/3.281}else{16}
+      
+      moderate = if(unit == "m"){
+        14.49/3.281}else{14.49}
+      
+      minor = if(unit == "m"){
+        12.50/3.281}else{12.5}
+      
+      if(unit == "m"){
+        water_level/3.281}else{water_level}
+      
       shiny::validate(need(water_level, "Data are not available from this instrument"))
       
       ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
-        geom_line(aes(color = "Water Level"), linewidth = 1) +
         ylab(y_label) +
         xlab("Time (ET)") + 
         scale_color_manual(
           values = c("#002366")) + 
+        geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= minor, 
+                      ymax = moderate, 
+                      fill = "NOAA - Minor Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= moderate + 0.1, 
+                      ymax = major, 
+                      fill = "NOAA - Moderate Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= major + 0.1, 
+                      ymax = major + 2, 
+                      fill = "NOAA - Major Flooding")) + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
+        
+        plot_theme() + 
+        theme(legend.position = 'none')
+      
+    }
+    else if(input$instrument.id == "CSI.Tide"){
+      
+      unit = unit_state()
+      y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
+      
+      water_level = combo_data()$CSI_Water_Level_ft
+      major = if(unit == "m"){
+        16/3.281}else{16}
+      
+      moderate = if(unit == "m"){
+        14.49/3.281}else{14.49}
+      
+      minor = if(unit == "m"){
+        12.50/3.281}else{12.5}
+      
+      if(unit == "m"){
+        water_level/3.281}else{water_level}
+      
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
+      
+      ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
+        ylab(y_label) +
+        xlab("Time (ET)") + 
+        scale_color_manual(
+          values = c("#002366")) + 
+        geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= minor, 
+                      ymax = moderate, 
+                      fill = "NOAA - Minor Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= moderate + 0.1, 
+                      ymax = major, 
+                      fill = "NOAA - Moderate Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= major + 0.1, 
+                      ymax = major + 2, 
+                      fill = "NOAA - Major Flooding")) + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
+        
         plot_theme() + 
         theme(legend.position = 'none')
       
