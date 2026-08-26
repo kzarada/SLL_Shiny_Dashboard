@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN R -e "install.packages(c('fresh', 'shinydashboard', 'shinybrowser', 'fontawesome', 'plotly'), repos='https://cloud.r-project.org')"
+RUN R -e "install.packages(c('s2', 'fresh', 'shinydashboard', 'shinybrowser', 'fs', 'zoo', 'shinyWidgets', fontawesome', 'plotly', 'htmlwidgets'), repos='https://cloud.r-project.org')"
 
 RUN rm -rf /srv/shiny-server/*
 
