@@ -6,7 +6,6 @@
 
 library(tidyverse)
 library(shinydashboard)
-library(leaflet)
 library(fresh)
 library(shinybrowser)
 library(plotly)
