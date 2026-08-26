@@ -12,7 +12,7 @@ library(plotly)
 
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/01_Data_Products/Double_Shiny/Data/"
 
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
@@ -23,18 +23,28 @@ flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>%
 combo = read.csv(file.path(data_dir, "Outputs/combo.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
-  dplyr::select(Time_ET, Boston_Water_MLLW)
+  dplyr::select(Time_ET, Boston_Water_MLLW) |> 
+  filter(Time_ET > (min(Time_ET) - days(1)))
 
 tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
-  dplyr::select(Time_ET, Boston_Water_Prediction)
+  dplyr::select(Time_ET, Boston_Water_Prediction) 
 
 peak = as.Date(c("2026-10-28", "2026-11-26", "2026-12-25"))
 diff =  peak - Sys.Date()
 count_down = as.numeric(min(diff[diff >= 0]))
 
 peak_day = format(min(peak[diff >= 0]), "%b %d, %Y")
+
+count_down_bck = case_when(
+  
+  count_down > 3 ~ "#D8DEE9", 
+  count_down == 3 ~ "#FFF326", 
+  count_down == 2 ~ "#F59115", 
+  count_down == 1 ~ "#F58069", 
+  count_down == 0 ~ "#BF91F2"
+)
 
 #colors: 
 #blue: #256EFF
@@ -74,7 +84,6 @@ convert_units <- function(value, unit) {
 }
 
 
-
 ##############################################
 #################################################
 
@@ -105,6 +114,7 @@ ui <- dashboardPage(
                 
           
                 tags$head(
+                tags$style(HTML(paste0(".custom-box {background-color:", count_down_bck, "!important; height: 89%}"))),
                 tags$link(rel = "stylesheet", type = "text/css", href = "wht_styles.css")),
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> Wicked High Tides </span>\');})')),
@@ -112,35 +122,31 @@ ui <- dashboardPage(
                 shinybrowser::detect(), 
                 
     fluidRow(
-            
-                
-                  box(solidHeader = TRUE, 
+              box(solidHeader = TRUE, 
                       width = 2,
-                      height = "380px",
+                      class = "custom-box", 
                       title = "Days until Peak", 
+                      height = '380px',
                       status = 'primary', 
                       tags$div(class = 'main-text', count_down),
-                      tags$div(class = 'sub-text', paste0("\n \n Peak tide on: \n" , peak_day))),
+                      tags$div(class = 'sub-text', paste0("\n \n \n Peak tide on: \n" , peak_day))),
                       
                                    
                     box(solidHeader = TRUE, 
                         title = "Moon Phase",
-                        height = "380px",
                         width = 2,
+                        height = '380px',
+                        
                         status = "primary", 
                         htmlOutput("frame", height = "100%", style = 'text-align:center;')), 
                   
-                  box(solidHeader = TRUE, 
-                      title = "Water Depth at Long Wharf", 
-                      height = "380px", 
-                      width = 3, 
-                      status = 'primary', 
-                      htmlOutput("water_level")),
+                 uiOutput("flood_box"),
                   
                   box(solidHeader = TRUE, 
                       title = "Other Links", 
-                      height = '380px', 
                       width = 5, 
+                      height = '380px',
+                      
                       status = 'primary', 
                       tags$div(
                         class = "button-text", 
@@ -153,15 +159,14 @@ ui <- dashboardPage(
                         href = "http://147.93.47.40:8080/app/SLL_Flood_Dashboard",
                         target = "_blank",
                         HTML("<p><i class = 'fa fa-map-location-dot' ></i>  Want to see more real-time flooding conditions? <u>Click here</u> to check out the SLL Flood Dashboard!</p>")
-                      ))),
-
-                  
-                  box(solidHeader = TRUE, 
-                      class = 'plot-box',
+                      )))),
+    fluidRow(
+               box(solidHeader = TRUE, 
+                     class = 'plot-box',
                       title = "NOAA Tide Gauge - Boston", 
                       status = 'primary',
                       width = 12, 
-                      plotlyOutput("Tide", height = "100%"))), 
+                      plotlyOutput("Tide", height = "100%")), 
                
                                    
 
@@ -173,7 +178,7 @@ ui <- dashboardPage(
                     HTML("<u>Click here</u> to learn more about Wicked High Tides!")
                   )
                 )   #end footer 
-                
+  )    #end Fluidrow      
   ) #end dashboard body
 ) #end UI 
 
@@ -250,7 +255,8 @@ server <- function(input, output, session) {
     change() > 0 ~ "rising", 
     change() < 0 ~ "falling")
     })
-
+  
+  
   ################## Reactive Statement to Update App with Live Data ##################
   
   flood.depth <- reactiveFileReader(
@@ -273,7 +279,8 @@ server <- function(input, output, session) {
       read.csv(path) %>% 
         mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
                Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))|> 
-        dplyr::select(Time_ET, Boston_Water_MLLW)
+        dplyr::select(Time_ET, Boston_Water_MLLW)|> 
+        filter(Time_ET > (min(Time_ET) - days(1)))
     }
   )
   
@@ -303,7 +310,32 @@ server <- function(input, output, session) {
             "Water levels are ", change_text()))
       )  
      
+output$flood_box <- renderUI({
 
+  water_depth = water_depth()
+  
+  flood_bck =  case_when(
+    water_depth == 0 ~ "#D8DEE9", 
+    water_depth < 0.5 ~ "#FFF326", 
+    water_depth > 0.5 & water_depth < 1 ~ "#F59115", 
+    water_depth >=1 & water_depth < 2 ~ "#F58069", 
+    water_depth >= 2 ~ "#BF91F2")
+  
+  
+  box(solidHeader = TRUE, 
+      title = "Water Depth at Long Wharf", 
+      style = paste0('background-color: ', flood_bck, "!important; height: 89%"),
+      width = 3, 
+      height = '380px',
+      
+      status = 'primary', 
+      tagList(
+        div(class = 'main-text',
+            paste0(ifelse(unit_state() == "ft", water_depth(), round(water_depth()/3.281,2)), " ", unit_state())), 
+        div(class = 'sub-text',
+            "Water levels are ", change_text())))
+
+})#end renderUI
   
   ###### Moon Embed
   
