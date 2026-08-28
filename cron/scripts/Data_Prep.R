@@ -212,7 +212,7 @@ data_avail_2 = map_hohonu |>
                   dplyr::select(Location, Time_ET) |> 
                   rename(Last_Time = Time_ET) |> 
                   mutate(Time_Diff = as.numeric(difftime(current_time, Last_Time, units = 'mins'))) |> 
-                  mutate(Last_Available = paste0("Data temporarily unavailable from this sensor. Data was last recorded from this sensor ", Time_Diff, " minutes ago. 
+                  mutate(Last_Available = paste0("Data temporarily unavailable from this sensor. Data were last recorded from this sensor ", Time_Diff, " minutes ago. 
                                                 The Dashboard updates every 10 minutes - check back soon for updates.")) |> 
                   dplyr::select(Location, Last_Available) |> 
                   left_join(data_avail)
@@ -220,7 +220,7 @@ data_avail_2 = map_hohonu |>
 map_hohonu = map_hohonu |> 
               left_join(data_avail_2) |> 
               mutate(Last_Available = ifelse(is.na(Flood.Depth) & is.na(Last_Available), 
-                                             "No data available for this sensor at this time point. Missing data is likely due to a sensor reading error (e.g., abnormally high reading or reading out of normal range).", 
+                                             "No data available for this sensor at this time point. Missing data are likely due to a sensor reading error (e.g., abnormally high reading or reading out of normal range).", 
                                              Last_Available),
                       Last_Available = replace_na(Last_Available, ""))
 
