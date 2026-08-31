@@ -16,6 +16,8 @@ library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
 
+source(file.path(data_dir, "Inputs/api_keys.R"))
+
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
