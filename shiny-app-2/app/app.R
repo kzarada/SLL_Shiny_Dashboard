@@ -848,7 +848,13 @@ server <- function(input, output, session) {
     
     
     leaflet() %>% 
-      addProviderTiles(providers$CartoDB.Positron) %>% 
+      #addProviderTiles(providers$CartoDB.Positron) %>% 
+      addTiles(
+        urlTemplate = url,
+        attribution = paste(
+          '&copy; <a href="https://carto.com/attributions">CARTO</a>,',
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        ),group='baseMap') |> 
       setView(lng = -70.99, lat = 42.099, zoom = 7.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
@@ -974,10 +980,10 @@ server <- function(input, output, session) {
                   HTML(paste0("<u>",unique(sensor_loc()$Type) ,"</u>"))), 
                 " overland flood sensor in partnership with the ", 
                 unique(sensor_loc()$Sponsor), ". <br><br>
-                Flood data is collected in real-time. The data have not been reviewed or edited and may be inaccurate. 
+                Flood data are collected in real-time. The data have not been reviewed or edited and may be inaccurate. 
                 Additionally, data may be temporarily unavailable for many reasons including 
                 missed data transmissions, temporary loss of cellular connection, 
-                or sensor errors (e.g., objects underneath sensors, unusally high data points). Sensors typically transmit data every 4 to 12 minutes. 
+                or sensor errors (e.g., objects underneath sensors, unusually high data points). Sensors typically transmit data every 4 to 12 minutes. 
                 Any missed connections are backfilled once connection is restored, but sensor errors will remain as missing data."))
   })
   
@@ -1455,7 +1461,7 @@ server <- function(input, output, session) {
       tagList(
         p("By downloading this data, you agree that:"),
         tags$ul(
-          tags$li("This data is provided as-is and may be inaccurate."),
+          tags$li("Data are provided as-is and may be inaccurate."),
           tags$li("You assume all risk associated with its use and the Stone Living Lab is not liable for any damages associated with the use of the data."),
           tags$li("You will credit the Stone Living Lab for any research or products released that use the data.")
         )),

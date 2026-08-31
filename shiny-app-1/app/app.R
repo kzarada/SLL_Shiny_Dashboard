@@ -13,6 +13,10 @@ library(shinybrowser)
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
 
+source(file.path(data_dir, "Inputs/api_keys.R"))
+
+
+
 ###### Read in Data #######
 hohonu = read.csv(file.path(data_dir, "Outputs/hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -678,10 +682,18 @@ server <- function(input, output, session) {
     legend_label = if(unit == 'ft'){ft_label
     }else{m_label}
     
-    
-    
+    url <- paste0('CartoDB.Positron'="https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png",'?key=',leaflet_key)
+
+  
     leaflet() %>% 
-      addProviderTiles(providers$CartoDB.Positron) %>% 
+      # addProviderTiles(providers$CartoDB.Positron, 
+      #                  options = providerTileOptions(key = leaflet_key)) %>% 
+      addTiles(
+        urlTemplate = url,
+        attribution = paste(
+          '&copy; <a href="https://carto.com/attributions">CARTO</a>,',
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        ),group='baseMap') |> 
       setView(lng = -70.99, lat = 42.099, zoom = 8.5) %>% 
       addLegend(position = "bottomright", 
                 opacity = 1, 
