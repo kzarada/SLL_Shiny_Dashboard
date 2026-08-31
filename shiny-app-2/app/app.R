@@ -849,6 +849,9 @@ server <- function(input, output, session) {
     }else{m_label}
     
     
+    url <- paste0('CartoDB.Positron'="https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}.png",'?key=',leaflet_key)
+    
+    
     leaflet() %>% 
       #addProviderTiles(providers$CartoDB.Positron) %>% 
       addTiles(
