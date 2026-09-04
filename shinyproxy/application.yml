@@ -17,9 +17,16 @@ proxy:
     - id: SLL_Flood_Dashboard
       display-name: SLL Flood Dashboard
       description: Dashboard for current flood conditions
-      container-image: sll_shiny_dashboard-shiny-app-1
+      container-image: sll-shiny-app-1:latest
       container-port: 3838
       container-path: /app/  
+      container-sharing:
+        enabled: true
+        max-clients: 2 
+      container-backend-spec:
+        pre-initialization:
+          enabled: true
+          min-instances: 2
       container-network: sp-net 
       pull-policy: IfNotPresent
       
@@ -29,9 +36,16 @@ proxy:
     - id: SLL_Current_Coastal_Conditions
       display-name: SLL Current Coastal Conditions
       description: Dashboard of current coastal conditions
-      container-image: sll_shiny_dashboard-shiny-app-2
+      container-image: sll-shiny-app-2:latest
       container-port: 3838
       container-path: /app/  
+      container-sharing:
+        enabled: true
+        max-clients: 2 
+      container-backend-spec:
+        pre-initialization:
+          enabled: true
+          min-instances: 2
       container-network: sp-net 
       pull-policy: IfNotPresent
 
@@ -41,9 +55,16 @@ proxy:
     - id: SLL_Storm_Explorer
       display-name: SLL Storm Explorer
       description: Dashboard to explore storms
-      container-image: sll_shiny_dashboard-shiny-app-3
+      container-image: sll-shiny-app-3:latest
       container-port: 3838
       container-path: /app/  
+      container-sharing:
+        enabled: true
+        max-clients: 2 
+      container-backend-spec:
+        pre-initialization:
+          enabled: true
+          min-instances: 2
       container-network: sp-net 
       pull-policy: IfNotPresent
 
@@ -53,9 +74,16 @@ proxy:
     - id: Wicked_High_Tides
       display-name: Wicked High Tides
       description: App to explore Wicked High Tide impacts
-      container-image: sll_shiny_dashboard-shiny-app-4
+      container-image: sll-shiny-app-4:latest
       container-port: 3838
       container-path: /app/  
+      container-sharing:
+        enabled: true
+        max-clients: 2 
+      container-backend-spec:
+        pre-initialization:
+          enabled: true
+          min-instances: 2
       container-network: sp-net 
       pull-policy: IfNotPresent
 

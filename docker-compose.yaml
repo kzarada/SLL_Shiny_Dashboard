@@ -11,7 +11,8 @@ services:
       - sp-net
 
   data-fetcher:
-    build: ./cron
+    build: 
+      context: ./cron
     platform: linux/amd64
     volumes:
       - ./Data:/app/Data
@@ -20,45 +21,41 @@ services:
       - sp-net
 
   shiny-app-1:
-    build: ./shiny-app-1
+    build: 
+      context: ./shiny-app-1
+    image: sll-shiny-app-1:latest
     platform: linux/amd64
-    volumes:
-      - ./Data:/srv/shiny-server/Data
-    restart: unless-stopped
-    container-sharing:
-        enabled: true
-        max-clients: 5
-    container-backend-spec:
-        pre-initialization:
-          enabled: true
-          min-instances: 2
+    profiles:
+      - build
     networks:
       - sp-net
 
   shiny-app-2:
-    build: ./shiny-app-2
+    build: 
+      context: ./shiny-app-2
+    image: sll-shiny-app-2:latest
     platform: linux/amd64
-    volumes:
-      - ./Data:/srv/shiny-server/Data
-    restart: unless-stopped
+    profiles:
+      - build
     networks:
       - sp-net
 
   shiny-app-3:
-    build: ./shiny-app-3
+    build: 
+      context: ./shiny-app-3
+    image: sll-shiny-app-3:latest
     platform: linux/amd64
-    volumes:
-      - ./Data:/app/Data
-    restart: unless-stopped
+    profiles:
+      - build
     networks:
       - sp-net
 
   shiny-app-4:
       build: ./shiny-app-4
+      image: sll-shiny-app-4:latest
       platform: linux/amd64
-      volumes:
-        - ./Data:/app/Data
-      restart: unless-stopped
+      profiles:
+      - build
       networks:
         - sp-net
 
