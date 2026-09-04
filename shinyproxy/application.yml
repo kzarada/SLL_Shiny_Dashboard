@@ -20,8 +20,8 @@ proxy:
       container-image: sll-shiny-app-1:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 2
-      seats-per-container: 2
+      minimum-seats-available: 4
+      seats-per-container: 4
       container-network: sp-net 
       pull-policy: IfNotPresent
     
@@ -34,8 +34,8 @@ proxy:
       container-image: sll-shiny-app-2:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 2
-      seats-per-container: 2
+      minimum-seats-available: 4
+      seats-per-container: 4
       container-network: sp-net 
       pull-policy: IfNotPresent
 
@@ -48,8 +48,8 @@ proxy:
       container-image: sll-shiny-app-3:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 2
-      seats-per-container: 2
+      minimum-seats-available: 1
+      seats-per-container: 1
       container-network: sp-net 
       pull-policy: IfNotPresent
 
@@ -62,8 +62,8 @@ proxy:
       container-image: sll-shiny-app-4:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 2
-      seats-per-container: 2
+      minimum-seats-available: 1
+      seats-per-container: 5
       container-network: sp-net 
       pull-policy: IfNotPresent
 
