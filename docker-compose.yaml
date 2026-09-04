@@ -25,6 +25,13 @@ services:
     volumes:
       - ./Data:/srv/shiny-server/Data
     restart: unless-stopped
+    container-sharing:
+        enabled: true
+        max-clients: 5
+    container-backend-spec:
+        pre-initialization:
+          enabled: true
+          min-instances: 2
     networks:
       - sp-net
 
