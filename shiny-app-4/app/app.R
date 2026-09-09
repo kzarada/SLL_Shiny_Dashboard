@@ -120,10 +120,7 @@ ui <- dashboardPage(
                                  $("header").find("nav").append(\'<span class="myClass"> Wicked High Tides </span>\');})')),
                 
                 shinybrowser::detect(), 
-                
-                shinybrowser::detect(),
-                "Window size:",
-                textOutput("size"), 
+
                 
                 fluidRow(
                   box(solidHeader = TRUE, 
