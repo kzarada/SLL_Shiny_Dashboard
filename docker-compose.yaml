@@ -23,7 +23,7 @@ services:
   shiny-app-1:
     build: 
       context: ./shiny-app-1
-    image: sll-shiny-app-1:latest
+    image: sll_shiny_dashboard-shiny-app-1:latest
     platform: linux/amd64
     profiles:
       - build
@@ -33,7 +33,7 @@ services:
   shiny-app-2:
     build: 
       context: ./shiny-app-2
-    image: sll-shiny-app-2:latest
+    image: sll_shiny_dashboard-shiny-app-2:latest
     platform: linux/amd64
     profiles:
       - build
@@ -43,7 +43,7 @@ services:
   shiny-app-3:
     build: 
       context: ./shiny-app-3
-    image: sll-shiny-app-3:latest
+    image: sll_shiny_dashboard-shiny-app-3:latest
     platform: linux/amd64
     profiles:
       - build
@@ -52,7 +52,7 @@ services:
 
   shiny-app-4:
       build: ./shiny-app-4
-      image: sll-shiny-app-4:latest
+      image: sll_shiny_dashboard-shiny-app-4:latest
       platform: linux/amd64
       profiles:
       - build
