@@ -30,7 +30,7 @@ tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>%
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
   dplyr::select(Time_ET, Boston_Water_Prediction) 
 
-peak = as.Date(c("2026-08-28", "2026-10-28", "2026-11-26", "2026-12-25"))
+peak = as.Date(c("2026-09-11", "2026-10-28", "2026-11-26", "2026-12-25"))
 diff =  peak - Sys.Date()
 count_down = as.numeric(min(diff[diff >= 0]))
 
@@ -111,17 +111,30 @@ ui <- dashboardPage(
   
   dashboardBody(use_theme(mytheme),
                 
-          
+                
+                
                 tags$head(
-                tags$style(HTML(paste0(".custom-box {background-color:", count_down_bck, "!important; height: 89%}"))),
-                tags$link(rel = "stylesheet", type = "text/css", href = "wht_styles.css")),
+                  tags$style(HTML(paste0("
+                                /* Force outer box container to fill and handle min height */
+                                .custom-box {
+                                  background-color: ", count_down_bck, " !important; 
+                                         height: calc(100% - 40px);
+                                  width: 100%;,
+                                  overflow: hidden !important; ,
+                                  box-sizing: border-box; 
+                                }"))),
+                  tags$link(rel = "stylesheet", type = "text/css", href = "wht_styles.css")),
                 tags$script(HTML('$(document).ready(function() {
                                  $("header").find("nav").append(\'<span class="myClass"> Wicked High Tides </span>\');})')),
                 
                 shinybrowser::detect(), 
                 
-    fluidRow(
-              box(solidHeader = TRUE, 
+                shinybrowser::detect(),
+                "Window size:",
+                textOutput("size"), 
+                
+                fluidRow(
+                  box(solidHeader = TRUE, 
                       width = 2,
                       class = "custom-box", 
                       title = "Days until Peak", 
@@ -129,17 +142,18 @@ ui <- dashboardPage(
                       status = 'primary', 
                       tags$div(class = 'main-text', count_down),
                       tags$div(class = 'sub-text', paste0("\n \n \n Peak tide on: \n" , peak_day))),
-                      
-                                   
-                    box(solidHeader = TRUE, 
-                        title = "Moon Phase",
-                        width = 2,
-                        height = '380px',
-                        
-                        status = "primary", 
-                        htmlOutput("frame", height = "100%", style = 'text-align:center;')), 
                   
-                 uiOutput("flood_box"),
+                  
+                  box(solidHeader = TRUE, 
+                      title = "Moon Phase",
+                      width = 3,
+                      height = '380px',
+                      
+                      status = "primary", 
+                      htmlOutput("frame", height = "100%", style = 'text-align:center;')
+                     ), 
+                  
+                  uiOutput("flood_box"),
                   
                   box(solidHeader = TRUE, 
                       title = "Other Links", 
@@ -149,35 +163,35 @@ ui <- dashboardPage(
                       status = 'primary', 
                       tags$div(
                         class = "button-text", 
-                          tags$a(
-                            href = "https://mycoast.org/ma/king-tides",
-                            target = "_blank",
-                            HTML("<p><i class = 'fa fa-camera' ></i>   Have photos of flooding? <u>Click here</u> to submit a photo to MyCoast!</p> <br>  ")
-                          ),
-                      tags$a(
-                        href = "http://147.93.47.40:8080/app/SLL_Flood_Dashboard",
-                        target = "_blank",
-                        HTML("<p><i class = 'fa fa-map-location-dot' ></i>  Want to see more real-time flooding conditions? <u>Click here</u> to check out the SLL Flood Dashboard!</p>")
-                      )))),
-    fluidRow(
-               box(solidHeader = TRUE, 
-                     class = 'plot-box',
+                        tags$a(
+                          href = "https://mycoast.org/ma/king-tides",
+                          target = "_blank",
+                          HTML("<p><i class = 'fa fa-camera' ></i>   Have photos of flooding? <u>Click here</u> to submit a photo to MyCoast!</p> <br>  ")
+                        ),
+                        tags$a(
+                          href = "http://147.93.47.40:8080/app/SLL_Flood_Dashboard",
+                          target = "_blank",
+                          HTML("<p><i class = 'fa fa-map-location-dot' ></i>  Want to see more real-time flooding conditions? <u>Click here</u> to check out the SLL Flood Dashboard!</p>")
+                        )))),
+                fluidRow(
+                  box(solidHeader = TRUE, 
+                      class = 'plot-box',
                       title = "NOAA Tide Gauge - Boston", 
                       status = 'primary',
                       width = 12, 
                       plotlyOutput("Tide", height = "100%")), 
-               
-                                   
-
-                tags$div(
-                  class = "app-footer",
-                  tags$a(
-                    href = "https://stonelivinglab.org/education/wicked-high-tides/",
-                    target = "_blank",
-                    HTML("<u>Click here</u> to learn more about Wicked High Tides!")
-                  )
-                )   #end footer 
-  )    #end Fluidrow      
+                  
+                  
+                  
+                  tags$div(
+                    class = "app-footer",
+                    tags$a(
+                      href = "https://stonelivinglab.org/education/wicked-high-tides/",
+                      target = "_blank",
+                      HTML("<u>Click here</u> to learn more about Wicked High Tides!")
+                    )
+                  )   #end footer 
+                )    #end Fluidrow      
   ) #end dashboard body
 ) #end UI 
 
@@ -188,7 +202,7 @@ ui <- dashboardPage(
 server <- function(input, output, session) {
   
   
-
+  
   ################## Unit Switch ################## 
   unit_state <- reactive({ifelse(input$unit_toggle, "m", "ft")})
   
@@ -229,7 +243,7 @@ server <- function(input, output, session) {
   
   
   ################## Load Data ##################
-
+  
   water_depth <- reactive({
     flood.depth() %>% 
       filter(Location == "Long.Wharf") |> 
@@ -250,10 +264,10 @@ server <- function(input, output, session) {
   
   change_text <- reactive({
     case_when(
-    change() == 0 ~ "stable",
-    change() > 0 ~ "rising", 
-    change() < 0 ~ "falling")
-    })
+      change() == 0 ~ "stable",
+      change() > 0 ~ "rising", 
+      change() < 0 ~ "falling")
+  })
   
   
   ################## Reactive Statement to Update App with Live Data ##################
@@ -298,51 +312,65 @@ server <- function(input, output, session) {
   ################## Main Pages ##################
   
   #### Flood Depth Text #####
-  
-  output$water_level <- renderUI(
+  output$flood_box <- renderUI({
     
+    water_depth <- water_depth()
+    
+    flood_bck <- case_when(
+      water_depth == 0 ~ "#FFF326",
+      water_depth < 0.5 ~ "#FFF326",
+      water_depth > 0.5 & water_depth < 1 ~ "#F59115",
+      water_depth >= 1 & water_depth < 2 ~ "#F58069",
+      water_depth >= 2 ~ "#BF91F2",
+      TRUE ~ "#D8DEE9"
+    )
+    
+    box_sub = ifelse(shinybrowser::get_width() < 1400, 43, 55)
+    
+    box(
+      solidHeader = TRUE,
+      title = "Water Depth at Long Wharf",
+      width = 2,
+      height = "380px",
+      status = "primary",
+      style = paste0(
+        "background-color: ", flood_bck, " !important;",
+        "height: calc(100% - ", box_sub, "px);",
+        "width: 100%;",
+        "overflow: hidden !important; ",
+        "box-sizing: border-box;"),
+  
+        div(
+          class = "main-text",
+          paste0(
+            ifelse(
+              unit_state() == "ft",
+              water_depth,
+              round(water_depth / 3.281, 2)
+            ),
+            " ",
+            unit_state()
+          )
+        ),
         
-      tagList(
-        div(class = 'main-text',
-            paste0(ifelse(unit_state() == "ft", water_depth(), round(water_depth()/3.281,2)), " ", unit_state())), 
-        div(class = 'sub-text',
-            "Water levels are ", change_text()))
-      )  
-     
-output$flood_box <- renderUI({
-
-  water_depth = water_depth()
-  
-  flood_bck =  case_when(
-    water_depth == 0 ~ "#D8DEE9", 
-    water_depth < 0.5 ~ "#FFF326", 
-    water_depth > 0.5 & water_depth < 1 ~ "#F59115", 
-    water_depth >=1 & water_depth < 2 ~ "#F58069", 
-    water_depth >= 2 ~ "#BF91F2")
-  
-  
-  box(solidHeader = TRUE, 
-      title = "Water Depth at Long Wharf", 
-      style = paste0('background-color: ', flood_bck, "!important; height: 89%"),
-      width = 3, 
-      height = '380px',
-      
-      status = 'primary', 
-      tagList(
-        div(class = 'main-text',
-            paste0(ifelse(unit_state() == "ft", water_depth(), round(water_depth()/3.281,2)), " ", unit_state())), 
-        div(class = 'sub-text',
-            "Water levels are ", change_text())))
-
-})#end renderUI
+        div(
+          class = "sub-text",
+          "Water levels are ",
+          change_text()
+        )
+      )
+    
+    
+  })
   
   ###### Moon Embed
   
   output$frame <- renderUI(
     tags$iframe(src="https://in-the-sky.org/widgets/moonphase.php?skin=0&locale=1&town=4930956", 
                 width = "190px", 
-                height = "320px")) #end frame
-
+                height = "320px", 
+                overflow = 'auto')) #end frame
+  
   
   ##### Tide Plot
   
@@ -350,18 +378,18 @@ output$flood_box <- renderUI({
     
     unit = unit_state()
     y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
-  
-
-  
+    
+    
+    
     water_level = if(unit == "m"){combo_data()$Boston_Water_MLLW/3.281}else{combo_data()$Boston_Water_MLLW}
     LW_elev = ifelse(unit == "m", 11.78/3.281, 11.78)
-  
+    
     prediction = if(unit == "m"){
       tide_pred()$Boston_Water_Prediction/3.281}else{tide_pred()$Boston_Water_Prediction}
-  
+    
     shiny::validate(need(water_level, "Data are not available from this instrument"))
-  
-  p =  ggplot(combo_data(), aes(x = Time_ET, y = water_level, group = 1)) + 
+    
+    p =  ggplot(combo_data(), aes(x = Time_ET, y = water_level, group = 1)) + 
       ylab(y_label) +
       xlab("") +  
       geom_line(aes(color = "Water Level", 
@@ -370,49 +398,49 @@ output$flood_box <- renderUI({
                                         text = paste0("Predicted tide height of ", round(prediction, 2)," at ", Time_ET)), linetype = 'dotted', linewidth =1) +
       geom_hline(aes(yintercept = LW_elev, color = 'Elevation at Long Wharf'), linetype = 'dashed', linewidth = 1) + 
       scale_color_manual(
-          values = c("darkred","#002366", "#2E3440" )) + 
+        values = c("darkred","#002366", "#2E3440" )) + 
       plot_theme() + 
       theme(legend.position = 'bottom', 
             legend.title = element_blank())
-  
-  if (shinybrowser::is_device_mobile()){
-    text_size = 7
-    title_size = 9
-    legend_size = 6
-  } else{
-    text_size = 16
-    title_size = 18
-    legend_size = 16
-  }
-  
-  ggplotly(p, tooltip = "text") %>%
-    layout(
-      xaxis = list(
-        tickfont = list(family = "Replica LL TT", size = text_size)),
-      yaxis = list(
-        tickfont = list(family = "Replica LL TT", size = text_size),
-        title = list(font = list(family = "Replica LL TT", size = title_size))),
-      legend = list(
-        orientation = 'h', 
-        x = 0.5, 
-        xanchor = 'center', 
-        y = -0.2,
-        title = list(text = NULL),
-        font = list(family = "Replica LL TT", 
-                    size = legend_size)),
-      hoverlabel = list(
-        font = list(family = "Replica LL TT"),
-        bgcolor = "white",
-        align = "left"
-      ), 
-      margins = list(
-        l = 15,
-        r = 15,
-        b = 1, 
-        t = 1, 
-        pad = 10
-      )) 
-  
+    
+    if (shinybrowser::is_device_mobile()){
+      text_size = 7
+      title_size = 9
+      legend_size = 6
+    } else{
+      text_size = 16
+      title_size = 18
+      legend_size = 16
+    }
+    
+    ggplotly(p, tooltip = "text") %>%
+      layout(
+        xaxis = list(
+          tickfont = list(family = "Replica LL TT", size = text_size)),
+        yaxis = list(
+          tickfont = list(family = "Replica LL TT", size = text_size),
+          title = list(font = list(family = "Replica LL TT", size = title_size))),
+        legend = list(
+          orientation = 'h', 
+          x = 0.5, 
+          xanchor = 'center', 
+          y = -0.2,
+          title = list(text = NULL),
+          font = list(family = "Replica LL TT", 
+                      size = legend_size)),
+        hoverlabel = list(
+          font = list(family = "Replica LL TT"),
+          bgcolor = "white",
+          align = "left"
+        ), 
+        margins = list(
+          l = 15,
+          r = 15,
+          b = 1, 
+          t = 1, 
+          pad = 10
+        )) 
+    
   }) #end plot
   
 } #end server

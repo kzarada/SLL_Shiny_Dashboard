@@ -2,15 +2,6 @@
    Docker CSS
 ═══════════════════════════════════════ */
 
-/* Register font */
-  @font-face {
-    font-family: 'Replica Mono LL TT';
-    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
-    url('ReplicaMonoLLTT-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-
 /* New — Replica (non-mono) for body text */
 @font-face {
   font-family: 'Replica LL TT';
@@ -71,7 +62,7 @@ body {
   height: 40px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 766px) {
 
   .main-header .logo {
     display: none !important;
@@ -170,7 +161,7 @@ body {
   text-align: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
   .app-footer {
     font-size: 12px;       /* smaller text */
     padding: 5px 8px;      /* less vertical padding */
@@ -218,7 +209,7 @@ body {
    LAYOUT — boxes & columns
 ═══════════════════════════════════════ */
 
-@media (max-width: 768px) {
+@media (max-width: 1400px) {
 
   /* Stack boxes vertically */
   .context-wrapper {
@@ -357,6 +348,3 @@ body {
     font-weight: bold;
     text-align: center;
   }
-
-
-
