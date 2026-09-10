@@ -14,7 +14,6 @@ library(plotly)
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
 
-
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -32,7 +31,7 @@ tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>%
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
   dplyr::select(Time_ET, Boston_Water_Prediction) 
 
-peak = as.Date(c("2026-09-11", "2026-10-28", "2026-11-26", "2026-12-25"))
+peak = as.Date(c("2026-09-15", "2026-10-28", "2026-11-26", "2026-12-25"))
 diff =  peak - Sys.Date()
 count_down = as.numeric(min(diff[diff >= 0]))
 
@@ -314,7 +313,7 @@ server <- function(input, output, session) {
       TRUE ~ "#D8DEE9"
     )
     
-    box_sub = ifelse(shinybrowser::get_width() < 1400, 43, 55)
+    box_sub = ifelse(shinybrowser::get_width() < 1400, 43, 60)
     
     box(
       solidHeader = TRUE,
