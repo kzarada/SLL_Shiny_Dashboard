@@ -185,7 +185,8 @@ ui <- dashboardPage(
                                                             "Boston - Morrissey Blvd" = "Morrissey.Blvd",
                                                             "Boston - Tenean Beach" = "Tenean.Beach",
                                                             "Essex - Main Street" = "Essex", 
-                                                            "Fall River - Stafford Square" = "Fall.River", 
+                                                            "Fall River - Stafford Square" = "Fall.River",
+                                                            "Falmouth - Surf Dr." = "Falmouth", 
                                                             "Marshfield - Ocean St." = "Marshfield",
                                                             "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                                             "Salem - Collin's Cove" = "Salem", 
@@ -248,6 +249,7 @@ ui <- dashboardPage(
                                              "Boston - Tenean Beach" = "Tenean.Beach",
                                              "Essex - Main Street" = "Essex", 
                                              "Fall River - Stafford Square" = "Fall.River",
+                                             "Falmouth - Surf Dr." = "Falmouth",
                                              "Marshfield - Ocean St." = "Marshfield",
                                              "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                              "Salem - Collin's Cove" = "Salem", 
@@ -382,15 +384,15 @@ server <- function(input, output, session) {
   
   observeEvent(input$unit_toggle, {
     unit_state = ifelse(input$unit_toggle, "m", "ft")
-  })
-  
-  observe({
+    
     updateActionButton(
       session, 
       "unit_toggle",
       label = unit_state()
     )
   })
+  
+
   
   ########## Mobile Detection #############
   
@@ -686,8 +688,6 @@ server <- function(input, output, session) {
 
   
     leaflet() %>% 
-      # addProviderTiles(providers$CartoDB.Positron, 
-      #                  options = providerTileOptions(key = leaflet_key)) %>% 
       addTiles(
         urlTemplate = url,
         attribution = paste(
@@ -703,7 +703,7 @@ server <- function(input, output, session) {
     
   })
   
-  observe({
+  observeEvent(input$flood_map_zoom, {
     
     unit = unit_state()
     
