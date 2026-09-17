@@ -137,6 +137,15 @@ noaa_fall_river_tide = read.csv(file.path(data_dir, "Outputs/NOAA_Fall_River_Dat
   rename(Fall_River_Water_MLLW = Water_MLLW) %>% 
   filter(Time_ET > start_time & Time_ET < current_time)
 
+noaa_falmouth_tide = read.csv(file.path(data_dir, "Outputs/NOAA_Falmouth_Data.csv")) %>%
+  mutate(Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M", tz = "America/New_York")) %>%
+  filter(Time_ET > start_time & Time_ET < current_time)  %>% 
+  dplyr::select(Time_ET, Water_MLLW) %>%
+  rename(Falmouth_Water_MLLW = Water_MLLW) %>% 
+  filter(Time_ET > start_time & Time_ET < current_time)
+
+
+
 combo = tibble(Time_ET = seq(start_time, current_time, by = "1 min")) %>% 
   left_join(harbor_entrance) %>% 
   left_join(rainsford) %>% 
@@ -147,9 +156,11 @@ combo = tibble(Time_ET = seq(start_time, current_time, by = "1 min")) %>%
   left_join(north_shore) %>% 
   left_join(noaa_boston_tide) %>% 
   left_join(noaa_fall_river_tide) %>% 
+  left_join(noaa_falmouth_tide) %>%
   arrange(Time_ET) %>% 
   mutate(across(where(is.numeric), 
-                ~zoo::na.approx(.x, na.rm = F))) 
+                ~zoo::na.approx(.x, na.rm = F))) %>%
+  mutate(Time_ET = format(Time_ET, "%Y-%m-%d %H:%M:%S"))
 
 
 ################################################
@@ -187,7 +198,9 @@ hohonu <- vroom::vroom(files,
   #mutate(across(where(is.numeric), 
   #              ~zoo::na.approx(.x, na.rm = F)), 
   #       Flood.Depth = round(Flood.Depth, 2)) %>% 
-  ungroup() 
+  ungroup() %>%
+  mutate(Time_ET = format(Time_ET, "%Y-%m-%d %H:%M:%S"))
+
 
 map_hohonu <- hohonu %>% 
   complete(., Time_ET, Location, 
@@ -222,7 +235,7 @@ map_hohonu = map_hohonu |>
               mutate(Last_Available = ifelse(is.na(Flood.Depth) & is.na(Last_Available), 
                                              "No data available for this sensor at this time point. Missing data are likely due to a sensor reading error (e.g., abnormally high reading or reading out of normal range).", 
                                              Last_Available),
-                      Last_Available = replace_na(Last_Available, ""))
+                      Last_Available = replace_na(Last_Available, "")) 
 
 ################################################
 ##### NOAA Predictions
@@ -240,7 +253,16 @@ boston_pred = read.csv(file.path(data_dir, "Outputs/NOAA_Boston_Predictions.csv"
   dplyr::select(Time_ET, Prediction_MLLW) %>%
   rename(Boston_Water_Prediction = Prediction_MLLW)
 
-predictions = full_join(fall_river_pred, boston_pred)
+falmouth_pred = read.csv(file.path(data_dir, "Outputs/NOAA_Falmouth_Predictions.csv")) %>%
+  mutate(Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M", tz = "America/New_York")) %>%
+  filter(Time_ET > start_time)  %>% 
+  dplyr::select(Time_ET, Prediction_MLLW) %>%
+  rename(Falmouth_Water_Prediction = Prediction_MLLW)
+
+
+predictions = full_join(fall_river_pred, boston_pred) %>%
+  full_join(falmouth_pred) |> 
+  mutate(Time_ET = format(Time_ET, "%Y-%m-%d %H:%M:%S"))
 
 
 write.csv(combo, file.path(data_dir,"Outputs/combo.csv"))

@@ -15,7 +15,6 @@ library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
-
 source(file.path(data_dir, "Inputs/api_keys.R"))
 
 ################## Read in data #####################
@@ -219,7 +218,8 @@ ui <- dashboardPage(
                                                     "Cathleen Stone Island" = 'csi',
                                                     "Essex - Main St." = 'essex',
                                                     "NOAA - Boston" = 'boston', 
-                                                    "NOAA - Fall River" = 'fall.river'),
+                                                    "NOAA - Fall River" = 'fall.river', 
+                                                    "NOAA - Woods Hole" = 'falmouth'),
                                      multiple = F), 
                                      solidHeader = TRUE, 
                                      width = 12, 
@@ -321,7 +321,8 @@ ui <- dashboardPage(
                                    "Harbor Entrance Wave Buoy" = "Harbor.Entrance", 
                                    "North Shore Wave Buoy" = "North.Shore", 
                                    #"Rainsford NE Wave Buoy" = "Rainsford.Buoy",
-                                   "Rainsford Island Weather Station" = "Rainsford.Weather"), 
+                                   "Rainsford Island Weather Station" = "Rainsford.Weather", 
+                                  "Woods Hole NOAA Tide Gauge" = 'Falmouth.Tide'), 
                               multiple = F
                             ), 
                             
@@ -658,7 +659,8 @@ server <- function(input, output, session) {
       input$tide_select == "gallops" ~ "Gallops Tide Gauge and NOAA Flood Predictions", 
       input$tide_select == 'csi' ~ "Cathleen Stone Island Tide Gauge and NOAA Flood Predictions",
       input$tide_select == "boston" ~ "NOAA Tide Gauge and Flood Predictions - Boston", 
-      input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River", 
+      input$tide_select == 'fall.river' ~ "NOAA Tide Gauge and Flood Predictions - Fall River",
+      input$tide_select == "falmouth" ~ "NOAA Tide Gauge and Flood Predictions - Woods Hole",
       input$tide_select == 'essex' ~ "Essex - Main St. Tide Gauge",
       .default = NA
     )
@@ -676,6 +678,8 @@ server <- function(input, output, session) {
       combo_data()$Essex_Water_Level_ft
     }else if(input$tide_select == 'intro'){
       combo_data()$Gallops_Water_Level_ft
+    } else if(input$tide_select == 'falmouth'){
+      combo_data()$Falmouth_Water_MLLW
     }
     
     water_level = if(unit == "m"){
@@ -696,8 +700,9 @@ server <- function(input, output, session) {
       NA
     } else if(input$tide_select == 'essex'){
       NA
-    }
-    
+    } else if(input$tide_select == 'falmouth'){
+      tide_pred()$Falmouth_Water_Prediction
+    }    
     prediction = if(unit == "m"){
       prediction/3.281}else{prediction}
     
@@ -715,6 +720,8 @@ server <- function(input, output, session) {
       16
     } else if(input$tide_select == 'essex') {
       NA
+    } else if(input$tide_select == 'falmouth'){
+      8.50
     }
     
     major = if(unit == "m"){
@@ -733,6 +740,8 @@ server <- function(input, output, session) {
       14.49
     } else if(input$tide_select == 'essex'){
       NA
+    } else if(input$tide_select == 'falmouth'){
+      7.01
     }
     
     moderate = if(unit == "m"){
@@ -751,6 +760,8 @@ server <- function(input, output, session) {
       12.50
     } else if(input$tide_select == 'essex'){
       NA
+    } else if(input$tide_select == 'falmouth'){
+      5.50
     }
     
     minor = if(unit == "m"){
@@ -1042,7 +1053,7 @@ server <- function(input, output, session) {
   
   output$instrument_text <- renderText({
     
-    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Gallops.Tide", "Essex.Tide", "CSI.Tide")){
+    if(input$instrument.id %in% c("Boston.Tide", "Fall.River.Tide", "Falmouth.Tide", "Gallops.Tide", "Essex.Tide", "CSI.Tide")){
       
       "Tide gauges are acoustic or radar instruments that measure changes in sea level. The major, moderate, and minor flooding lines and the predicted future water level are from NOAA."
     }
@@ -1331,6 +1342,59 @@ server <- function(input, output, session) {
         scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
         plot_theme() + 
         theme(legend.box = 'vertical')
+      
+    }
+    else if(input$instrument.id ==  "Falmouth.Tide"){
+     
+      unit = unit_state()
+      y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)") 
+      
+      major = if(unit == "m"){
+        8.50/3.281}else{8.5}
+      
+      moderate = if(unit == "m"){
+        7.01/3.281}else{7.01}
+      
+      minor = if(unit == "m"){
+        5.5/3.281}else{5.5}
+      
+      water_level = if(unit == "m"){combo_data()$Falmouth_Water_MLLW/3.281}else{combo_data()$Falmouth_Water_MLLW}
+      
+      prediction = if(unit == "m"){
+          tide_pred()$Falmouth_Water_Prediction/3.281}else{tide_pred()$Falmouth_Water_Prediction}
+    
+      shiny::validate(need(water_level, "Data are not available from this instrument"))
+      
+      ggplot(combo_data(), aes(x = Time_ET, y = water_level)) + 
+        ylab(y_label) +
+        xlab("Time (ET)") + 
+        ggtitle("NOAA Tide Gauge and Flood Predictions - Woods Hole") + 
+        scale_color_manual(
+          values = c("#002366", "#2E3440")) + 
+        geom_hline(yintercept = minor, color = "#F6C871", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = moderate, color = "#EE7E6D", linewidth = 1.5, linetype = 'dotted') + 
+        geom_hline(yintercept = major, color = "#8F62FF", linewidth = 1.5, linetype = 'dotted') + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= minor, 
+                      ymax = moderate, 
+                      fill = "NOAA - Minor Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= moderate + 0.1, 
+                      ymax = major, 
+                      fill = "NOAA - Moderate Flooding")) + 
+        geom_rect(aes(xmin = -Inf, 
+                      xmax = Inf, 
+                      ymin= major + 0.1, 
+                      ymax = major + 2, 
+                      fill = "NOAA - Major Flooding")) + 
+        geom_line(aes(color = "Water Level"), linewidth = 1) +
+        geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level"), linetype = 'dotted', linewidth =1) + 
+        scale_fill_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D")) + 
+        plot_theme() + 
+        theme(legend.box = 'vertical')
+      
       
     }
     else if(input$instrument.id == "North.Shore"){
