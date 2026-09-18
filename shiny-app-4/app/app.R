@@ -12,7 +12,8 @@ library(plotly)
 
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/01_Data_Products/Shiny_Apps/Data/"
 
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
@@ -45,6 +46,15 @@ count_down_bck = case_when(
   count_down == 1 ~ "#F58069", 
   count_down == 0 ~ "#BF91F2"
 )
+
+info_button <- function(id) {
+  actionButton(
+    inputId = id,
+    label = NULL,
+    icon = icon("info-circle"),
+    class = "info-button"
+  )
+}
 
 #colors: 
 #blue: #256EFF
@@ -164,7 +174,9 @@ ui <- dashboardPage(
                 fluidRow(
                   box(solidHeader = TRUE, 
                       class = 'plot-box',
-                      title = "NOAA Tide Gauge - Boston", 
+                      title = tagList(
+                        "NOAA Tide Gauge - Boston", 
+                        info_button('tide_info')), 
                       status = 'primary',
                       width = 12, 
                       plotlyOutput("Tide", height = "100%")), 
@@ -203,6 +215,56 @@ server <- function(input, output, session) {
       session, 
       "unit_toggle",
       label = unit_state()
+    )
+  })
+
+  ############ Info Popups ##################
+   observeEvent(input$tide_info, {
+    showModal(
+      modalDialog(
+        title = "What is this graph?",
+        
+        p(
+          "This graph shows the measured tide height in Boston. The solid black line is the observed tide height,
+          and the dashed line is the predicted tide height. The dashed redline is the elevation of Long Wharf. When the tide 
+          height is greater than Long Wharf's elevation, there is likely flooding! However, the tide height doesn't always predict flooding - 
+          wind and waves also impact if there is flooding at Long Wharf, so the SLL has an overland flood sensor to catch 
+          when flooding is happening!"  
+          
+        ),
+        
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$flood_info, {
+    showModal(
+      modalDialog(
+        title = "Flood Depth at Long Wharf",
+        
+        p(
+          "The Stone Living Lab has an overland flood sensor at Long Wharf that measures flood depth. Most of the time, this sensor measures 0
+          because there is no flooding! When there is flooding, this sensor measures how deep the water is in real-time. "  
+          
+        ),
+        
+        tags$img(
+          src = 'Long.Wharf.jpg', 
+          alt = "Overland flood sensor at Long Wharf", 
+          width = '300px', 
+          height = 'auto', 
+          style = 'display: block; margin: auto; width: 50%; '
+        ),
+
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
     )
   })
   
@@ -252,9 +314,10 @@ server <- function(input, output, session) {
   
   change_text <- reactive({
     case_when(
-      change() == 0 ~ "stable",
-      change() > 0 ~ "rising", 
-      change() < 0 ~ "falling")
+      change() == 0 & water_depth() == 0 ~ "No flooding detected",
+      change() > 0 ~ "Flood waters are rising", 
+      change() < 0 ~ "Flood waters are falling", 
+      change() == 0 & water_depth()>0 ~ "Flood waters are not changing")
   })
   
   
@@ -317,7 +380,9 @@ server <- function(input, output, session) {
     
     box(
       solidHeader = TRUE,
-      title = "Water Depth at Long Wharf",
+      title = tagList(
+        "Flood Depth at Long Wharf",
+        info_button('flood_info')),
       width = 2,
       height = "380px",
       status = "primary",
@@ -343,7 +408,6 @@ server <- function(input, output, session) {
         
         div(
           class = "sub-text",
-          "Water levels are ",
           change_text()
         )
       )
@@ -384,7 +448,7 @@ server <- function(input, output, session) {
                     text = paste0("Observed tide height of ", round(water_level, 2), " at ", Time_ET)), linewidth = 1) +
       geom_line(data = tide_pred(), aes(x = Time_ET, y = prediction, color = "Predicted Water Level", 
                                         text = paste0("Predicted tide height of ", round(prediction, 2)," at ", Time_ET)), linetype = 'dotted', linewidth =1) +
-      geom_hline(aes(yintercept = LW_elev, color = 'Elevation at Long Wharf'), linetype = 'dashed', linewidth = 1) + 
+      geom_hline(aes(yintercept = LW_elev, color = 'Height for potential flooding at Long Wharf'), linetype = 'dashed', linewidth = 1) + 
       scale_color_manual(
         values = c("darkred","#002366", "#2E3440" )) + 
       plot_theme() + 
