@@ -50,6 +50,9 @@ body {
   gap: 10px;
 }
 
+.recalculating { 
+  opacity: 1.0 !important; 
+}
 
 /* ═══════════════════════════════════════
    HEADER
@@ -258,6 +261,12 @@ body {
     font-size: 9pt;
   }
 }
+
+  /* Legend Rendering */
+  .legend .scrollbox {
+    clip-path: none !important;
+  }
+
 
 
 /* ═══════════════════════════════════════
