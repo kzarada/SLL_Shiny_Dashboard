@@ -12,8 +12,8 @@ library(plotly)
 
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
-
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/01_Data_Products/Shiny_Apps/Data/"
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -31,7 +31,7 @@ tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>%
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
   dplyr::select(Time_ET, Boston_Water_Prediction) 
 
-peak = as.Date(c("2026-09-15", "2026-10-28", "2026-11-26", "2026-12-25"))
+peak = as.Date(c("2026-10-04", "2026-10-28", "2026-11-26", "2026-12-25"))
 diff =  peak - Sys.Date()
 count_down = as.numeric(min(diff[diff >= 0]))
 
@@ -118,7 +118,7 @@ ui <- dashboardPage(
                                 /* Force outer box container to fill and handle min height */
                                 .custom-box {
                                   background-color: ", count_down_bck, " !important; 
-                                         height: calc(100% - 40px);
+                                         height: calc(100% - 55px);
                                   width: 100%;,
                                   overflow: hidden !important; ,
                                   box-sizing: border-box; 
@@ -134,7 +134,9 @@ ui <- dashboardPage(
                   box(solidHeader = TRUE, 
                       width = 2,
                       class = "custom-box", 
-                      title = "Days until Peak", 
+                      title = tagList(
+                        "Days Until Highest Tides",
+                        info_button('peak_info')), 
                       height = '380px',
                       status = 'primary', 
                       tags$div(class = 'main-text', count_down),
@@ -142,7 +144,9 @@ ui <- dashboardPage(
                   
                   
                   box(solidHeader = TRUE, 
-                      title = "Moon Phase",
+                      title = tagList(
+                        "Moon Phase",
+                        info_button("moon_info")), 
                       width = 3,
                       height = '380px',
                       
@@ -163,12 +167,12 @@ ui <- dashboardPage(
                         tags$a(
                           href = "https://mycoast.org/ma/king-tides",
                           target = "_blank",
-                          HTML("<p><i class = 'fa fa-camera' ></i>   Have photos of flooding? <u>Click here</u> to submit a photo to MyCoast!</p> <br>  ")
+                          HTML("<p><i class = 'fa fa-camera' ></i>   Have photos of flooding? <u><span style='color:blue;'>Click here</u></span> to submit a photo to MyCoast!</p> <br>  ")
                         ),
                         tags$a(
                           href = "http://147.93.47.40:8080/app/SLL_Flood_Dashboard",
                           target = "_blank",
-                          HTML("<p><i class = 'fa fa-map-location-dot' ></i>  Want to see more real-time flooding conditions? <u>Click here</u> to check out the SLL Flood Dashboard!</p>")
+                          HTML("<p><i class = 'fa fa-map-location-dot' ></i>  Want to see more real-time flooding conditions? <u><span style='color:blue;'>Click here </u></span> to check out the SLL Flood Dashboard!</p>")
                         )))),
                 fluidRow(
                   box(solidHeader = TRUE, 
@@ -218,17 +222,98 @@ server <- function(input, output, session) {
   })
 
   ############ Info Popups ##################
-   observeEvent(input$tide_info, {
+  observeEvent(input$peak_info, {
+    showModal(
+      modalDialog(
+        title = "What are Wicked High Tides?",
+        
+        p(
+          "Wicked High Tides (aka Perigean Spring Tides) are tides that are 2-4 higher than normal. 
+          The tide peaks in height when the moon is closest to and most aligned with the Earth, 
+          and will be extra high for one or two days before and after the peak. 
+          Flooding can happen during the entire two or three day range. Looking at the predicted tide heights and 
+          moon phase allows us to predict when flooding is most likely to occur. In Boston, flooding happens 
+          when the tide is 11 feet or higher."  
+          
+        ),
+
+        p("This year the highest high tides are expected on: "),
+
+      tags$table(
+        tags$tr(
+          tags$td(
+            style = "vertical-align: top;",
+            tags$ul(
+                tags$li("October 27"), 
+                tags$li("October 28"), 
+                tags$li("October 29")
+            )
+          ), 
+          tags$td(
+            style = "vertical-align: top;",
+            tags$ul(
+                tags$li("November 25"), 
+                tags$li("November 26"), 
+                tags$li("November 27") 
+            )
+          ), 
+          tags$td(
+            style = "vertical-align: top;",
+            tags$ul(
+              tags$li("December 23"), 
+              tags$li("December 24"), 
+              tags$li("December 25"), 
+              tags$li("December 26")
+            )
+          ),  
+        )
+      ),
+    
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  }) 
+  
+  observeEvent(input$moon_info, {
+    showModal(
+      modalDialog(
+        title = "Why does the moon phase matter?",
+        
+        p("To understand exactly what’s causing these wicked high tides, there are three important things to know:"
+      
+        ),
+        
+        tags$ul(
+          tags$li(tags$strong("High and low tides are caused by the pull of gravity from our neighbors, the Sun and Moon.")), 
+          tags$li(tags$strong("The Moon’s orbit around the Earth isn’t a perfect circle"), "– It’s actually oval-shaped,
+                   which means some months the Moon is closer to the Earth than others."), 
+          tags$li(tags$strong("When there’s a new or full moon, the Sun, Moon, and Earth line up, and 
+                    the “pull” of the Sun and Moon on our oceans combines to make an extra-high tide."), 
+                    "These are called “spring” tides, because the tide springs or jumps higher than usual.")
+
+        ),
+        p("When there is a new or full Moon and the Moon is in perigee, we experience wicked high tides!"),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+  observeEvent(input$tide_info, {
     showModal(
       modalDialog(
         title = "What is this graph?",
         
         p(
-          "This graph shows the measured tide height in Boston. The solid black line is the observed tide height,
-          and the dashed line is the predicted tide height. The dashed redline is the elevation of Long Wharf. When the tide 
-          height is greater than Long Wharf's elevation, there is likely flooding! However, the tide height doesn't always predict flooding - 
-          wind and waves also impact if there is flooding at Long Wharf, so the SLL has an overland flood sensor to catch 
-          when flooding is happening!"  
+          "This graph shows the measured tide height in Boston. The solid black line is the observed tide height, 
+          and the dashed line is the predicted tide height. The dashed horizontal red line is the elevation of 
+          Long Wharf. When the tide height is greater than Long Wharf's elevation, there is likely flooding! However, 
+          the tide height doesn't always predict flooding - wind and waves also impact if there is flooding at Long Wharf. 
+          The SLL overland flood sensor will catch when flooding is happening!"  
           
         ),
         
@@ -364,18 +449,18 @@ server <- function(input, output, session) {
   #### Flood Depth Text #####
   output$flood_box <- renderUI({
     
-    water_depth <- water_depth()
-    
+    #water_depth <- water_depth()
+    water_depth = 0.5
     flood_bck <- case_when(
-      water_depth == 0 ~ "#D8DEE9",
+      water_depth == 0 ~ "#FFF326",
       water_depth < 0.5 ~ "#FFF326",
-      water_depth > 0.5 & water_depth < 1 ~ "#F59115",
+      water_depth >= 0.5 & water_depth < 1 ~ "#F59115",
       water_depth >= 1 & water_depth < 2 ~ "#F58069",
       water_depth >= 2 ~ "#BF91F2",
       TRUE ~ "#D8DEE9"
     )
     
-    box_sub = ifelse(shinybrowser::get_width() < 1400, 43, 60)
+    box_sub = ifelse(shinybrowser::get_width() < 1400, 40, 55)
     
     box(
       solidHeader = TRUE,
@@ -403,6 +488,7 @@ server <- function(input, output, session) {
             " ",
             unit_state()
           )
+          
         ),
         
         div(

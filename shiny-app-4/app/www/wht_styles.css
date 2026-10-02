@@ -112,6 +112,7 @@ body {
     transform-origin: right center;
     margin: 0;
   }
+
 }   /* end media  */
 
 /* ═══════════════════════════════════════
@@ -151,7 +152,7 @@ body {
 }
 
 .main-text{
-  font-size: 108px;
+  font-size: 48pt !important; 
   font-weight: bold;
   text-align: center;
 }
@@ -160,6 +161,7 @@ body {
   font-size: 28px;
   text-align: center;
 }
+
 
 @media (max-width: 1400px) {
   .app-footer {
@@ -168,20 +170,20 @@ body {
     line-height: 1.3;
   }
   
+  .main-text{
+  font-size: 82pt !important; 
+  font-weight: bold;
+  text-align: center;
+}
   .button-text{
   font-size: 22px;
   text-align: left;
   color: black !important;
 }
 
-.main-text{
-  font-size: 108px;
-  font-weight: bold;
-  text-align: center;
-}
 
 .sub-text{
-  font-size: 28px;
+  font-size: 28px !important;
   text-align: center;
 }
 
