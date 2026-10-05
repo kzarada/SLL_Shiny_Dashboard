@@ -13,6 +13,7 @@ library(plotly)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
+
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
