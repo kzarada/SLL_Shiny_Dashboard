@@ -15,9 +15,8 @@ library(htmlwidgets)
 library(plotly)
 
 #Set Data File Path (changes for dockerfile)
-#data_dir = "/srv/shiny-server/Data/"
-data_dir = '/Users/katherinezarada/Documents/01_Data_Products/Shiny_Apps/Data/'
 
+data_dir = "/srv/shiny-server/Data/"
 ################## Read in data #####################
 instrument.locations = read.csv(file.path(data_dir, "Inputs/RealTimeMonitoring_Locations.csv")) %>% 
   dplyr::select(Name, ID, Latitude, Longitude) 
@@ -83,6 +82,16 @@ convert_units <- function(value, unit) {
     return(value)
   }
 }
+
+info_button <- function(id) {
+  actionButton(
+    inputId = id,
+    label = NULL,
+    icon = icon("info-circle"),
+    class = "info-button"
+  )
+}
+
 
 
 ##############################################
@@ -168,30 +177,33 @@ ui <- dashboardPage(
                             column(width = 6, 
                                    class = "col-12 col-md-6", 
                                    box(
-                                     title =  pickerInput(
-                                       inputId = "flood.station",
-                                       label = NULL, 
-                                       choices = list("Boston - Border Street" = "Border.St", 
-                                                            "Boston - Cathleen Stone Island" = "CSI", 
-                                                            "Boston - Lewis Mall" = "Lewis.Mall",
-                                                            "Boston - Long Wharf" = "Long.Wharf",
-                                                            "Boston - Morrissey Blvd" = "Morrissey.Blvd",
-                                                            "Boston - Tenean Beach" = "Tenean.Beach",
-                                                            "Essex - Main Street" = "Essex", 
-                                                            "Fall River - Stafford Square" = "Fall.River",
-                                                            "Falmouth - Surf Dr." = "Falmouth", 
-                                                            "Marshfield - Ocean St." = "Marshfield",
-                                                            "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
-                                                            "Salem - Collin's Cove" = "Salem", 
-                                                            "Wareham - Besse Park" = "Wareham"), 
-                                       selected = list("Boston - Long Wharf" = "Long.Wharf",                                                       
-                                                       "Boston - Tenean Beach" = "Tenean.Beach"), 
-                                       options = list(
-                                         `actions-box` = TRUE, # Adds Select All/None buttons
-                                         `selected-text-format` = "count > 2" # Shows count if many selected
-                                       ), 
-                                       multiple = TRUE
-                                     ),
+                                       title = div(
+                                        span(
+                                            pickerInput(
+                                                inputId = "flood.station",
+                                                label = NULL, 
+                                                choices = list("Boston - Border Street" = "Border.St", 
+                                                                      "Boston - Cathleen Stone Island" = "CSI", 
+                                                                      "Boston - Lewis Mall" = "Lewis.Mall",
+                                                                      "Boston - Long Wharf" = "Long.Wharf",
+                                                                      "Boston - Morrissey Blvd" = "Morrissey.Blvd",
+                                                                      "Boston - Tenean Beach" = "Tenean.Beach",
+                                                                      "Essex - Main Street" = "Essex", 
+                                                                      "Fall River - Stafford Square" = "Fall.River",
+                                                                      "Falmouth - Surf Dr." = "Falmouth", 
+                                                                      "Marshfield - Ocean St." = "Marshfield",
+                                                                      "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
+                                                                      "Salem - Collin's Cove" = "Salem", 
+                                                                      "Wareham - Besse Park" = "Wareham"), 
+                                                selected = list("Boston - Long Wharf" = "Long.Wharf",                                                       
+                                                                "Boston - Tenean Beach" = "Tenean.Beach"), 
+                                                options = list(
+                                                  `actions-box` = TRUE, # Adds Select All/None buttons
+                                                  `selected-text-format` = "count > 2" # Shows count if many selected
+                                                ), 
+                                                multiple = TRUE
+                                              )),
+                                         info_button("flood_info")), 
                                      class = "plot-box",
                                      solidHeader = TRUE, 
                                      status = 'primary',
@@ -199,14 +211,18 @@ ui <- dashboardPage(
                                      plotlyOutput("flood_graph", height = "100%")), 
                                    
                                    box(
-                                     title = "Wind Speed at Rainsford Island",
+                                     title = tagList(
+                                              "Wind Speed at Rainsford Island",
+                                              info_button("wind_info")), 
                                      class = 'plot-box',
                                      solidHeader = TRUE,
                                      width = 12,
                                      status = 'primary',
                                      shinyfullscreen::fullscreen_this(plotOutput("wind_plot", height = "100%"))), 
                                    box(
-                                     title = "Air Temperature at Rainsford Island",
+                                     title = tagList(
+                                      "Air Temperature at Rainsford Island",
+                                      info_button("air_info")),
                                      class = 'plot-box',
                                      solidHeader = TRUE,
                                      width = 12,
@@ -217,7 +233,9 @@ ui <- dashboardPage(
                             column(width = 6, 
                                    class = "col-12 col-md-6",  
                                    
-                                   box(title = selectInput(
+                                   box(title = 
+                                        div(
+                                          span(selectInput(
                                      "tide_select",
                                      label = NULL, 
                                      choices = list("Select Tide Gauge" = 'intro',
@@ -227,7 +245,8 @@ ui <- dashboardPage(
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river', 
                                                     "NOAA - Woods Hole" = 'falmouth'),
-                                     multiple = F), 
+                                     multiple = F)), 
+                                     info_button("tide_info")), 
                                      solidHeader = TRUE, 
                                      width = 12, 
                                      class = 'select-box',
@@ -235,20 +254,24 @@ ui <- dashboardPage(
                                      plotlyOutput("tide_plot", height= '100%')), 
                                    
                                    box(
-                                     title = selectInput(
+                                     title = div(
+                                      span(selectInput(
                                        "wave_select",
                                        label = NULL, 
                                        choices = list("Select Wave Buoy" = "intro",
                                                       "Harbor Entrance" = "harbor.entrance", 
                                                       "North Shore" = "north.shore"),
-                                       multiple = F),
+                                       multiple = F)),
+                                       info_button("wave_info")),
                                      solidHeader = TRUE,
                                      class = 'plot-box',
                                      status = 'primary',
                                      width = 12,
                                      plotlyOutput("wave_plot", height = "100%")), 
                                    box(
-                                     title = "Air Pressure (in Hg) at Rainsford Island",
+                                     title = tagList(
+                                      "Air Pressure (in Hg) at Rainsford Island",
+                                      info_button("pressure_info")), 
                                      solidHeader = TRUE,
                                      class = 'plot-box',
                                      status = 'primary',
@@ -309,7 +332,8 @@ ui <- dashboardPage(
                                    class = "col-12 col-md-6", 
                                    box(
                                      
-                                     title = selectInput(
+                                     title = div(
+                                      span(selectInput(
                                        "flood.compare",
                                        label = NULL, 
                                        choices = list("Boston - Border Street" = "Border.St", 
@@ -325,7 +349,8 @@ ui <- dashboardPage(
                                                             "Oak Bluffs - Lake Ave" = "Oak.Bluffs",
                                                             "Salem - Collin's Cove" = "Salem", 
                                                             "Wareham - Besse Park" = "Wareham"),
-                                       multiple = F), 
+                                       multiple = F)),
+                                       info_button("flood_compare_info")), 
                                      
                                      class = "plot-box",
                                      solidHeader = TRUE, 
@@ -334,13 +359,16 @@ ui <- dashboardPage(
                                      plotlyOutput("flood_graph_compare", height = "100%")), 
                                    
                                    box(
-                                     title =  selectInput(
+                                     title = div(
+                                      span(
+                                      selectInput(
                                        "wind_select_compare",
                                        label = NULL, 
                                        choices = list("Select Wind Measurement" = 'intro', 
                                                       "Wind Speed" = 'wind_speed', 
                                                       "Gust Speed" = 'gust_speed'),
-                                       multiple = F),
+                                       multiple = F)),
+                                       info_button("wind_compare_info")), 
                                      class = 'plot-box',
                                      solidHeader = TRUE,
                                      width = 12,
@@ -348,7 +376,8 @@ ui <- dashboardPage(
                                      plotlyOutput("wind_compare", height = "100%")), 
                                    
                                    box(
-                                     title =  "Air Temperature at Rainsford Island",
+                                     title =  tagList("Air Temperature at Rainsford Island",
+                                                  info_button("air_compare_info")), 
                                      class = 'plot-box',
                                      solidHeader = TRUE,
                                      width = 12,
@@ -359,7 +388,8 @@ ui <- dashboardPage(
                             column(width = 6, 
                                    class = "col-12 col-md-6",  
                                    
-                                   box(title = selectInput(
+                                   box(title = div(
+                                    span(selectInput(
                                      "tide_select_compare",
                                      label = NULL, 
                                      choices = list("Select Tide Gauge" = 'intro',
@@ -368,7 +398,8 @@ ui <- dashboardPage(
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river', 
                                                     "NOAA - Woods Hole" = 'falmouth'),
-                                     multiple = F), 
+                                     multiple = F)),
+                                     info_button('tide_compare_info')),  
                                      solidHeader = TRUE, 
                                      width = 12, 
                                      class = 'plot-box',
@@ -377,7 +408,8 @@ ui <- dashboardPage(
                                    
                                    
                                    box(
-                                     title = selectInput(
+                                     title = div(
+                                      span(selectInput(
                                        "wave_select_compare",
                                        label = NULL, 
                                        choices = list("Select Wave Buoy" = "intro",
@@ -385,13 +417,17 @@ ui <- dashboardPage(
                                                       "Harbor Entrance Max. Wave Height" = 'harbor.entrance.max', 
                                                       "North Shore Sig. Wave Height" = "north.shore.sig", 
                                                       "North Shore Max. Wave Height" = 'north.shore.max'),
-                                       multiple = F),
+                                       multiple = F)),
+                                       info_button("wave_compare_info")), 
                                      solidHeader = TRUE,
                                      class = 'plot-box',
                                      status = 'primary',
                                      width = 12,
                                      plotlyOutput("wave_compare", height = "100%")), 
-                                   box(title = "Air Pressure (in Hg) at Rainsford Island",
+                                   
+                                   box(title = tagList(
+                                    "Air Pressure (in Hg) at Rainsford Island",
+                                    info_button("pressure_compare_info")), 
                                      solidHeader = TRUE, 
                                      width = 12, 
                                      class = 'plot-box',
@@ -581,8 +617,7 @@ ui <- dashboardPage(
 # ---- Server ----
 server <- function(input, output, session) {
   
-  ################## Popup ################## 
-  ################## Popup ################## 
+  ################## Popups ################## 
   showModal(modalDialog(
     title = "Welcome to the Stone Living Lab Storm Explorer Dashboard!",
     HTML(paste0("This dashboard displays data from our real-time monitoring sensors during past storms. 
@@ -593,6 +628,206 @@ server <- function(input, output, session) {
     footer = modalButton("Dismiss")
   ))
   
+
+  observeEvent(input$flood_info, {
+    showModal(
+      modalDialog(
+        title = "Flood Graph",
+        
+        p(
+          "This graph shows the flood depth at the overland flood sensor locations. Use the drop down menu to select stations and compare flood levels throughout the storm. Hover over the lines to see the time, flood depth, and station name. To learn more about the flood sensors and see their locations, use the ‘Stations’ tab."
+        ),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$wind_info, {
+    showModal(
+      modalDialog(
+        title = "Wind Graph",
+        
+        p(
+          "This graph shows the gust speed (blue), wind speed (green), and wind direction (arrows) from the weather station on Rainsford Island. Wind speed is the rate at which the air is moving horizontally past a fixed point. Gusts are rapid fluctuations in wind. The arrows indicate the direction the wind is traveling (e.g., an arrow pointing towards the y-axis is wind blowing from the east). Click on the graph to see a full-screen version."),
+
+        p("Wind speed and direction influence waves which can impact coastal flooding. For example, high wind speeds that are traveling towards the shore might lead to flooding during a high tide compared to lower wind speeds or wind traveling east."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+  
+  observeEvent(input$tide_info, {
+    showModal(
+      modalDialog(
+        title = "Tide Graph",
+        
+        p(
+         "This graph shows the water level in feet or meters above mean lower low water (learn more about tidal datums", a(href = "https://tidesandcurrents.noaa.gov/datum_options.html", "here."), " The yellow, orange, and purple lines represent the NOAA coastal flood thresholds for minor, moderate, and major flood advisories (advisory definitions and examples can be found ", a(href= "https://www.weather.gov/images/okx/coastalflood/Coastal%20Flood%20Threshold%20Definitions.png", "here.")),
+
+        p("Use the drop down menu to explore different tide gauge locations."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$wave_info, {
+    showModal(
+      modalDialog(
+        title = "Wave Graph",
+        
+        p(
+         "This graph shows the maximum and significant wave height at different wave buoy locations. Maximum wave height is the single tallest wave during a sampling period while the significant wave height is the average height of the largest third of waves during a sampling period. "),
+
+        p("Use the drop down menu to explore different wave buoy locations."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$air_info, {
+    showModal(
+      modalDialog(
+        title = "Air Temperature Graph",
+        
+        p(
+         "This graph shows the air temperature measured at the weather station on Rainsford Island. AirUse the toggle in the right hand corner of the Dashboard to change the units from Fahrenheit to Celsius."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+    observeEvent(input$pressure_info, {
+    showModal(
+      modalDialog(
+        title = "Air Pressure Graph",
+        
+        p(
+         "This graph shows the air pressure measured at the weather station on Rainsford Island."),
+
+        p("Air pressure is an important metric for understanding changing weather conditions and the severity of storms. Dropping air pressure typically indicates an approaching storm system, rising air pressure indicates improving weather conditions, and stable air pressure indicates stable weather conditions. Significant drops in air pressure can also indicate severe weather systems or explosive storm developments such as ", a(href = "https://weather.com/science/weather-explainers/news/2025-11-12-what-is-a-bomb-cyclone-and-why-is-it-so-powerful", "bomb cyclones.")), 
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$flood_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Flood Comparison Graph",
+        
+        p(
+         "This graph shows the flood depth during two storms at a selected overland flood sensor location. The first storm is shown in gray and the second storm in teal. Use the drop down menu to select different station locations. Hover over the lines to see the flood depth. To learn more about the flood sensors and see their locations, use the ‘Stations’ tab. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$tide_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Tide Comparison Graph",
+        
+        p(
+         "This graph shows the water level in feet or meters above mean lower low water (learn more about tidal datums", a(href = "https://tidesandcurrents.noaa.gov/datum_options.html", "here"), " from the two selected storms. The yellow, orange, and purple lines represent the NOAA coastal flood thresholds for minor, moderate, and major flood advisories (advisory definitions and examples can be found ", a(href= "https://www.weather.gov/images/okx/coastalflood/Coastal%20Flood%20Threshold%20Definitions.png", "here.")),
+
+        p("Use the drop down menu to explore different tide gauge locations. Hover over the lines to see water level measurements. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$wind_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Wind Speed Comparison Graph ",
+        
+        p(
+         "This graph shows the wind parameters for the two selected storms. Use the drop down menu to toggle between wind speed and gust speed. Wind speed is the rate at which the air is moving horizontally past a fixed point. Gusts are rapid fluctuations in wind. Hover over the lines to see the speed. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+    observeEvent(input$wave_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Wave Comparison Graph  ",
+        
+        p(
+         "This graph shows wave parameters for the two selected storms. Use the drop down menu to toggle between maximum and significant wave heights at the Harbor Entrance and North Shore buoys. Maximum wave height is the single tallest wave during a sampling period while the significant wave height is the average height of the largest third of waves during a sampling period."), 
+        
+        p("Hover over the lines to see the wave height. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$air_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Air Temperature Comparison Graph ",
+        
+        p(
+         "This graph shows the air temperature measured at the weather station on Rainsford Island during the two selected storms.. Use the toggle in the right hand corner of the Dashboard to change the units from Fahrenheit to Celsius."), 
+        
+        p("Hover over the lines to see the temperature. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."),
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
+  observeEvent(input$pressure_compare_info, {
+    showModal(
+      modalDialog(
+        title = "Air Pressure Comparison Graph",
+        
+        p(
+         "This graph shows the air pressure measured at the weather station on Rainsford Island during the two selected storms. "),
+
+        p("Air pressure is an important metric for understanding changing weather conditions and the severity of storms. Dropping air pressure typically indicates an approaching storm system, rising air pressure indicates improving weather conditions, and stable air pressure indicates stable weather conditions. Significant drops in air pressure can also indicate severe weather systems or explosive storm developments such as ", a(href = "https://weather.com/science/weather-explainers/news/2025-11-12-what-is-a-bomb-cyclone-and-why-is-it-so-powerful", "bomb cyclones.")), 
+
+        p("Hover over the lines to see the air pressure. Lines may have different lengths due to different storm lengths. For example, the September 2026 Nor’easter lasted for 3 days while the February 2026 Nor’easter lasted for two days."), 
+        
+        footer = modalButton("Close"),
+        easyClose = TRUE,
+        size = "m"
+      )
+    )
+  })
+
   ########## Mobile Detection #############
   
   plot_theme <- reactive({
@@ -1101,8 +1336,8 @@ server <- function(input, output, session) {
     rows = ifelse(length(unique(hohonu_graph()$Location)) > 3, 2, 1)
     
     p = ggplot(hohonu_graph(), aes(x = Time_ET, y = Depth, 
-                                   color = Station.Name,)) + 
-      geom_line(linewidth = 1) + 
+                                   color = Station.Name, group = 1)) + 
+      geom_line(linewidth = 1, aes(text = paste0("<b>", Station.Name,"</b>", "<br>Time (ET): ", Time_ET, "<br>Flood Depth: ", round(Depth, 2)))) + 
       geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) + 
@@ -1121,7 +1356,7 @@ server <- function(input, output, session) {
       legend_size = 14
     }
     
-    ggplotly(p, tooltip = c("color", "y", "x")) %>%
+    ggplotly(p, tooltip = "text") %>%
       layout(
         xaxis = list(
           tickfont = list(family = "Replica LL TT", size = text_size)),
@@ -1422,9 +1657,9 @@ server <- function(input, output, session) {
     } else if(input$wave_select_compare == 'harbor.entrance.max'){
       if(unit == "m"){compare_data_2()$Harbor_Entrance_Hmax_Wave_Height_m}else{compare_data_2()$Harbor_Entrance_Hmax_Wave_Height_ft}
     }  else if(input$wave_select_compare == "north.shore.sig"){
-      if(unit == "m"){compare_data_1()$North_Shore_Hs_Wave_Height_m}else{compare_data_1()$North_Shore_Hs_Wave_Height_ft}
+      if(unit == "m"){compare_data_2()$North_Shore_Hs_Wave_Height_m}else{compare_data_2()$North_Shore_Hs_Wave_Height_ft}
     } else if(input$wave_select_compare == 'north.shore.max'){
-      if(unit == "m"){compare_data_1()$North_Shore_Hmax_Wave_Height_m}else{compare_data_1()$North_Shore_Hmax_Wave_Height_ft}
+      if(unit == "m"){compare_data_2()$North_Shore_Hmax_Wave_Height_m}else{compare_data_2()$North_Shore_Hmax_Wave_Height_ft}
     } 
     
     shiny::validate(need(wave_height_1, "Data are not available from this instrument for the first storm"))
