@@ -13,7 +13,6 @@ library(plotly)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
-
 ###### Read in Data #######
 flood.depth = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
@@ -31,7 +30,7 @@ tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>%
          Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) |> 
   dplyr::select(Time_ET, Boston_Water_Prediction) 
 
-peak = as.Date(c("2026-10-04", "2026-10-28", "2026-11-26", "2026-12-25"))
+peak = as.Date(c("2026-10-27", "2026-10-28", "2026-10-29", "2026-11-25", "2026-11-26", "2026-11-27",  "2026-12-23", "2026-12-24", "2026-12-25", "2026-12-26"))
 diff =  peak - Sys.Date()
 count_down = as.numeric(min(diff[diff >= 0]))
 
@@ -449,10 +448,11 @@ server <- function(input, output, session) {
   #### Flood Depth Text #####
   output$flood_box <- renderUI({
     
-    #water_depth <- water_depth()
-    water_depth = 0.5
+    water_depth <- water_depth()
+    water_depth = round(water_depth, 2)
+
     flood_bck <- case_when(
-      water_depth == 0 ~ "#FFF326",
+      water_depth == 0 ~ "#D8DEE9",
       water_depth < 0.5 ~ "#FFF326",
       water_depth >= 0.5 & water_depth < 1 ~ "#F59115",
       water_depth >= 1 & water_depth < 2 ~ "#F58069",
