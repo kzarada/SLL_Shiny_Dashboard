@@ -208,7 +208,7 @@ map_hohonu <- hohonu %>%
                        Unit = "Flood Depth_ft", 
                        min = 0)) |> 
   group_by(Location) %>%
-  mutate(Flood.Depth = zoo::na.approx(Flood.Depth, maxgap = 10, rule = 2)) |> 
+  mutate(Flood.Depth = zoo::na.approx(Flood.Depth, maxgap = 30, rule = 2)) |> 
   fill(c(Sponsor, Station.Name, Latitude, Longitude, Type, Directions), .direction = "down") 
 
 
