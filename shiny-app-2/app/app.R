@@ -41,7 +41,8 @@ hohonu = read.csv(file.path(data_dir, "Outputs/hohonu.csv")) %>%
 
 map_hohonu = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+         Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"), 
+         Last_Available = replace_na(Last_Available, "")) 
 
 tide_pred = read.csv(file.path(data_dir, "Outputs/tide_predictions.csv")) %>% 
   mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 

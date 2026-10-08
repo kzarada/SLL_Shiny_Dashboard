@@ -139,13 +139,11 @@ ui <- dashboardPage(
                 tabItems(
                   tabItem(tabName = "dashboard", 
                           fluidRow(
-                            
                             selectInput(
                               "storm_select", 
                               "Select Storm:", 
                               list("September 2026 Nor'easter" = "September_2026_Noreaster",
                                    "February 2026 Nor'easter" = "February_2026_Noreaster", 
-                                   "February 2026 Flooding" = "February_2026_Flooding", 
                                    "October 2025 Nor'easter" = "October_2025_Noreaster"), 
                               multiple = F)),
                           fluidRow(
@@ -158,21 +156,7 @@ ui <- dashboardPage(
                                      uiOutput("storm_overview")
                                    )
                             )),
-                            
-                            fluidRow(
-                              column(width = 12, 
-                                     sliderInput(
-                                       inputId = "time",
-                                       label   = "Select time:",
-                                       min     = start_time,
-                                       max     = end_time,
-                                       value   = start_time,
-                                       step    = 6 * 60,   # 10 minutes (in seconds)
-                                       timeFormat = "%b %d %H:%M",
-                                       animate = animationOptions(interval = 300), 
-                                       width = "85%"))),
-                            
-                            
+
                           fluidRow(  
                             column(width = 6, 
                                    class = "col-12 col-md-6", 
@@ -238,8 +222,7 @@ ui <- dashboardPage(
                                           span(selectInput(
                                      "tide_select",
                                      label = NULL, 
-                                     choices = list("Select Tide Gauge" = 'intro',
-                                                    "Gallops Island" = "gallops", 
+                                     choices = list("Gallops Island" = "gallops", 
                                                     "Cathleen Stone Island" = 'csi', 
                                                     "Essex - Main St." = 'essex', 
                                                     "NOAA - Boston" = 'boston', 
@@ -258,8 +241,7 @@ ui <- dashboardPage(
                                       span(selectInput(
                                        "wave_select",
                                        label = NULL, 
-                                       choices = list("Select Wave Buoy" = "intro",
-                                                      "Harbor Entrance" = "harbor.entrance", 
+                                       choices = list("Harbor Entrance" = "harbor.entrance", 
                                                       "North Shore" = "north.shore"),
                                        multiple = F)),
                                        info_button("wave_info")),
@@ -299,7 +281,6 @@ ui <- dashboardPage(
                                 "Select Storm 1: ", 
                                 list("September 2026 Nor'easter" = "September_2026_Noreaster",
                                      "February 2026 Nor'easter" = "February_2026_Noreaster", 
-                                     "February 2026 Flooding" = "February_2026_Flooding", 
                                      "October 2025 Nor'easter" = "October_2025_Noreaster"), 
                                 multiple = F)),
                             column(
@@ -309,24 +290,10 @@ ui <- dashboardPage(
                                 "Select Storm 2:",
                                 list("September 2026 Nor'easter" = "September_2026_Noreaster",
                                      "February 2026 Nor'easter" = "February_2026_Noreaster", 
-                                     "February 2026 Flooding" = "February_2026_Flooding", 
                                      "October 2025 Nor'easter" = "October_2025_Noreaster"), 
                                 selected = "February_2026_Noreaster",
                                 multiple = F))),
-                          
-                          fluidRow(
-                            column(
-                              width = 12, 
-                              sliderInput(
-                                inputId = "compare_time",
-                                label   = "Hours since start of storm:",
-                                min     = 0,
-                                max     = max(time_seq)/60,
-                                value   = 0,
-                                step    = 1,   # 10 minutes (in seconds)
-                                timeFormat = "%H",
-                                animate = animationOptions(interval = 300), 
-                                width = "85%"))),
+                        
                           fluidRow(
                             column(width = 6, 
                                    class = "col-12 col-md-6", 
@@ -364,8 +331,7 @@ ui <- dashboardPage(
                                       selectInput(
                                        "wind_select_compare",
                                        label = NULL, 
-                                       choices = list("Select Wind Measurement" = 'intro', 
-                                                      "Wind Speed" = 'wind_speed', 
+                                       choices = list("Wind Speed" = 'wind_speed', 
                                                       "Gust Speed" = 'gust_speed'),
                                        multiple = F)),
                                        info_button("wind_compare_info")), 
@@ -392,8 +358,7 @@ ui <- dashboardPage(
                                     span(selectInput(
                                      "tide_select_compare",
                                      label = NULL, 
-                                     choices = list("Select Tide Gauge" = 'intro',
-                                                    "Gallops Island" = "gallops", 
+                                     choices = list("Gallops Island" = "gallops", 
                                                     "Cathleen Stone Island" = 'csi',
                                                     "NOAA - Boston" = 'boston', 
                                                     "NOAA - Fall River" = 'fall.river', 
@@ -412,8 +377,7 @@ ui <- dashboardPage(
                                       span(selectInput(
                                        "wave_select_compare",
                                        label = NULL, 
-                                       choices = list("Select Wave Buoy" = "intro",
-                                                      "Harbor Entrance Sig. Wave Height" = "harbor.entrance.sig", 
+                                       choices = list("Harbor Entrance Sig. Wave Height" = "harbor.entrance.sig", 
                                                       "Harbor Entrance Max. Wave Height" = 'harbor.entrance.max', 
                                                       "North Shore Sig. Wave Height" = "north.shore.sig", 
                                                       "North Shore Max. Wave Height" = 'north.shore.max'),
@@ -672,6 +636,8 @@ server <- function(input, output, session) {
 
         p("Use the drop down menu to explore different tide gauge locations."),
         
+        p("Note: The Essex tide station does not have NWS flooding thresholds because it is not near a NOAA station with determined thresholds. The Gallops and CSI stations disply the thresholds derived for the nearby NOAA Boston station."),
+        
         footer = modalButton("Close"),
         easyClose = TRUE,
         size = "m"
@@ -702,7 +668,7 @@ server <- function(input, output, session) {
         title = "Air Temperature Graph",
         
         p(
-         "This graph shows the air temperature measured at the weather station on Rainsford Island. AirUse the toggle in the right hand corner of the Dashboard to change the units from Fahrenheit to Celsius."),
+         "This graph shows the air temperature measured at the weather station on Rainsford Island. Use the toggle in the right hand corner of the Dashboard to change the units from Fahrenheit to Celsius."),
         
         footer = modalButton("Close"),
         easyClose = TRUE,
@@ -981,20 +947,6 @@ server <- function(input, output, session) {
           Notably, even with the snow, the sensors still observed flooding during the storm. </strong> <u>Click here</u> to learn more about this storm in the 
           SLL Field Observation post. Use the time slider below to explore storm conditions."))
       
-    }else if(input$storm_select == "February_2026_Flooding"){
-      
-      tags$a(
-        href = url,
-        style = 'color:black;',
-        target = "_blank",
-        HTML(
-          "King tides surrounding the full moon on February 1, 2026 in conjunction with an offshore storm resulted in overland flooding
-          at Tenean Beach in Dorchester. The Boston NOAA tide gauge reached a peak of 12.54 feet MLLW at 10 am on February 1st, 
-          exceeding the National Weather Service threshold for minor flooding. <strong>Please note that snow pack impacted flood sensor readings. Snow under the sensors is recorded as flooding. 
-          Notably, even with the snow, the sensors still observed flooding during the King tides. </strong> 
-          <u>Click here</u> to learn more about this storm in the 
-          SLL Field Observation post. Use the time slider below to explore storm conditions."))
-      
     } else if(input$storm_select == "October_2025_Noreaster"){
       
       tags$a(
@@ -1059,8 +1011,6 @@ server <- function(input, output, session) {
     ggplot(combo_data(), aes(x = Time_ET, y = wind_speed)) +
       geom_line(aes(x = Time_ET, y = wind_speed, color = "Wind Speed"), linewidth = 1) +
       geom_line(aes(x = Time_ET, y = gust_speed, color = "Gust Speed"), linewidth = 1) +
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       ylim(c(-2, y_max)) + 
       geom_segment(data = wind_dir(), 
                    aes(xend = arrow_xend, 
@@ -1082,9 +1032,7 @@ server <- function(input, output, session) {
     
     unit = unit_state() 
     
-    wave_height = if(input$wave_select == 'intro'){
-      if(unit == "m"){combo_data()$Harbor_Entrance_Hs_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hs_Wave_Height_ft}
-    }else if(input$wave_select == "harbor.entrance"){
+    wave_height = if(input$wave_select == "harbor.entrance"){
       if(unit == "m"){combo_data()$Harbor_Entrance_Hs_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hs_Wave_Height_ft}
     } else if(input$wave_select == 'rainsford'){
       if(unit == "m"){combo_data()$Rainsford_Hs_Wave_Height_m}else{combo_data()$Rainsford_Hs_Wave_Height_ft}
@@ -1092,9 +1040,7 @@ server <- function(input, output, session) {
       if(unit == "m"){combo_data()$North_Shore_Hs_Wave_Height_m}else{combo_data()$North_Shore_Hs_Wave_Height_ft}
     }
     
-    max_height = if(input$wave_select == 'intro'){
-      if(unit == "m"){combo_data()$Harbor_Entrance_Hmax_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hmax_Wave_Height_ft}
-    }else if(input$wave_select == "harbor.entrance"){
+    max_height = if(input$wave_select == "harbor.entrance"){
       if(unit == "m"){combo_data()$Harbor_Entrance_Hmax_Wave_Height_m}else{combo_data()$Harbor_Entrance_Hmax_Wave_Height_ft}
     } else if(input$wave_select == 'rainsford'){
       NA
@@ -1106,13 +1052,6 @@ server <- function(input, output, session) {
     
     y_max = max(max_height, convert_units(2.5, unit))
     
-    ggtitle = case_when(
-      input$wave_select == "intro" ~ "Harbor Entrance Wave Buoy",
-      input$wave_select == "harbor.entrance" ~ "Harbor Entrance Wave Buoy", 
-      input$wave_select == "rainsford" ~ "Rainsford NE Wave Buoy", 
-      input$wave_select == 'north.shore' ~ "North Shore Wave Buoy", 
-      .default = NA
-    )
     
     y_label = ifelse(unit == 'ft', "Wave Height (ft)", "Wave Height (m)")
     
@@ -1124,9 +1063,6 @@ server <- function(input, output, session) {
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("") + 
-      ggtitle(ggtitle) + 
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       scale_color_manual(
         values = c("#256EFF","#2EBBAD")) + 
       plot_theme() + 
@@ -1180,7 +1116,6 @@ server <- function(input, output, session) {
     y_label = ifelse(unit == 'ft', "Height (ft, MLLW)", "Height (m, MLLW)")
     
     ggtitle = case_when(
-      input$tide_select == "intro" ~ "NOAA Tide Gauge and Flood Thresholds - Boston",
       input$tide_select == "gallops" ~ "Gallops Tide Gauge and NOAA Flood Thresholds", 
       input$tide_select == 'csi' ~ "Cathleen Stone Island Tide Gauge and NOAA Flood Thresholds", 
       input$tide_select == 'essex' ~ "Essex - Main St. Tide Gauge",
@@ -1205,9 +1140,7 @@ server <- function(input, output, session) {
     else if(input$tide_select == 'essex'){
       combo_data()$Essex_Water_Level_ft
     }
-    else if(input$tide_select == 'intro'){
-      combo_data()$Boston_Water_MLLW
-    }
+   
     
     shiny::validate(need(water_level, "Data are not available from this instrument"))
     
@@ -1215,7 +1148,7 @@ server <- function(input, output, session) {
       water_level/3.281}else{water_level}
     
     
-    major = if(input$tide_select %in% c("gallops", "csi", "boston", "intro")){
+    major = if(input$tide_select %in% c("gallops", "csi", "boston")){
       16}
     else if(input$tide_select == 'essex'){
       NA
@@ -1229,7 +1162,7 @@ server <- function(input, output, session) {
     major = if(unit == "m"){
       major/3.281}else{major}
     
-    moderate = if(input$tide_select %in% c("gallops", "csi", "boston", "intro")){
+    moderate = if(input$tide_select %in% c("gallops", "csi", "boston")){
       14.49}
     else if(input$tide_select == 'essex'){
       NA
@@ -1243,7 +1176,7 @@ server <- function(input, output, session) {
     moderate = if(unit == "m"){
       moderate/3.281}else{moderate}
     
-    minor = if(input$tide_select %in% c("gallops", "csi", "boston", "intro")){
+    minor = if(input$tide_select %in% c("gallops", "csi", "boston")){
       12.50}
     else if(input$tide_select == 'essex'){
       NA
@@ -1265,8 +1198,6 @@ server <- function(input, output, session) {
       geom_line(aes(color = "Observed Water Level",
                     text = paste0("Time (ET): ", Time_ET, "<br> Observed water level: ", round(water_level, 2))), linewidth = 1) +
       scale_color_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D","#002366")) + 
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) +
       xlab("") +
       ggtitle(ggtitle) +
@@ -1338,8 +1269,6 @@ server <- function(input, output, session) {
     p = ggplot(hohonu_graph(), aes(x = Time_ET, y = Depth, 
                                    color = Station.Name, group = 1)) + 
       geom_line(linewidth = 1, aes(text = paste0("<b>", Station.Name,"</b>", "<br>Time (ET): ", Time_ET, "<br>Flood Depth: ", round(Depth, 2)))) + 
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) + 
       xlab("") + 
       ylim(c(0, y_max)) + 
@@ -1397,8 +1326,6 @@ server <- function(input, output, session) {
                                  group = 1, text = paste0("Time (ET): ", Time_ET, 
                                                           "<br>Air Temp: ", round(temp, 2)))) +
       geom_line(linewidth = 1, color = "#256EFF") +
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       xlab("") + 
       ylab(y_label) +
       plot_theme()
@@ -1459,8 +1386,6 @@ server <- function(input, output, session) {
       geom_line( linewidth= 1, color = "#2EBBAD") + 
       ylab("Air Pressure (inHg)") + 
       xlab("") + 
-      geom_vline(xintercept = with_tz(input$time, tzone = "America/New_York"), 
-                 color = "darkred", linewidth = 1, linetype = "dashed") +
       plot_theme() + 
       theme(plot.title = element_text(size = 18))
     
@@ -1526,11 +1451,7 @@ server <- function(input, output, session) {
     
     wind_speed_1 = 
       
-      if(input$wind_select_compare == "intro"){
-        
-        if(unit == "m"){compare_data_1()$Wind.Speed_RMYoung_mph/2.237}else{compare_data_1()$Wind.Speed_RMYoung_mph}
-        
-      } else if(input$wind_select_compare == "wind_speed"){
+     if(input$wind_select_compare == "wind_speed"){
         
         if(unit == "m"){compare_data_1()$Wind.Speed_RMYoung_mph/2.237}else{compare_data_1()$Wind.Speed_RMYoung_mph}
         
@@ -1540,11 +1461,7 @@ server <- function(input, output, session) {
       }
     
     wind_speed_2 = 
-      if(input$wind_select_compare == "intro"){
-        
-        if(unit == "m"){compare_data_2()$Wind.Speed_RMYoung_mph/2.237}else{compare_data_2()$Wind.Speed_RMYoung_mph}
-        
-      } else if(input$wind_select_compare == "wind_speed"){
+      if(input$wind_select_compare == "wind_speed"){
         
         if(unit == "m"){compare_data_2()$Wind.Speed_RMYoung_mph/2.237}else{compare_data_2()$Wind.Speed_RMYoung_mph}
         
@@ -1562,7 +1479,6 @@ server <- function(input, output, session) {
       max(wind_speed_1 + 1, wind_speed_2 + 1,  6.7)}else{max(wind_speed_1 + 1, wind_speed_2 + 1,  15)}
     
     ggtitle = case_when(
-      input$wind_select_compare == "intro" ~ "Wind Speed at Rainsford Island",
       input$wind_select_compare == "wind_speed" ~ "Wind Speed at Rainsford Island", 
       input$wind_select_compare == "gust_speed" ~ "Gust Speed at Rainsford Island", 
       .default = NA
@@ -1570,9 +1486,9 @@ server <- function(input, output, session) {
     
    p =  ggplot(compare_data_1(), aes(x = Time_Seq/60, y = wind_speed_1, group =1)) +
       geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = wind_speed_1, color = storm_1, 
-                                             text = paste0(storm_1, " speed: ", round(wind_speed_1, 2))), linewidth = 1) +
+                                             text = paste0(storm_1, " speed: ", round(wind_speed_1, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
       geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = wind_speed_2, color = storm_2, 
-                                             text = paste0(storm_2, " speed: ", round(wind_speed_2,2))), linewidth = 1) +
+                                             text = paste0(storm_2, " speed: ", round(wind_speed_2,2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
       geom_vline(xintercept =input$compare_time , 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylim(c(-2, y_max)) + 
@@ -1638,9 +1554,7 @@ server <- function(input, output, session) {
     storm_2 = str_replace_all(input$compare_2, "_", " ")
     
     
-    wave_height_1 = if(input$wave_select_compare == 'intro'){
-      if(unit == "m"){compare_data_1()$Harbor_Entrance_Hs_Wave_Height_m}else{compare_data_1()$Harbor_Entrance_Hs_Wave_Height_ft}
-    }else if(input$wave_select_compare == "harbor.entrance.sig"){
+    wave_height_1 = if(input$wave_select_compare == "harbor.entrance.sig"){
       if(unit == "m"){compare_data_1()$Harbor_Entrance_Hs_Wave_Height_m}else{compare_data_1()$Harbor_Entrance_Hs_Wave_Height_ft}
     } else if(input$wave_select_compare == 'harbor.entrance.max'){
       if(unit == "m"){compare_data_1()$Harbor_Entrance_Hmax_Wave_Height_m}else{compare_data_1()$Harbor_Entrance_Hmax_Wave_Height_ft}
@@ -1650,9 +1564,7 @@ server <- function(input, output, session) {
       if(unit == "m"){compare_data_1()$North_Shore_Hmax_Wave_Height_m}else{compare_data_1()$North_Shore_Hmax_Wave_Height_ft}
     } 
     
-    wave_height_2 = if(input$wave_select_compare == 'intro'){
-      if(unit == "m"){compare_data_2()$Harbor_Entrance_Hs_Wave_Height_m}else{compare_data_2()$Harbor_Entrance_Hs_Wave_Height_ft}
-    }else if(input$wave_select_compare == "harbor.entrance.sig"){
+    wave_height_2 = if(input$wave_select_compare == "harbor.entrance.sig"){
       if(unit == "m"){compare_data_2()$Harbor_Entrance_Hs_Wave_Height_m}else{compare_data_2()$Harbor_Entrance_Hs_Wave_Height_ft}
     } else if(input$wave_select_compare == 'harbor.entrance.max'){
       if(unit == "m"){compare_data_2()$Harbor_Entrance_Hmax_Wave_Height_m}else{compare_data_2()$Harbor_Entrance_Hmax_Wave_Height_ft}
@@ -1668,7 +1580,6 @@ server <- function(input, output, session) {
     y_max = max(wave_height_1, wave_height_2, convert_units(2.5, unit))
     
     ggtitle = case_when(
-      input$wave_select_compare == "intro" ~ "Harbor Entrance Wave Buoy",
       input$wave_select_compare == "harbor.entrance.sig" ~ "Harbor Entrance Wave Buoy - Significant Wave Height", 
       input$wave_select_compare == 'harbor.entrance.max' ~ "Harbor Entrance Wave Buoy - Maximum Wave Height", 
       input$wave_select_compare == "north.shore.sig" ~ "North Shore Wave Buoy - Significant Wave Height", 
@@ -1680,15 +1591,14 @@ server <- function(input, output, session) {
     
     p = ggplot(compare_data_1(), aes(x = Time_Seq/60, y = wave_height_1, group = 1)) + 
       geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = wave_height_1, color = storm_1, 
-                                             text = paste0(storm_1, " wave height: ", round(wave_height_1, 2))), linewidth= 1) + 
+                                             text = paste0(storm_1, " wave height: ", round(wave_height_1, 2), "<br>Time (ET): ", Time_ET)), linewidth= 1) + 
       geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = wave_height_2, color = storm_2, 
-                                             text = paste0(storm_2, " wave height: ", round(wave_height_2, 2))), linewidth = 1) + 
+                                             text = paste0(storm_2, " wave height: ", round(wave_height_2, 2),"<br>Time (ET): ", Time_ET)), linewidth = 1) + 
       geom_vline(xintercept = input$compare_time, 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) + 
       ylim(c(0, y_max)) + 
       xlab("Hours since start of storm") + 
-      ggtitle(ggtitle) + 
       scale_color_manual(
         values = c("#2EBBAD", 'gray40')) +
       plot_theme() + 
@@ -1748,7 +1658,6 @@ server <- function(input, output, session) {
     storm_2 = str_replace_all(input$compare_2, "_", " ")
     
     ggtitle = case_when(
-      input$tide_select_compare == "intro" ~ "NOAA Tide Gauge and Flood Thresholds - Boston",
       input$tide_select_compare == "gallops" ~ "Gallops Tide Gauge and Flood Thresholds",
       input$tide_select_compare == 'csi' ~ "Cathleen Stone Island Tide Gauge and Flood Thresholds",
       input$tide_select_compare == 'essex' ~ "Essex - Main St. Tide Gauge",  
@@ -1769,9 +1678,7 @@ server <- function(input, output, session) {
       compare_data_1()$Essex_Water_Level_ft   
     } else if(input$tide_select_compare == 'falmouth'){
         compare_data_1()$Falmouth_Water_MLLW
-    } else if(input$tide_select_compare == 'intro'){
-      compare_data_1()$Boston_Water_MLLW
-    }
+    } 
     
     
     water_level_2 = if(input$tide_select_compare == "gallops"){
@@ -1786,8 +1693,6 @@ server <- function(input, output, session) {
       compare_data_2()$Essex_Water_Level_ft   
     } else if(input$tide_select_compare == 'falmouth'){
         compare_data_2()$Falmouth_Water_MLLW
-    } else if(input$tide_select_compare == 'intro'){
-      compare_data_2()$Boston_Water_MLLW
     }
     
     shiny::validate(need(water_level_1, "Data are not available from this instrument for Storm 1"))
@@ -1800,7 +1705,7 @@ server <- function(input, output, session) {
       water_level_2/3.281}else{water_level_2}
     
     
-    major = if(input$tide_select_compare %in% c("intro", "gallops", 'csi', "boston")){
+    major = if(input$tide_select_compare %in% c("gallops", 'csi', "boston")){
       16}
     else if(input$tide_select_compare == 'essex'){
       NA
@@ -1814,7 +1719,7 @@ server <- function(input, output, session) {
     major = if(unit == "m"){
       major/3.281}else{major}
     
-    moderate = if(input$tide_select_compare %in% c("intro", "gallops", 'csi', "boston")){
+    moderate = if(input$tide_select_compare %in% c("gallops", 'csi', "boston")){
       14.49}
     else if(input$tide_select_compare == 'essex'){
       NA
@@ -1829,7 +1734,7 @@ server <- function(input, output, session) {
     moderate = if(unit == "m"){
       moderate/3.281}else{moderate}
     
-    minor = if(input$tide_select_compare %in% c("intro", "gallops", 'csi', "boston")){
+    minor = if(input$tide_select_compare %in% c("gallops", 'csi', "boston")){
       12.50}
     else if(input$tide_select_compare == 'fall.river'){
       6.98
@@ -1848,8 +1753,8 @@ server <- function(input, output, session) {
       geom_hline(aes(yintercept = minor, color = "NOAA - Minor Flooding"), linewidth = 1, linetype = 'dotted') + 
       geom_hline(aes(yintercept = moderate, color = "NOAA - Moderate Flooding"), linewidth = 1, linetype = 'dotted') + 
       geom_hline(aes(yintercept = major, color = "NOAA - Major Flooding"), linewidth = 1, linetype = 'dotted') + 
-      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = water_level_1, color = paste0("Water level ", storm_1), text = paste0(storm_1, " water level: ", round(water_level_1, 2))), linewidth = 1) +
-      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = water_level_2, color = paste0("Water level ", storm_2), text = paste0(storm_2, " water level: ", round(water_level_2, 2))), linewidth = 1) +
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = water_level_1, color = paste0("Water level ", storm_1), text = paste0(storm_1, " water level: ", round(water_level_1, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = water_level_2, color = paste0("Water level ", storm_2), text = paste0(storm_2, " water level: ", round(water_level_2, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
       scale_color_manual(values = c("#8F62FF", "#F6C871", "#EE7E6D", "#2EBBAD", '#3A434C')) + 
       geom_vline(xintercept = input$compare_time , 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
@@ -1935,8 +1840,8 @@ server <- function(input, output, session) {
     y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
     
     p = ggplot(flood.data.1, aes(x = Time_Seq/60, y = Depth_1, group = 1)) + 
-      geom_line(data = flood.data.1, aes(x = Time_Seq/60, y = Depth_1, color = storm_1, text = paste0("Flood depth: ", Depth_1)), linewidth= 1) + 
-      geom_line(data = flood.data.2, aes(x = Time_Seq/60, y = Depth_2, color = storm_2, text = paste0("Flood depth: ", Depth_2)), linewidth = 1) + 
+      geom_line(data = flood.data.1, aes(x = Time_Seq/60, y = Depth_1, color = storm_1, text = paste0("Flood depth: ", Depth_1, "<br>Time (ET): ", Time_ET)), linewidth= 1) + 
+      geom_line(data = flood.data.2, aes(x = Time_Seq/60, y = Depth_2, color = storm_2, text = paste0("Flood depth: ", Depth_2, "<br>Time (ET): ", Time_ET)), linewidth = 1) + 
       geom_vline(xintercept = input$compare_time, 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab(y_label) + 
@@ -2014,8 +1919,8 @@ server <- function(input, output, session) {
     shiny::validate(need(temp_2, "Data are not available from this instrument for the second storm"))
     
     p = ggplot(compare_data_1(), aes(x = Time_Seq/60, y = temp_1, group = 1)) +
-      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = temp_1, color = storm_1, text = paste0(storm_1, " air temperature: ", round(temp_1, 2))), linewidth = 1) +
-      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = temp_2, color = storm_2, text = paste0(storm_2, " air temperature: ", round(temp_2, 2))), linewidth = 1) +
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = temp_1, color = storm_1, text = paste0(storm_1, " air temperature: ", round(temp_1, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = temp_2, color = storm_2, text = paste0(storm_2, " air temperature: ", round(temp_2, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) +
       geom_vline(xintercept =input$compare_time , 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       xlab("Hours since start of storm") + 
@@ -2088,8 +1993,8 @@ server <- function(input, output, session) {
     
 
     p = ggplot(compare_data_1(), aes(x = Time_Seq/60, y = air_1, group = 1)) + 
-      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = air_1, color = storm_1, text = paste0(storm_1, " air pressure: ", round(air_1, 2))), linewidth= 1) + 
-      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = air_2, color = storm_2, text = paste0(storm_2, " air pressure: ", round(air_2, 2))), linewidth = 1) + 
+      geom_line(data = compare_data_1(), aes(x = Time_Seq/60, y = air_1, color = storm_1, text = paste0(storm_1, " air pressure: ", round(air_1, 2), "<br>Time (ET): ", Time_ET)), linewidth= 1) + 
+      geom_line(data = compare_data_2(), aes(x = Time_Seq/60, y = air_2, color = storm_2, text = paste0(storm_2, " air pressure: ", round(air_2, 2), "<br>Time (ET): ", Time_ET)), linewidth = 1) + 
       geom_vline(xintercept = input$compare_time, 
                  color = "darkred", linewidth = 1, linetype = "dashed") +
       ylab("Air Pressure (inHg)") + 

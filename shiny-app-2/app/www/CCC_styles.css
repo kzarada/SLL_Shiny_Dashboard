@@ -217,7 +217,7 @@ body {
 
   /* Map fills most of the viewport height */
   .map-box {
-    height: 65vh;
+    height: 75vh;
     min-height: 280px;
     width: 100% !important;
     box-sizing: border-box;
