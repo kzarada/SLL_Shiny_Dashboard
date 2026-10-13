@@ -1499,7 +1499,9 @@ server <- function(input, output, session) {
     readFunc = function(path){
       read.csv(path) %>% 
         mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>%
+        mutate(Last_Available = as.character(Last_Available), 
+               Last_Available = replace_na(Last_Available, "")) 
     }
   )
   
