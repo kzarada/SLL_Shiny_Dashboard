@@ -74,7 +74,8 @@ proxy:
       display-name: Climate Personality Quiz
       description: Discover your climate personality
       container-image: climate_quiz:latest
-      port: 80
+      container-port: 80
+      container-path: /app/ 
       minimum-seats-available: 10
       seats-per-container: 10
       pull-policy: IfNotPresent
