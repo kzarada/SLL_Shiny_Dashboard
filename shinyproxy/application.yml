@@ -74,7 +74,7 @@ proxy:
       display-name: Climate Personality Quiz
       description: Discover your climate personality
       container-image: climate_quiz:latest
-      container-port: 80
+      port: 80
       minimum-seats-available: 10
       seats-per-container: 10
       container-network: sp-net 
