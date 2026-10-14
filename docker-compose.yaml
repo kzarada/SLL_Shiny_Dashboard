@@ -62,7 +62,7 @@ services:
   climate_quiz: 
       build: ./climate_quiz
       image: climate_quiz:latest
-      platform: nginx
+      platform: linux/amd64
       profiles: 
       - build
 
