@@ -51,20 +51,23 @@ services:
       - sp-net
 
   shiny-app-4:
-      build: ./shiny-app-4
-      image: sll_shiny_dashboard-shiny-app-4:latest
-      platform: linux/amd64
-      profiles:
+    build: 
+      context: ./shiny-app-4
+    image: sll_shiny_dashboard-shiny-app-4:latest
+    platform: linux/amd64
+    profiles:
       - build
-      networks:
+    networks:
         - sp-net
   
   climate_quiz: 
-      build: ./climate_quiz
-      image: climate_quiz:latest
-      platform: linux/amd64
-      profiles: 
+    build: ./climate_quiz
+    image: climate_quiz:latest
+    platform: linux/amd64
+    profiles: 
       - build
+    networks:
+      - sp-net
 
 networks:
   sp-net:
