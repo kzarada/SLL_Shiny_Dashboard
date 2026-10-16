@@ -20,7 +20,7 @@ proxy:
       container-image: sll_shiny_dashboard-shiny-app-1:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 4
+      minimum-seats-available: 5
       seats-per-container: 5
       container-network: sp-net 
       pull-policy: IfNotPresent
@@ -34,7 +34,7 @@ proxy:
       container-image: sll_shiny_dashboard-shiny-app-2:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 4
+      minimum-seats-available: 5
       seats-per-container: 5
       container-network: sp-net 
       pull-policy: IfNotPresent
@@ -48,8 +48,8 @@ proxy:
       container-image: sll_shiny_dashboard-shiny-app-3:latest
       container-port: 3838
       container-path: /app/  
-      minimum-seats-available: 2
-      seats-per-container: 4
+      minimum-seats-available: 5
+      seats-per-container: 5
       container-network: sp-net 
       pull-policy: IfNotPresent
 
@@ -75,7 +75,7 @@ proxy:
       description: Discover your climate personality
       container-image: climate_quiz:latest
       port: 80
-      minimum-seats-available: 10
-      seats-per-container: 10
+      minimum-seats-available: 30
+      seats-per-container: 30
       container-network: sp-net 
       pull-policy: IfNotPresent
