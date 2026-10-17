@@ -6,6 +6,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./shinyproxy/application.yml:/opt/shinyproxy/application.yml
+    group_add:
+      - "969"
     restart: unless-stopped
     networks:
       - sp-net
