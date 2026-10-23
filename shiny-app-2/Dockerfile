@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libfontconfig1-dev \
     libcairo2-dev \
+    libfreetype6-dev \
     libxt-dev \
     libpng-dev \
     libjpeg-dev \
@@ -20,7 +21,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN R -e "install.packages(c('s2', 'sf', 'leaflet', 'fresh', 'shinydashboard', 'shinybrowser', 'vroom', 'fs', 'zoo', 'shinyWidgets', 'shinyfullscreen', 'bsicons', 'fontawesome', 'ggiraph'), repos='https://cloud.r-project.org')"
+RUN R -e "install.packages(c('s2', 'sf', 'leaflet', 'fresh', 'shinydashboard', 'shinybrowser', 'vroom', 'fs', 'zoo', 'shinyWidgets', 'shinyfullscreen', 'bsicons', 'fontawesome', 'ggiraph'), dependencies=TRUE, repos='https://cloud.r-project.org')"
 
 RUN rm -rf /srv/shiny-server/*
 
