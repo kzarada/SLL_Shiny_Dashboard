@@ -1,17 +1,7 @@
 /* ═══════════════════════════════════════
-   Docker CSS
+   FONTS & GLOBAL BASE
 ═══════════════════════════════════════ */
 
-/* Register font */
-  @font-face {
-    font-family: 'Replica Mono LL TT';
-    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
-    url('ReplicaMonoLLTT-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-/* New — Replica (non-mono) for body text */
 @font-face {
   font-family: 'Replica LL TT';
   src: url('ReplicaLLTT-Regular.ttf') format('truetype');
@@ -33,7 +23,6 @@
   font-style: italic;
 }
 
-/* Update body only */
 body {
   font-family: 'Replica LL TT', sans-serif;
 }
@@ -44,124 +33,68 @@ body {
   gap: 10px;
 }
 
+.recalculating { 
+  opacity: 1.0 !important; 
+}
+
 
 /* ═══════════════════════════════════════
-   HEADER
+   HEADER & NAVBAR
 ═══════════════════════════════════════ */
 
-/* Title text injected via JS into the navbar */
+/* Navbar title injected via JS */
 .myClass {
-  font-size: clamp(13px, 2.5vw, 28px); /* scales from phone → desktop */
+  font-size: clamp(13px, 2.5vw, 28px);
   line-height: 40px;
-  text-align: left;
-  align-items: center;
-  font-family: "Replica Mono LL TT", monospace;
+  text-align: center;             /* Changed from left to center */
+  margin: 0 auto;                 /* Added: centers block within flex containers */
   padding: 0 8px;
   overflow: hidden;
   white-space: nowrap;
   color: white !important;
 }
 
-.recalculating { 
-  opacity: 1.0 !important; 
-}
-
-/* Unit toggle inside navbar-custom-menu */
+/* Unit toggle wrapper */
 .main-header .navbar .navbar-custom-menu .shiny-input-container {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
   padding: 0 16px;
   height: 40px;
 }
 
- .pretty.p-switch .state:before{
-   border: 2px solid white!important;
-  }
-  
-   /* track border (off state) */
-      #unit_toggle ~ .state label:before {
-        border-color: white !important;
-      }
-      /* knob color */
-      #unit_toggle ~ .state label:after {
-        background-color: white !important;
-      }
-      /* keep border black + control fill color when switch is ON */
-      #unit_toggle:checked ~ .state label:before {
-        border-color: white !important;
-        background-color: white !important;  /* since fill = TRUE */
-      }
-      
-      /* Checkmark color for selected pickerInput items */
-.bootstrap-select .dropdown-menu li a span.check-mark {
-  color: black !important;
+/* Switches & Toggles */
+.pretty.p-switch .state:before,
+#unit_toggle ~ .state label:before,
+#unit_toggle:checked ~ .state label:before {
+  border: 2px solid white !important;
 }
 
-/* Some bootstrap-select versions draw the check via ::after instead */
-.bootstrap-select .dropdown-menu li a span.check-mark:after {
-  color: black !important;
+#unit_toggle ~ .state label:after,
+#unit_toggle:checked ~ .state label:before {
+  background-color: white !important;
 }
 
-/* Make sure the active/selected item text color doesn't override it */
+.state span {
+  font-size: clamp(10px, 16px, 16px);
+  color: white !important;
+}
+
+/* Bootstrap Select Dropdowns */
+.bootstrap-select .dropdown-menu li a span.check-mark,
+.bootstrap-select .dropdown-menu li a span.check-mark:after,
 .bootstrap-select .dropdown-menu li a.active,
-.bootstrap-select .dropdown-menu li a.selected {
+.bootstrap-select .dropdown-menu li a.selected,
+.dropdown-menu.inner li a span.text,
+.filter-option-inner-inner,
+.bs-actionsbox .btn-group button {
   color: black !important;
 }
 
-@media (max-width: 768px) {
+.dropdown-menu {
+  padding: 0 !important; 
+  margin: 0 !important;
+}
 
-  .main-header .logo {
-    display: none !important;
-  }
-
-  /* Title — allow it to grow and fill remaining space */
-  .myClass {
-    display: inline-block !important;
-    line-height: 40px;
-    font-size: clamp(11px, 3.5vw, 16px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left !important;
-    padding: 0 6px !important;
-    color: white;
-    max-width: calc(100% - 90px) !important; /* leave room for hamburger + switch */
-  }
-  /* Remove padding from the right container */
-  .main-header .navbar-custom-menu {
-    margin-right: 2 !important;
-    padding-right: 2 !important;
-  }
-
-  .main-header .navbar-custom-menu > .navbar-nav {
-    margin: 0 !important;
-  }
-
-  /* Force the toggle to the far right */
-  .unit-toggle-nav {
-    position: absolute;
-    right: 5px;     
-    top: 5px;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Remove extra spacing from Shiny input wrapper */
-  .unit-toggle-nav .shiny-input-container {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: auto !important;
-  }
-
-  /* Shrink the switch */
-  .unit-toggle-nav .pretty {
-    transform: scale(0.75);
-    transform-origin: right center;
-    margin: 0;
-  }
-  
-
-}   /* end media  */
 
 /* ═══════════════════════════════════════
    FOOTER
@@ -189,22 +122,212 @@ body {
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-  .app-footer {
-    font-size: 12px;       /* smaller text */
-    padding: 5px 8px;      /* less vertical padding */
-    line-height: 1.3;
-  }
+
+/* ═══════════════════════════════════════
+   LAYOUT — BOXES & CONTENT
+═══════════════════════════════════════ */
+
+.map-box,
+.plot-box {
+  height: auto !important;
+  box-sizing: border-box;
+  aspect-ratio: 9/5 !important;
+}
+.flood-box {
+  height: auto !important;
+  box-sizing: border-box;
+  aspect-ratio: 18/5 !important;
+  overflow:hidden
+}
+
+.text-box {
+  height: 35vh;
+  overflow-y: auto;
+}
+
+.box .box-body .shiny-ggirafe-output {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Box Typography */
+.box-title {
+  font-size: clamp(14px, 3vw, 20px);
+  overflow: visible;
+  text-align: left;
+}
+
+.box-text {
+  font-size: clamp(16px, 4vw, 24px);
+  overflow-y: auto;
+  text-align: left;
+}
+
+/* Box Headers & Info Buttons */
+.box-header {
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 15px !important;
+}
+
+.box-header .box-title {
+  line-height: normal !important;
+  margin: 0 !important;
+  display: block !important;
+  width: auto !important;
+  padding-right: 35px !important;
+}
+
+.box-header .form-group,
+.box-header .selectize-control {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.box-header .selectize-control {
+  text-align: center;
+}
+
+.box-header .selectize-input {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: unset !important;
+  height: 25px !important;
+  font-size: 16px !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.selectize-input .item,
+.selectize-input > input {
+  display: inline-block !important;
+  width: 100%;
+  text-align: center !important;
+  float: none !important;
+}
+
+.box-header .info-button {
+  position: absolute !important;
+  right: 10px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  background: transparent !important;
+  border: none !important;
+  color: white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  box-shadow: none !important;
+  z-index: 10 !important;
+}
+
+.box-header .info-button:hover {
+  color: #ddd !important;
+  transform: translateY(-50%) scale(1.15) !important;
+}
+
+.box-header .info-button:focus,
+.box-header .info-button:active {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 
 /* ═══════════════════════════════════════
-   LAYOUT — boxes & columns
+   SLIDERS
 ═══════════════════════════════════════ */
 
-@media (max-width: 768px) {
+.shiny-input-container,
+.irs {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  /* Stack boxes vertically */
+.shiny-input-container {
+  text-align: center;
+}
+
+.irs-grid-text,
+.irs--shiny .irs-min,
+.irs--shiny .irs-max {
+  font-size: 12pt;
+}
+
+.irs-grid-text:last-child {
+  display: none;
+}
+
+
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVE (max-width: 768px)
+═══════════════════════════════════════ */
+
+@media (max-width: 1000px) {
+
+  /* Header adjustments */
+  .main-header .logo {
+    display: none !important;
+  }
+
+  .myClass {
+    display: block !important;    /* Changed from inline-block to block */
+    line-height: 40px;
+    font-size: clamp(11px, 3.5vw, 16px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center !important;/* Changed from left to center */
+    margin: 0 auto !important;    /* Added: enforces horizontal centering */
+    padding: 0 6px !important;
+    color: white;
+    max-width: calc(100% - 90px) !important;
+  }
+
+  .main-header .navbar-custom-menu {
+    margin-right: 2px !important;
+    padding-right: 2px !important;
+  }
+
+  .main-header .navbar-custom-menu > .navbar-nav {
+    margin: 0 !important;
+  }
+
+  .unit-toggle-nav {
+    position: absolute;
+    right: 5px;     
+    top: 5px;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .unit-toggle-nav .shiny-input-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+  }
+
+  .unit-toggle-nav .pretty {
+    transform: scale(0.75);
+    transform-origin: right center;
+    margin: 0;
+  }
+
+  /* Footer adjustments */
+  .app-footer {
+    font-size: 12px;
+    padding: 5px 8px;
+    line-height: 1.3;
+  }
+
+  /* Layout adjustments */
   .context-wrapper {
     flex-direction: column;
   }
@@ -215,252 +338,49 @@ body {
     box-sizing: border-box;
   }
 
-  /* Map fills most of the viewport height */
-  .map-box {
-    height: 75vh;
-    min-height: 280px;
-    width: 100% !important;
-    box-sizing: border-box;
+  .map-box,
+  .plot-box, 
+  .flood-box {
+    min-height: 280px !important;
+    aspect-ratio: 4/4 !important;
   }
 
-  /* Plots match map height */
-  .plot-box {
-    height: 55vh;
-    min-height: 280px;
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-  
-  /* Plots match map height */
   .text-box {
-    height: 15vh;
-    min-height: 280px;
-    width: 100% !important;
-    box-sizing: border-box;
-    text-overflow:scroll; 
+    height: auto !important;
+    min-height: 180px !important;
   }
 
-
-  /* Leaflet and Shiny output wrappers fill their parent */
   .leaflet-container,
   .shiny-plot-output,
-  .plotly.html-widget {
+  .shiny-ggirafe-output,
+  .girafe.html-widget {
     height: 100% !important;
     width: 100% !important;
+    padding: 0 !important;
+    overflow: auto; 
   }
 
-  /* Prevent Bootstrap grid horizontal overflow */
   .row {
     margin-left: 0 !important;
     margin-right: 0 !important;
   }
 
-  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4,
-  .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8,
-  .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
-    width: 100% !important;
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-  }
-
-  /* Add bottom padding so footer doesn't cover content */
   .content-wrapper {
     padding-bottom: 50px !important;
   }
 
-  /* Larger tap targets for selectize inputs */
+  /* General mobile inputs */
   .selectize-input {
-    height: 36px !important;
-    font-size: 16px !important;  /* prevents iOS auto-zoom */
+    height: 36px;
+    font-size: 16px !important;
     line-height: 1.5 !important;
-    padding: 6px 8px !important;
+    padding: 6px 8px;
   }
 
-  /* Slider readability */
-  .irs-grid-text {
-    font-size: 8px;
-  }
-
+  /* Mobile sliders */
+  .irs-grid-text,
   .irs--shiny .irs-min,
   .irs--shiny .irs-max {
-    font-size: 8px;
+    font-size: 7pt;
   }
-}
-
-
-
-
-/* ═══════════════════════════════════════
-   BOX TITLES & TEXT
-═══════════════════════════════════════ */
-
-.selectize-input {
-  padding: 0;
-}
-
-.box-title {
-  font-family: "Replica Mono LL TT", monospace;
-  font-size: clamp(14px, 3vw, 20px);
-  overflow: visible;
-  text-align: left;
-}
-
-.box-header .form-group  { margin: 0 !important; padding: 0 !important; }
-.box-header .selectize-control { margin: 0 !important; padding: 0 !important; }
-.box-header .selectize-input {
-  margin: 0 !important;
-  min-height: unset !important;
-  height: 20px !important;
-  font-size: 14px !important;
-  line-height: 1.2 !important;
-}
-.box-header .selectize-input::after { margin: 0 !important; }
-
-.box-text {
-  font-family: "Replica Mono LL TT", monospace;
-  font-size: clamp(16px, 4vw, 24px);
-  overflow-y: auto;
-  text-align: left;
-}
-
-.state span {
-  font-size:clamp(10px, 16px, 16px);
-  color: white !important;
-}
-
-/* Changes the color of the dropdown items */
-  .dropdown-menu.inner li a span.text {
-        color: black !important;
-      }
-      
-  .dropdown-menu {
-    padding: 0 !important; 
-    margin:0 !important;
-  }
-/* Changes the color of the button text (selected value) */
-  .filter-option-inner-inner {
-        color: black;
-      }
-      
-/* Target the buttons inside the actions box */
-  .bs-actionsbox .btn-group button {
-        color: black !important;
-      }
-
-/* ═══════════════════════════════════════
-   DESKTOP — default box heights
-═══════════════════════════════════════ */
-
-.map-box {
-  height: 40vh;
-}
-
-.plot-box {
-  height: 40vh;
-}
-
-.text-box {
-    height: 22vh;
-    text-overflow:scroll; 
-  }
-  
-/* ═══════════════════════════════════════
-   Info Buttons
-═══════════════════════════════════════ */
-
-/* Make the box header a positioning container */
-.box-header {
-  position: relative !important;
-}
-
-/* Keep the box title on the left */
-.box-header .box-title {
-  display: block !important;
-  width: auto !important;
-  padding-right: 35px !important;
-}
-
-/* Put the info button at the far right of the header */
-.box-header .info-button {
-  position: absolute !important;
-  right: 10px !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-
-  background: transparent !important;
-  border: none !important;
-  color: white !important;
-
-  padding: 0 !important;
-  margin: 0 !important;
-
-  width: 22px !important;
-  height: 22px !important;
-  min-width: 22px !important;
-
-  box-shadow: none !important;
-  z-index: 10 !important;
-}
-
-/* Hover effect */
-.box-header .info-button:hover {
-  color: #ddd !important;
-  transform: translateY(-50%) scale(1.15) !important;
-}
-
-/* Remove focus/active styling */
-.box-header .info-button:focus,
-.box-header .info-button:active {
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* ═══════════════════════════════════════
-   SLIDER
-═══════════════════════════════════════ */
-
-.shiny-input-container {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.irs { margin-left: auto; margin-right: auto; }
-
-.irs-grid-text {
-  font-size: 12pt;
-  font-family: 'Replica Mono LL TT', monospace;
-}
-
-.irs-grid-text:last-child { display: none; }
-
-.irs--shiny .irs-min,
-.irs--shiny .irs-max {
-  font-size: 12pt;
-  font-family: 'Replica Mono LL TT', monospace;
-}
-
-@media (max-width: 768px) {
-.shiny-input-container {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.irs { margin-left: auto; margin-right: auto; }
-
-.irs-grid-text {
-  font-size: 7pt;
-  font-family: 'Replica Mono LL TT', monospace;
-}
-
-.irs-grid-text:last-child { display: none; }
-
-.irs--shiny .irs-min,
-.irs--shiny .irs-max {
-  font-size: 7pt;
-  font-family: 'Replica Mono LL TT', monospace;
-}
 }
