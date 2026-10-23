@@ -188,6 +188,7 @@ body {
 
 .box-header .selectize-control {
   text-align: center;
+  max-width: 75%;
 }
 
 .box-header .selectize-input {
@@ -269,13 +270,15 @@ body {
 /* ═══════════════════════════════════════
    MOBILE RESPONSIVE (max-width: 768px)
 ═══════════════════════════════════════ */
+@media (max-width:768px){
+    .main-header .logo {
+    display: none !important;
+  }
+}
 
 @media (max-width: 1000px) {
 
   /* Header adjustments */
-  .main-header .logo {
-    display: none !important;
-  }
 
   .myClass {
     display: block !important;    /* Changed from inline-block to block */
@@ -357,7 +360,7 @@ body {
     height: 100% !important;
     width: 100% !important;
     padding: 0 !important;
-    overflow: auto; 
+    overflow: hidden; 
   }
 
   .row {
@@ -371,7 +374,7 @@ body {
 
   /* General mobile inputs */
   .selectize-input {
-    height: 36px;
+    height: 20px;
     font-size: 16px !important;
     line-height: 1.5 !important;
     padding: 6px 8px;

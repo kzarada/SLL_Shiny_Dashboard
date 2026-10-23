@@ -15,8 +15,8 @@ library(shinyWidgets)
 library(ggiraph)
 
 #Set Data File Path (changes for dockerfile)
-data_dir = "/srv/shiny-server/Data/"
-
+#data_dir = "/srv/shiny-server/Data/"
+data_dir = "/Users/katherinezarada/Documents/01_Data_Products/Shiny_Apps/Data/"
 source(file.path(data_dir, "Inputs/api_keys.R"))
 
 
@@ -819,9 +819,14 @@ server <- function(input, output, session) {
   )
   
   #### Reactive Statements to Filter Data #####
+   # Debounce time input by 250ms to prevent rapid re-render spikes
+    selected_time <- reactive({ round_date(input$time, unit = 'mins') }) %>% debounce(250)
+  
+  
+  
   filtered_flood_data <- reactive({
     
-    map_hohonu_data() %>% filter(Time_ET == with_tz(input$time, tzone = "America/New_York"))
+    map_hohonu_data() %>% filter(Time_ET == round_date(with_tz(input$time, tzone = "America/New_York"), unit = "mins"))
     
   })
   
@@ -835,10 +840,7 @@ server <- function(input, output, session) {
   })
 
 
-  # Debounce time input by 250ms to prevent rapid re-render spikes
-    selected_time <- reactive({ input$time }) %>% debounce(250)
-  
-  
+ 
   
   ############# Wind Direction ################
   
@@ -1524,7 +1526,7 @@ output$flood_map <- renderLeaflet({
                        radius = marker_radius(),  
                        fillOpacity = 1,
                        layerId = filtered_flood_data()$Location,
-                       label=~as.character(Flood.Depth),
+                       label=~as.character(filtered_flood_data()$Flood.Depth),
                        labelOptions = labelOptions(noHide = TRUE, textOnly = TRUE, direction = "center",
                                                    style = list(
                                                      "color" = "black",
@@ -1589,7 +1591,8 @@ output$flood_map <- renderLeaflet({
         pivot_longer(cols = !Time_ET, 
                      names_to = "Location", 
                      values_to = "Wave_Height") |> 
-        mutate(Location = str_replace(str_remove(Location, "_Hs_Wave_.*$"), "_", " ")) 
+        mutate(Location = str_replace(str_remove(Location, "_Hs_Wave_.*$"), "_", " ")) |> 
+        filter(Location != "Rainsford")
     }else if(input$wave_select_compare == 'maximum'){
       combo_data()|> 
         dplyr::select(Time_ET, contains(paste0("Hmax_Wave_Height_", unit))) |> 
