@@ -15,8 +15,7 @@ library(shinyWidgets)
 library(ggiraph)
 
 #Set Data File Path (changes for dockerfile)
-#data_dir = "/srv/shiny-server/Data/"
-data_dir = "~/Documents/01_Data_Products/Shiny_Apps/Data/"
+data_dir = "/srv/shiny-server/Data/"
 
 source(file.path(data_dir, "Inputs/api_keys.R"))
 
