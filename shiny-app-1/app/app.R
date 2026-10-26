@@ -470,7 +470,7 @@ server <- function(input, output, session) {
   water_depth <- reactive({
     map_hohonu_data() %>% 
       filter(Location == input$station_select) %>%  
-      filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
+      filter(Time_ET == round_date(with_tz(input$time, tzone = "America/New_York"), unit = "mins")) %>% 
       pull(Flood.Depth)
   })
   
@@ -509,7 +509,7 @@ server <- function(input, output, session) {
       
      paste0(map_hohonu_data() %>% 
         filter(Location == input$station_select) %>%  
-        filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
+        filter(Time_ET == round_date(with_tz(input$time, tzone = "America/New_York"), unit = "mins")) %>% 
         pull(Last_Available), ' Please select another time or sensor to view flood context.')
     }
     else if(input$icon_select == 'bus'){
@@ -733,7 +733,7 @@ server <- function(input, output, session) {
     
   })
   
-  observeEvent(input$flood_map_zoom, {
+  observe( {
     
     unit = unit_state()
     
@@ -756,7 +756,7 @@ server <- function(input, output, session) {
                                                      "font-size" = label_size())), 
                        popup = ~paste0("<strong>", Station.Name,
                                        "</strong><br/>
-                                      Flood Depth: ", Flood.Depth, " ", unit, 
+                                      Flood Depth: ", round(Flood.Depth, 2), " ", unit, 
                                        "<br/>", Last_Available,
                                        "<br/> <a href='#'
                                           onclick=\"
