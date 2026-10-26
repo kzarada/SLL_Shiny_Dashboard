@@ -422,7 +422,14 @@ ui <- dashboardPage(
                                 leafletOutput("sensor_map", height = "100%"), 
                                 width = 12
                               ), 
-                              
+                               box(
+                                title = "Flood Depth", 
+                                solidHeader = TRUE, 
+                                class = "plot-box",
+                                status = "primary", 
+                                girafeOutput("station_flood", height = "100%"), 
+                                width = 12
+                              ) #end box
                             ) #end col
                           ) #end fluid row
                   ), #end tabItem
@@ -1419,6 +1426,71 @@ girafe(
 
 
   })
+
+   output$station_flood <- renderGirafe({
+    
+    unit = unit_state()
+    y_label = ifelse(unit == 'ft', "Flood Depth (ft)", "Flood Depth (m)")
+    depth = if(unit == "m"){sensor_loc()$Flood.Depth/3.281}else{sensor_loc()$Flood.Depth}
+    y_max = max(depth, convert_units(1, unit_state()), na.rm = T)
+    tool_label = ifelse(unit == 'ft', "ft", "m")
+
+    
+    shiny::validate(need(depth, "Data are not available from this sensor"))
+    
+   p =  ggplot(sensor_loc(), aes(x = Time_ET, y = depth)) + 
+      geom_point_interactive(aes(tooltip = paste0(
+                            "Time (ET): ",
+                            format(
+                                Time_ET,
+                                format = "%b %d, %Y %I:%M %p",
+                                tz = "America/New_York"
+                            ),
+                            "\nFlood Depth: ",
+                            sprintf("%.2f", depth),
+                            tool_label
+                            ),
+                data_id = paste0('water_', seq(1, length(depth)))),
+                size = 0.75,
+                alpha = 1,
+                hover_nearest = TRUE,
+                color = "#2EBBAD") + 
+      ylab(y_label) + 
+      ylim(c(0, y_max)) + 
+      xlab("Time (ET)") + 
+      plot_theme()
+     
+     girafe(
+        ggobj = p,
+        width_svg = graph_width(),
+        height_svg = graph_height(),
+        options = list(
+          opts_tooltip(
+            css = paste0(
+              "font-family: Replica LL TT;",
+              "font-size: 14px;",
+              "background-color: white;",
+              "color: #333333;",
+              "padding: 8px;"
+            )
+          ),
+          opts_hover(
+            css = "stroke-width: 2.5px;",
+            nearest_distance = 10
+          ),
+    
+          opts_sizing(
+            rescale = TRUE, 
+            width = 1
+          ), 
+          opts_toolbar(
+            saveaspng = FALSE 
+          )
+        )
+      )
+    
+    
+   })
   
   ############## MAP ###################
   zoom_level <- reactive({
