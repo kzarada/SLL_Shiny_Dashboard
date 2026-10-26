@@ -12,7 +12,6 @@ library(shinybrowser)
 
 #Set Data File Path (changes for dockerfile)
 data_dir = "/srv/shiny-server/Data/"
-
 source(file.path(data_dir, "Inputs/api_keys.R"))
 
 
@@ -29,8 +28,13 @@ map_hohonu = read.csv(file.path(data_dir, "Outputs/map_hohonu.csv")) %>%
          Last_Available = replace_na(Last_Available, ""))
 
 
-start_time = round_date(min(map_hohonu$Time_ET, na.rm = T), "10 mins")
-end_time = max(map_hohonu$Time_ET, na.rm = T)
+
+time = data.table::fread(file.path(data_dir, "Outputs/map_hohonu.csv"), select = 'Time_ET', tz = "")  
+time$Time_ET <- lubridate::ymd_hms(time$Time_ET, tz = "America/New_York")
+
+start_time = round_date(min(time$Time_ET, na.rm = T), "10 mins")
+end_time = max(time$Time_ET, na.rm = T)
+
 
 #colors: 
 #blue: #256EFF
@@ -352,7 +356,7 @@ ui <- dashboardPage(
                 tags$div(
                   class = "app-footer",
                   tags$a(
-                    href = "http://147.93.47.40:8080/app/SLL_Current_Coastal_Conditions",
+                    href = "https://stonelivinglab.online/SLL_Current_Coastal_Conditions/",
                     target = "_blank",
                     HTML("Interested in seeing more data? <u>Click here</u> to view our Current Coastal Conditions Dashboard")
                   )
@@ -398,7 +402,7 @@ server <- function(input, output, session) {
   
   plot_theme <- reactive({
     if (shinybrowser::is_device_mobile()) {
-      theme_bw(base_family = "Replica Mono LL TT") +
+      theme_bw(base_family = "Replica LL TT") +
         theme(
           axis.text.x  = element_text(size = 7, angle = 45, hjust = 1),
           axis.text.y  = element_text(size = 7),
@@ -407,7 +411,7 @@ server <- function(input, output, session) {
           plot.margin = margin(0.1,0.5,0.1,0.1, "cm") #t,r,b,l
         )
     } else {
-      theme_bw(base_family = "Replica Mono LL TT") +
+      theme_bw(base_family = "Replica LL TT") +
         theme(
           axis.text  = element_text(size = 12),
           axis.title = element_text(size = 16),
@@ -418,12 +422,38 @@ server <- function(input, output, session) {
   })
   
   
+  ################## Reactive Statement to Update App ##################
+  
+  hohonu_data <- reactiveFileReader(
+    intervalMillis = 500,
+    session = session,
+    filePath = file.path(data_dir, "Outputs/hohonu.csv"),
+    readFunc = function(path){
+      read.csv(path) %>% 
+        mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
+               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
+    }
+  )
+  
+  map_hohonu_data <- reactiveFileReader(
+    intervalMillis = 500,
+    session = session,
+    filePath = file.path(data_dir, "Outputs/map_hohonu.csv"),
+    readFunc = function(path){
+      read.csv(path) %>% 
+        mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
+               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>%
+        mutate(Last_Available = as.character(Last_Available), 
+               Last_Available = replace_na(Last_Available, ""))
+    }
+  )
+  
   ################## Load Data ##################
   
   
   filtered_flood_data <- reactive({
     
-    map_hohonu_data()  %>% filter(Time_ET == with_tz(input$time, tzone = "America/New_York")) %>% 
+    map_hohonu_data()  %>% filter(Time_ET == round_date(with_tz(input$time, tzone = "America/New_York"), unit = "mins"))%>% 
       mutate(Flood.Depth = convert_units(Flood.Depth, unit_state())) %>%
       mutate(Last_Available = as.character(Last_Available), 
              Last_Available = replace_na(Last_Available, ""))
@@ -721,7 +751,7 @@ server <- function(input, output, session) {
                        labelOptions = labelOptions(noHide = TRUE, textOnly = TRUE, direction = "center",
                                                    style = list(
                                                      "color" = "black",
-                                                     "font-family" = "Replica Mono LL TT",
+                                                     "font-family" = "Replica LL TT",
                                                      "font-style" = "bold",
                                                      "font-size" = label_size())), 
                        popup = ~paste0("<strong>", Station.Name,
@@ -818,32 +848,7 @@ server <- function(input, output, session) {
     
   })
   
-  ################## Reactive Statement to Update App ##################
-  
-  hohonu_data <- reactiveFileReader(
-    intervalMillis = 500,
-    session = session,
-    filePath = file.path(data_dir, "Outputs/hohonu.csv"),
-    readFunc = function(path){
-      read.csv(path) %>% 
-        mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York"))
-    }
-  )
-  
-  map_hohonu_data <- reactiveFileReader(
-    intervalMillis = 500,
-    session = session,
-    filePath = file.path(data_dir, "Outputs/map_hohonu.csv"),
-    readFunc = function(path){
-      read.csv(path) %>% 
-        mutate(Time_ET = ifelse(str_detect(Time_ET, ":00$", negate = T), paste0(Time_ET, " 00:00:00"), Time_ET), 
-               Time_ET = as.POSIXct(Time_ET, format = "%Y-%m-%d %H:%M:%S", tz = "America/New_York")) %>%
-        mutate(Last_Available = as.character(Last_Available), 
-               Last_Available = replace_na(Last_Available, ""))
-    }
-  )
-  
+  ##### Observe new data and update slider ########
   observe({
     newData = map_hohonu_data() 
     updateSliderInput(session, 

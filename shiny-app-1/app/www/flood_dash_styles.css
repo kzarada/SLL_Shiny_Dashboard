@@ -1,17 +1,7 @@
 /* ═══════════════════════════════════════
-   Docker CSS
+   FONTS & GLOBAL BASE
 ═══════════════════════════════════════ */
 
-/* Register font */
-  @font-face {
-    font-family: 'Replica Mono LL TT';
-    src: url('ReplicaMonoLLTT-Regular.woff2') format('woff2'),
-    url('ReplicaMonoLLTT-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-/* New — Replica (non-mono) for body text */
 @font-face {
   font-family: 'Replica LL TT';
   src: url('ReplicaLLTT-Regular.ttf') format('truetype');
@@ -33,7 +23,6 @@
   font-style: italic;
 }
 
-/* Update body only */
 body {
   font-family: 'Replica LL TT', sans-serif;
 }
@@ -43,6 +32,11 @@ body {
   flex-direction: row;
   gap: 10px;
 }
+
+.recalculating { 
+  opacity: 1.0 !important; 
+}
+
 
 
 
@@ -56,7 +50,7 @@ body {
   line-height: 40px;
   text-align: left;
   align-items: center;
-  font-family: "Replica Mono LL TT", monospace;
+  font-family: "Replica LL TT", monospace;
   padding: 0 8px;
   overflow: hidden;
   white-space: nowrap;
@@ -265,7 +259,7 @@ body {
 }
 
 .box-title {
-  font-family: "Replica Mono LL TT", monospace;
+  font-family: "Replica LL TT", monospace;
   font-size: clamp(14px, 3vw, 20px);
   overflow: visible;
   text-align: left;
@@ -284,7 +278,7 @@ body {
 .box-header .selectize-input::after { margin: 0 !important; }
 
 .box-text {
-  font-family: "Replica Mono LL TT", monospace;
+  font-family: "Replica LL TT", monospace;
   font-size: clamp(16px, 4vw, 24px);
   overflow-y: auto;
   text-align: left;
@@ -327,7 +321,7 @@ body {
 
 .irs-grid-text {
   font-size: 12pt;
-  font-family: 'Replica Mono LL TT', monospace;
+  font-family: 'Replica LL TT', monospace;
 }
 
 .irs-grid-text:last-child { display: none; }
@@ -335,7 +329,7 @@ body {
 .irs--shiny .irs-min,
 .irs--shiny .irs-max {
   font-size: 12pt;
-  font-family: 'Replica Mono LL TT', monospace;
+  font-family: 'Replica LL TT', monospace;
 }
 
 @media (max-width: 768px) {
@@ -349,7 +343,7 @@ body {
 
 .irs-grid-text {
   font-size: 7pt;
-  font-family: 'Replica Mono LL TT', monospace;
+  font-family: 'Replica LL TT', monospace;
 }
 
 .irs-grid-text:last-child { display: none; }
@@ -357,7 +351,7 @@ body {
 .irs--shiny .irs-min,
 .irs--shiny .irs-max {
   font-size: 7pt;
-  font-family: 'Replica Mono LL TT', monospace;
+  font-family: 'Replica LL TT', monospace;
 }
 }
 
